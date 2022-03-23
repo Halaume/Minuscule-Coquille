@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 10:59:21 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/23 11:03:28 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/23 15:12:48 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 # define POUR for
 # define ALLER goto
 # define ALIGNE inline
-# define RETOURN return
+# define RENVOIE return
 # define UNION union
 # define VOLATILE volatile
 # define TANTQUE while

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/23 20:53:44 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/24 10:47:52 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ VIDE	analyse_syntaxique(CARACTERE *ligne, t_info *info)
 	i = 0;
 	SI (!ligne)
 		RENVOIE ;
-	TANTQUE (ligne[i])
+	(VIDE)i;
+	(VIDE)info;
+	/*	TANTQUE (ligne[i])
 	{
 		SI (i && (ligne[i] == '&' && ligne[i - 1]) || (ligne[i] == '|' \
 					&& ligne[i - 1] == '|'))
@@ -28,5 +30,5 @@ VIDE	analyse_syntaxique(CARACTERE *ligne, t_info *info)
 			tuyau(ligne, info);
 		SINON SI (ligne[i] == '('
 
-	}
+	}*/
 }

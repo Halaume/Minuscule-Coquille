@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/23 11:46:46 by tnaton            #+#    #+#              #
-#    Updated: 2022/03/24 12:05:11 by tnaton           ###   ########.fr        #
+#    Updated: 2022/03/24 12:36:28 by ghanquer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,14 +18,16 @@ NAME = minishell
 
 LIBFT = libft/libft.a
 
-source = src/principale.c src/analysesyntaxique.c
+source = $(addprefix src/,principale.c analysesyntaxique.c)
 
 CFLAGS = -Wall -Werror -Wextra
+
+CC =	clang
 
 object = $(source:.c=.o)
 
 $(NAME) : $(object) $(LIBFT)
-	gcc $(CFLAGS) $(object) $(LIBFT) -o $@ -lreadline
+	$(CC) $(CFLAGS) $(object) $(LIBFT) -o $@ -lreadline
 
 -include libft/Makefile
 
@@ -33,7 +35,7 @@ $(LIBFT) : $(source) $(BONUS) libft.h
 	$(MAKE) bonus -C ./libft
 
 debug : 
-	gcc $(CFLAGS) -g3 -fsanitize=address $(object) $(LIBFT) -o $@ -lreadline
+	$(CC) $(CFLAGS) -g3 -fsanitize=address $(object) $(LIBFT) -o $@ -lreadline
 
 .PHONY: all
 all : $(NAME)

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 17:48:52 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/24 20:05:58 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,32 +22,48 @@ void	prendpart(char *ligne, t_arbre *arbre, int start)
 	ingui = 0;
 	(void)arbre;
 	end = start;
+	if (ligne[end] == '(')
+		inpar++;
 	if (ligne[end + 1])
 		end++;
 	while (ligne[end] && ((ligne[end] != '|' && ligne[end] != '&') || (inpar || ingui)))
 	{
 		if (!ingui && ligne[end] == '(')
-			inpar = 1;
+			inpar++;
 		if (!ingui && ligne[end] == ')')
-			inpar = 0;
-		if (!inpar && (ligne[end] == '\'' || ligne[end] == '"'))
+			inpar--;
+		if (ligne[end] == '\'' || ligne[end] == '"')
 			ingui = !ingui;
 		end++;
 	}
 	if (ligne[end])
 		end++;
-	printf("%s\n", ft_substr(ligne, start, (end - start)));
+	printf("prendpart : %s\n", ft_substr(ligne, start, (end - start)));
 }
 
 void	getpar(char *ligne, t_arbre *arbre, int start)
 {
 	int	end;
+	int	inpar;
+	int	ingui;
 
+	ingui = 0;
+	inpar = 1;
 	(void)arbre;
-	end = start;
-	while (ligne[end] != ')')
+	end = start + 1;
+	while (inpar != 0)
+	{
+		if (ligne[end] == '\'')
+			ingui = !ingui;
+		if (ligne[end] == '"')
+			ingui = !ingui;
+		if (!ingui && ligne[end] == '(')
+			inpar++;
+		if (!ingui && ligne[end] == ')')
+			inpar--;
 		end++;
-	printf("%s\n", ft_substr(ligne, start, (end - start + 1)));
+	}
+	printf("getpar : %s\n", ft_substr(ligne, start, (end - start + 1)));
 }
 
 
@@ -62,9 +78,10 @@ void	analyse_syntaxique(char *ligne, t_arbre *arbre)
 	i = 0;
 	if (!ligne)
 		RENVOIE ;
+	prendpart(ligne, arbre, 0);
 	while (ligne[i])
 	{
-		if (!dansparenthese && (ligne[i] == '\'' || ligne[i] == '"'))
+		if (ligne[i] == '\'' || ligne[i] == '"')
 			dansguillemet = !dansguillemet;
 		if (i && !dansguillemet && !dansparenthese && ((ligne[i] == '&' && ligne[i - 1] == '&') \
 					|| (ligne[i] == '|' && ligne[i - 1] == '|')))
@@ -73,11 +90,11 @@ void	analyse_syntaxique(char *ligne, t_arbre *arbre)
 			prendpart(ligne, arbre, i);
 		else if (!dansguillemet && ligne[i] == '(')
 		{
-			dansparenthese = 1;
+			dansparenthese++;
 			getpar(ligne, arbre, i);
 		}
 		else if (!dansguillemet && ligne[i] == ')')
-			dansparenthese = 0;
+			dansparenthese--;
 		i++;
 	}
 }

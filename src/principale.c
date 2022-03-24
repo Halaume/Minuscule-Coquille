@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 17:21:54 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/24 19:53:34 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ int	verifieligne(char *ligne)
 	simpleguillemet = 0;
 	while (ligne[i])
 	{
-		if (ligne[i] == '"' && !simpleguillemet && !parenthese)
+		if (ligne[i] == '"' && !simpleguillemet)
 			doubleguillemet = !doubleguillemet;
-		else if (ligne[i] == '\'' && !doubleguillemet && !parenthese)
+		else if (ligne[i] == '\'' && !doubleguillemet)
 			simpleguillemet = !simpleguillemet;
 		else if (ligne[i] == '(' && !simpleguillemet && !doubleguillemet) 
 			parenthese++;

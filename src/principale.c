@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 14:55:09 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/03/24 14:57:40 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ ENTIER	verifieligne(CARACTERE *ligne)
 	simpleguillemet = 0;
 	TANTQUE (ligne[i])
 	{
-		if (ligne[i] == '"' && !simpleguillemet && !parenthese)
+		SI (ligne[i] == '"' && !simpleguillemet && !parenthese)
 			doubleguillemet = !doubleguillemet;
 		SINON SI (ligne[i] == '\'' && !doubleguillemet && !parenthese)
 			simpleguillemet = !simpleguillemet;

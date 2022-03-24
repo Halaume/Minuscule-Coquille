@@ -6,65 +6,67 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 14:57:40 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/03/24 17:21:54 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
 
-ENTIER	verifieligne(CARACTERE *ligne)
+int	verifieligne(char *ligne)
 {
-	ENTIER	i;
-	ENTIER	parenthese;
-	ENTIER	doubleguillemet;
-	ENTIER	simpleguillemet;
+	int	i;
+	int	parenthese;
+	int	doubleguillemet;
+	int	simpleguillemet;
+
 	parenthese = 0;
 	i = 0;
 	doubleguillemet = 0;
 	simpleguillemet = 0;
-	TANTQUE (ligne[i])
+	while (ligne[i])
 	{
-		SI (ligne[i] == '"' && !simpleguillemet && !parenthese)
+		if (ligne[i] == '"' && !simpleguillemet && !parenthese)
 			doubleguillemet = !doubleguillemet;
-		SINON SI (ligne[i] == '\'' && !doubleguillemet && !parenthese)
+		else if (ligne[i] == '\'' && !doubleguillemet && !parenthese)
 			simpleguillemet = !simpleguillemet;
-		SINON SI (ligne[i] == '(' && !simpleguillemet && !doubleguillemet) 
+		else if (ligne[i] == '(' && !simpleguillemet && !doubleguillemet) 
 			parenthese++;
-		SINON SI (ligne[i] == ')' && !simpleguillemet && !doubleguillemet)
+		else if (ligne[i] == ')' && !simpleguillemet && !doubleguillemet)
 			parenthese--;
-		SI (parenthese < 0)
-			RENVOIE (1);
+		if (parenthese < 0)
+			return (1);
 		i++;
 	}
-	SI (parenthese != 0 || simpleguillemet != 0 || doubleguillemet != 0)
-		RENVOIE (1);
-	SI (ligne[i - 1] == ';' || ligne[i - 1] == '\\')
-		RENVOIE (1);
-	RENVOIE (0);
+	if (parenthese != 0 || simpleguillemet != 0 || doubleguillemet != 0)
+		return (1);
+	if (ligne[i - 1] == ';' || ligne[i - 1] == '\\')
+		return (1);
+	return (0);
 }
 
-ENTIER	principale(ENTIER ac, CARACTERE **av, CARACTERE **envp)
+int	principale(int ac, char **av, char **envp)
 {
-	CARACTERE	*ligne;
+	char	*ligne;
 	t_info		info;
 
 	info.arbre = (t_arbre *)malloc(TAILLEDE(t_arbre));
 	ligne = readline("MinusculeCoquille$>");
-	TANTQUE (ligne)
+	while (ligne)
 	{
-		SI (verifieligne(ligne))
+		if (verifieligne(ligne))
 			printf("Erreur syntaxique\n");
-		analyse_syntaxique(ligne, &info);
+		else
+			analyse_syntaxique(ligne, info.arbre);
 		free(ligne);
 		ligne = readline("MinusculeCoquille$>");
 	}
-	(VIDE)ac;
-	(VIDE)av;
-	(VIDE)envp;
-	RENVOIE (0);
+	(void)ac;
+	(void)av;
+	(void)envp;
+	return (0);
 }
 
-ENTIER	main(ENTIER ac, CARACTERE **av, CARACTERE **envp)
+int	main(int ac, char **av, char **envp)
 {
-	RENVOIE (principale(ac, av, envp));
+	return (principale(ac, av, envp));
 }

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 14:33:18 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/24 14:55:09 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,28 @@
 ENTIER	verifieligne(CARACTERE *ligne)
 {
 	ENTIER	i;
-	ENTIER	parenthèse;
+	ENTIER	parenthese;
 	ENTIER	doubleguillemet;
 	ENTIER	simpleguillemet;
-	parenthèse = 0;
+	parenthese = 0;
 	i = 0;
 	doubleguillemet = 0;
 	simpleguillemet = 0;
 	TANTQUE (ligne[i])
 	{
-		SI (ligne[i] == '"' && !simpleguillemet && !parenthèse)
+		if (ligne[i] == '"' && !simpleguillemet && !parenthese)
 			doubleguillemet = !doubleguillemet;
-		SINON SI (ligne[i] == '\'' && !doubleguillemet && !parenthèse)
+		SINON SI (ligne[i] == '\'' && !doubleguillemet && !parenthese)
 			simpleguillemet = !simpleguillemet;
 		SINON SI (ligne[i] == '(' && !simpleguillemet && !doubleguillemet) 
-			parenthèse++;
+			parenthese++;
 		SINON SI (ligne[i] == ')' && !simpleguillemet && !doubleguillemet)
-			parenthèse--;
-		SI (parenthèse < 0)
+			parenthese--;
+		SI (parenthese < 0)
 			RENVOIE (1);
 		i++;
 	}
-	SI (parenthèse != 0 || simpleguillemet != 0 || doubleguillemet != 0)
+	SI (parenthese != 0 || simpleguillemet != 0 || doubleguillemet != 0)
 		RENVOIE (1);
 	SI (ligne[i - 1] == ';' || ligne[i - 1] == '\\')
 		RENVOIE (1);

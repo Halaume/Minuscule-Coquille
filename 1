@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/23 11:46:46 by tnaton            #+#    #+#              #
-#    Updated: 2022/03/24 17:45:33 by ghanquer         ###   ########.fr        #
+#    Updated: 2022/03/24 15:57:25 by ghanquer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,7 @@ NAME = minishell
 
 LIBFT = libft/libft.a
 
-MES_SOURCES = principale.c analysesyntaxique.c fais_dedans.c
-
-source = $(addprefix src/, $(MES_SOURCES))
+source = $(addprefix src/,principale.c analysesyntaxique.c, fais_dedans.c)
 
 CFLAGS = -Wall -Werror -Wextra
 

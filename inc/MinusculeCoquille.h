@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 15:23:19 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/03/24 15:55:49 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ typedef STRUCTURE s_info
 //				ANALYSE-SYNTAXIQUE
 
 VIDE	analyse_syntaxique(CARACTERE *ligne, t_info *info);
+void	logique(char *ligne, t_info *info, int i);
+void	tuyau(char *ligne, t_info *info, int i);
+void	fourchette(char *ligne, t_info *info, int i);
 
 //				FAIS-DEDANS
 

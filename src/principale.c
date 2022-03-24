@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 14:57:40 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/03/24 15:54:10 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,15 @@ ENTIER	principale(ENTIER ac, CARACTERE **av, CARACTERE **envp)
 	CARACTERE	*ligne;
 	t_info		info;
 
+	(void)info;
 	info.arbre = (t_arbre *)malloc(TAILLEDE(t_arbre));
 	ligne = readline("MinusculeCoquille$>");
 	TANTQUE (ligne)
 	{
 		SI (verifieligne(ligne))
 			printf("Erreur syntaxique\n");
-		analyse_syntaxique(ligne, &info);
+		is_built_in(ligne);
+//		analyse_syntaxique(ligne, &info);
 		free(ligne);
 		ligne = readline("MinusculeCoquille$>");
 	}

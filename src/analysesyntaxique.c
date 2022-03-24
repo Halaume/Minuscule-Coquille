@@ -6,11 +6,11 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 10:47:52 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/24 12:03:02 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "MinusculeCoquille.h"
+#include "../inc/MinusculeCoquille.h"
 
 VIDE	analyse_syntaxique(CARACTERE *ligne, t_info *info)
 {

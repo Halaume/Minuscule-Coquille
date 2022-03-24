@@ -6,11 +6,11 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 11:23:27 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/24 12:03:12 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "MinusculeCoquille.h"
+#include "../inc/MinusculeCoquille.h"
 
 ENTIER	verifieligne(CARACTERE *ligne)
 {

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 12:03:12 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/03/24 14:33:18 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ ENTIER	verifieligne(CARACTERE *ligne)
 	{
 		SI (ligne[i] == '"' && !simpleguillemet && !parenthèse)
 			doubleguillemet = !doubleguillemet;
-		SI (ligne[i] == '\'' && !doubleguillemet && !parenthèse)
+		SINON SI (ligne[i] == '\'' && !doubleguillemet && !parenthèse)
 			simpleguillemet = !simpleguillemet;
-		SI (ligne[i] == '(')
+		SINON SI (ligne[i] == '(' && !simpleguillemet && !doubleguillemet) 
 			parenthèse++;
-		SINON SI (ligne[i] == ')')
+		SINON SI (ligne[i] == ')' && !simpleguillemet && !doubleguillemet)
 			parenthèse--;
 		SI (parenthèse < 0)
 			RENVOIE (1);

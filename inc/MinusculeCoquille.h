@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 12:06:06 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/24 12:29:27 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <stdlib.h>
 # include "../libft/libft.h"
 
-DEFINITIONTYPE STRUCTURE s_arbre
+typedef STRUCTURE s_arbre
 {
 	CARACTERE			*commande;
 	STRUCTURE s_arbre	**logique;
@@ -29,11 +29,11 @@ DEFINITIONTYPE STRUCTURE s_arbre
 	STRUCTURE s_arbre	**argument;
 }	t_arbre;
 
-DEFINITIONTYPE STRUCTURE s_info
+typedef STRUCTURE s_info
 {
-	t_arbre *arbre;
+	t_arbre	*arbre;
 }	t_info;
 
-VIDE analyse_syntaxique(CARACTERE *ligne, t_info *info);
+VIDE	analyse_syntaxique(CARACTERE *ligne, t_info *info);
 
 #endif

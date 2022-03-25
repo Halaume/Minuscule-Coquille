@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 19:53:34 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/25 12:10:05 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ int	verifieligne(char *ligne)
 		i++;
 	}
 	if (parenthese != 0 || simpleguillemet != 0 || doubleguillemet != 0)
-		return (1);
-	if (ligne[i - 1] == ';' || ligne[i - 1] == '\\')
 		return (1);
 	return (0);
 }

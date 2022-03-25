@@ -6,13 +6,13 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/25 11:34:13 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/25 12:23:19 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
 
-void	prendpart(char *ligne, t_arbre *arbre, int start)
+void	prendpart(char *ligne, t_arbre *arbre, int *start)
 {
 	int	end;
 	int	inpar;
@@ -21,7 +21,7 @@ void	prendpart(char *ligne, t_arbre *arbre, int start)
 	inpar = 0;
 	ingui = 0;
 	(void)arbre;
-	end = start;
+	end = *start;
 	if (ligne[end] == '(')
 		inpar++;
 	if (ligne[end + 1])
@@ -38,10 +38,11 @@ void	prendpart(char *ligne, t_arbre *arbre, int start)
 	}
 	if (ligne[end])
 		end++;
-	printf("prendpart : %s\n", ft_substr(ligne, start, (end - start)));
+	printf("prendpart : %s\n", ft_substr(ligne, *start, (end - *start)));
+	*start = end - 2;
 }
 
-void	getpar(char *ligne, t_arbre *arbre, int start)
+void	getpar(char *ligne, t_arbre *arbre, int *start)
 {
 	int	end;
 	int	inpar;
@@ -50,7 +51,7 @@ void	getpar(char *ligne, t_arbre *arbre, int start)
 	ingui = 0;
 	inpar = 1;
 	(void)arbre;
-	end = start + 1;
+	end = *start + 1;
 	while (inpar != 0)
 	{
 		if (ligne[end] == '\'')
@@ -63,7 +64,8 @@ void	getpar(char *ligne, t_arbre *arbre, int start)
 			inpar--;
 		end++;
 	}
-	printf("getpar : %s\n", ft_substr(ligne, start, (end - start + 1)));
+	printf("getpar : %s\n", ft_substr(ligne, *start, (end - *start)));
+	*start = end - 2;
 }
 
 
@@ -78,24 +80,24 @@ void	analyse_syntaxique(char *ligne, t_arbre *arbre)
 	i = 0;
 	if (!ligne)
 		RENVOIE ;
-	prendpart(ligne, arbre, 0);
+	prendpart(ligne, arbre, &i);
 	while (ligne[i])
 	{
 		if (ligne[i] == '\'' || ligne[i] == '"')
 			dansguillemet = !dansguillemet;
 		if (i && !dansguillemet && !dansparenthese && ((ligne[i] == '&' && ligne[i - 1] == '&') \
 					|| (ligne[i] == '|' && ligne[i - 1] == '|')))
-			prendpart(ligne, arbre, i);
+			prendpart(ligne, arbre, &i);
 		else if (!dansguillemet && !dansparenthese && ligne[i] == '|' && ligne[i + 1] != '|')
-			prendpart(ligne, arbre, i);
+			prendpart(ligne, arbre, &i);
 		else if (i && !dansguillemet && !dansparenthese && ((ligne[i] == '>' && ligne[i - 1] == '>') || (ligne[i] == '<' && ligne[i - 1 ] == '<')))
-			prendpart(ligne, arbre, i);
+			prendpart(ligne, arbre, &i);
 		else if (!dansguillemet && !dansparenthese && ((ligne[i] == '>' && ligne[i + 1] != '>') || (ligne[i] == '<' && ligne[i + 1] != '<')))
-			prendpart(ligne, arbre, i);
+			prendpart(ligne, arbre, &i);
 		else if (!dansguillemet && ligne[i] == '(')
 		{
 			dansparenthese++;
-			getpar(ligne, arbre, i);
+			getpar(ligne, arbre, &i);
 		}
 		else if (!dansguillemet && ligne[i] == ')')
 			dansparenthese--;

@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/23 11:46:46 by tnaton            #+#    #+#              #
-#    Updated: 2022/03/25 10:46:13 by tnaton           ###   ########.fr        #
+#    Updated: 2022/03/25 12:12:03 by tnaton           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ $(NAME) : $(object) $(LIBFT)
 $(LIBFT) : $(source) $(BONUS) libft.h
 	$(MAKE) bonus -C ./libft
 
-debug : 
+debug : $(object)
 	$(CC) $(CFLAGS) -g3 -fsanitize=address $(object) $(LIBFT) -o $@ -lreadline
 
 .PHONY: all

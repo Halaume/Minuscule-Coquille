@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 15:54:10 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/03/25 11:47:43 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ ENTIER	principale(ENTIER ac, CARACTERE **av, CARACTERE **envp)
 	{
 		SI (verifieligne(ligne))
 			printf("Erreur syntaxique\n");
-		is_built_in(ligne);
-//		analyse_syntaxique(ligne, &info);
+		analyse_syntaxique(ligne, &info);
 		free(ligne);
 		ligne = readline("MinusculeCoquille$>");
 	}

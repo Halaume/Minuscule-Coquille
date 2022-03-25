@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 15:55:49 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/03/25 11:45:59 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ void	fourchette(char *ligne, t_info *info, int i);
 
 //				FAIS-DEDANS
 
-int		is_built_in(char *str);
-int		ft_echo(char **splitted_str);
-int		ft_cd(char **splitted_str);
+int		is_built_in(t_arbre *arbre);
+int		ft_echo(t_arbre **arg);
+int		ft_cd(t_arbre **arg);
 int		ft_pwd(char **splitted_str);
 int		ft_export(char **splitted_str);
 int		ft_unset(char **splitted_str);

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/03/24 17:47:30 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/03/25 10:50:51 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int	is_built_in(char *str)
 {
 	char	**splitted_str;
 
+	if (!str || !*str)
+		return (-1);
 	splitted_str = ft_split(str, ' ');
 	if (ft_strncmp("echo", splitted_str[0], 4) == 0)
 		return (ft_echo(splitted_str));

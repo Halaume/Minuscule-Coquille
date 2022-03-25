@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 15:43:34 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/25 11:58:04 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,22 @@ typedef STRUCTURE s_info
 	t_arbre	*arbre;
 }	t_info;
 
-VIDE	analyse_syntaxique(CARACTERE *ligne, t_arbre *arbre);
+//				ANALYSE-SYNTAXIQUE
+
+VIDE	analyse_syntaxique(CARACTERE *ligne, t_info *info);
+void	logique(char *ligne, t_info *info, int i);
+void	tuyau(char *ligne, t_info *info, int i);
+void	fourchette(char *ligne, t_info *info, int i);
+
+//				FAIS-DEDANS
+
+int		is_built_in(t_arbre *arbre);
+int		ft_echo(t_arbre **arg);
+int		ft_cd(t_arbre **arg);
+int		ft_pwd(char **splitted_str);
+int		ft_export(char **splitted_str);
+int		ft_unset(char **splitted_str);
+int		ft_env(char **splitted_str);
+int		ft_exit(char **splitted_str);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/23 11:46:46 by tnaton            #+#    #+#              #
-#    Updated: 2022/03/24 12:36:28 by ghanquer         ###   ########.fr        #
+#    Updated: 2022/03/25 10:46:13 by tnaton           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ clean :
 .PHONY: fclean
 fclean :
 		rm -rf $(NAME) $(object)
+		$(MAKE) fclean -C ./libft
 
 .PHONY: re
 re : fclean all

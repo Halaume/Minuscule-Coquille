@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 20:05:58 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/25 11:34:13 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	prendpart(char *ligne, t_arbre *arbre, int start)
 		inpar++;
 	if (ligne[end + 1])
 		end++;
-	while (ligne[end] && ((ligne[end] != '|' && ligne[end] != '&') || (inpar || ingui)))
+	while (ligne[end] && ((ligne[end] != '|' && ligne[end] != '&' && ligne[end] != '<' && ligne[end] != '>') || (inpar || ingui)))
 	{
 		if (!ingui && ligne[end] == '(')
 			inpar++;
@@ -87,6 +87,10 @@ void	analyse_syntaxique(char *ligne, t_arbre *arbre)
 					|| (ligne[i] == '|' && ligne[i - 1] == '|')))
 			prendpart(ligne, arbre, i);
 		else if (!dansguillemet && !dansparenthese && ligne[i] == '|' && ligne[i + 1] != '|')
+			prendpart(ligne, arbre, i);
+		else if (i && !dansguillemet && !dansparenthese && ((ligne[i] == '>' && ligne[i - 1] == '>') || (ligne[i] == '<' && ligne[i - 1 ] == '<')))
+			prendpart(ligne, arbre, i);
+		else if (!dansguillemet && !dansparenthese && ((ligne[i] == '>' && ligne[i + 1] != '>') || (ligne[i] == '<' && ligne[i + 1] != '<')))
 			prendpart(ligne, arbre, i);
 		else if (!dansguillemet && ligne[i] == '(')
 		{

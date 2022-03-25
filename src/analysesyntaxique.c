@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/25 12:23:19 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/25 16:03:55 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	analyse_syntaxique(char *ligne, t_arbre *arbre)
 	i = 0;
 	if (!ligne)
 		RENVOIE ;
+	add_history(ligne);
 	prendpart(ligne, arbre, &i);
 	while (ligne[i])
 	{

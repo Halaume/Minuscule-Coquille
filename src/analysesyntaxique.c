@@ -6,33 +6,102 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/24 17:45:50 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/03/25 16:03:55 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
 
-VIDE	analyse_syntaxique(CARACTERE *ligne, t_info *info)
+void	prendpart(char *ligne, t_arbre *arbre, int *start)
 {
-	ENTIER	i;
-//	ENTIER	dansguillemet;
+	int	end;
+	int	inpar;
+	int	ingui;
 
-//	dansguillemet = 0;
-	i = 0;
-	SI (!ligne)
-		RENVOIE ;
-	(VIDE)i;
-	(VIDE)info;
-/*	TANTQUE (ligne[i])
+	inpar = 0;
+	ingui = 0;
+	(void)arbre;
+	end = *start;
+	if (ligne[end] == '(')
+		inpar++;
+	if (ligne[end + 1])
+		end++;
+	while (ligne[end] && ((ligne[end] != '|' && ligne[end] != '&' && ligne[end] != '<' && ligne[end] != '>') || (inpar || ingui)))
 	{
-		SI (ligne[i] == '\'' || ligne[i] == '"')
+		if (!ingui && ligne[end] == '(')
+			inpar++;
+		if (!ingui && ligne[end] == ')')
+			inpar--;
+		if (ligne[end] == '\'' || ligne[end] == '"')
+			ingui = !ingui;
+		end++;
+	}
+	if (ligne[end])
+		end++;
+	printf("prendpart : %s\n", ft_substr(ligne, *start, (end - *start)));
+	*start = end - 2;
+}
+
+void	getpar(char *ligne, t_arbre *arbre, int *start)
+{
+	int	end;
+	int	inpar;
+	int	ingui;
+
+	ingui = 0;
+	inpar = 1;
+	(void)arbre;
+	end = *start + 1;
+	while (inpar != 0)
+	{
+		if (ligne[end] == '\'')
+			ingui = !ingui;
+		if (ligne[end] == '"')
+			ingui = !ingui;
+		if (!ingui && ligne[end] == '(')
+			inpar++;
+		if (!ingui && ligne[end] == ')')
+			inpar--;
+		end++;
+	}
+	printf("getpar : %s\n", ft_substr(ligne, *start, (end - *start)));
+	*start = end - 2;
+}
+
+
+void	analyse_syntaxique(char *ligne, t_arbre *arbre)
+{
+	int	i;
+	int	dansparenthese;
+	int	dansguillemet;
+
+	dansguillemet = 0;
+	dansparenthese = 0;
+	i = 0;
+	if (!ligne)
+		RENVOIE ;
+	add_history(ligne);
+	prendpart(ligne, arbre, &i);
+	while (ligne[i])
+	{
+		if (ligne[i] == '\'' || ligne[i] == '"')
 			dansguillemet = !dansguillemet;
-		SI (i && !dansguillemet && ((ligne[i] == '&' && ligne[i - 1] == '&') \
+		if (i && !dansguillemet && !dansparenthese && ((ligne[i] == '&' && ligne[i - 1] == '&') \
 					|| (ligne[i] == '|' && ligne[i - 1] == '|')))
-			logique(ligne, info, i);
-		SINON SI (!dansguillemet && ligne[i] == '|')
-			tuyau(ligne, info, i);
-		SINON SI (!dansguillemet && ligne[i] == '(')
-			fourchette(ligne, info, i);
-	}*/
+			prendpart(ligne, arbre, &i);
+		else if (!dansguillemet && !dansparenthese && ligne[i] == '|' && ligne[i + 1] != '|')
+			prendpart(ligne, arbre, &i);
+		else if (i && !dansguillemet && !dansparenthese && ((ligne[i] == '>' && ligne[i - 1] == '>') || (ligne[i] == '<' && ligne[i - 1 ] == '<')))
+			prendpart(ligne, arbre, &i);
+		else if (!dansguillemet && !dansparenthese && ((ligne[i] == '>' && ligne[i + 1] != '>') || (ligne[i] == '<' && ligne[i + 1] != '<')))
+			prendpart(ligne, arbre, &i);
+		else if (!dansguillemet && ligne[i] == '(')
+		{
+			dansparenthese++;
+			getpar(ligne, arbre, &i);
+		}
+		else if (!dansguillemet && ligne[i] == ')')
+			dansparenthese--;
+		i++;
+	}
 }

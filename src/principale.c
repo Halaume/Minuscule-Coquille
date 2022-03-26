@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/25 12:10:05 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/25 17:44:14 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	verifieligne(char *ligne)
 	simpleguillemet = 0;
 	while (ligne[i])
 	{
+		add_history(ligne);
 		if (ligne[i] == '"' && !simpleguillemet)
 			doubleguillemet = !doubleguillemet;
 		else if (ligne[i] == '\'' && !doubleguillemet)

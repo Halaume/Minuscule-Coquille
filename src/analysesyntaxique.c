@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/25 16:03:55 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/03/26 18:54:47 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,40 +68,196 @@ void	getpar(char *ligne, t_arbre *arbre, int *start)
 	*start = end - 2;
 }
 
+void	takelogical(char *ligne, t_arbre *arbre, int i)
+{
+	int	j;
+	int	inpar;
+	int	indoublegui;
+	int	insimplegui;
+
+	insimplegui = 0;
+	indoublegui = 0;
+	inpar = 0;
+	j = i - 2;
+	(void)arbre;
+	while (j)
+	{
+		if (!indoublegui && ligne[j] == '\'')
+		   insimplegui = !insimplegui;
+		if (!insimplegui && ligne[j] == '"')
+			indoublegui = !indoublegui;
+		if (!insimplegui && !indoublegui && ligne[j] == ')')
+			inpar++;
+		if (!insimplegui && !indoublegui && ligne[j] == '(')
+			inpar--;
+		if (j && !indoublegui && !insimplegui && !inpar && ((ligne[j] == '|' && ligne[j - 1] == '|') || (ligne[j] == '&' && ligne[j - 1] == '&')))
+			break ;
+		j--;
+	}
+	printf("%s\n", ft_substr(ligne, j, i - j));
+}
+
+void	takepipe(char *ligne, t_arbre *arbre, int i)
+{
+	int	j;
+	int	inpar;
+	int	indoublegui;
+	int	insimplegui;
+
+	insimplegui = 0;
+	indoublegui = 0;
+	inpar = 0;
+	j = i - 2;
+	(void)arbre;
+	while (j)
+	{
+		if (!indoublegui && ligne[j] == '\'')
+		   insimplegui = !insimplegui;
+		if (!insimplegui && ligne[j] == '"')
+			indoublegui = !indoublegui;
+		if (!insimplegui && !indoublegui && ligne[j] == ')')
+			inpar++;
+		if (!insimplegui && !indoublegui && ligne[j] == '(')
+			inpar--;
+		if (j && !indoublegui && !insimplegui && !inpar && (ligne[j] == '|' || ligne[j] == '&'))
+			break ;
+		j--;
+	}
+	printf("%s\n", ft_substr(ligne, j, i - j));
+}
+
+void	takerepipe(char *ligne, t_arbre *arbre, int i)
+{
+	int	j;
+	int	inpar;
+	int	indoublegui;
+	int	insimplegui;
+
+	insimplegui = 0;
+	indoublegui = 0;
+	inpar = 0;
+	j = i + 1;
+	(void)arbre;
+	while (ligne[j])
+	{
+		if (!indoublegui && ligne[j] == '\'')
+		   insimplegui = !insimplegui;
+		if (!insimplegui && ligne[j] == '"')
+			indoublegui = !indoublegui;
+		if (!insimplegui && !indoublegui && ligne[j] == ')')
+			inpar--;
+		if (!insimplegui && !indoublegui && ligne[j] == '(')
+			inpar++;
+		if (j && !indoublegui && !insimplegui && !inpar && (ligne[j] == '|' || ligne[j] == '&'))
+			break ;
+		j++;
+	}
+	printf("%s\n", ft_substr(ligne, i, j - i));
+}
+
+void	takefork(char *ligne, t_arbre *arbre, int i)
+{
+	int	j;
+	int	inpar;
+	int	indoublegui;
+	int	insimplegui;
+
+	insimplegui = 0;
+	indoublegui = 0;
+	inpar = 1;
+	j = i - 1;
+	(void)arbre;
+	while (j)
+	{
+		if (!indoublegui && ligne[j] == '\'')
+		   insimplegui = !insimplegui;
+		if (!insimplegui && ligne[j] == '"')
+			indoublegui = !indoublegui;
+		if (!insimplegui && !indoublegui && ligne[j] == ')')
+			inpar++;
+		if (!insimplegui && !indoublegui && ligne[j] == '(')
+			inpar--;
+		if (j && !indoublegui && !insimplegui && !inpar && ligne[j] == '(')
+			break ;
+		j--;
+	}
+	if (i)
+		analyse_syntaxique(ft_strtrim(ft_substr(ligne, j, i - j), "()"), arbre);
+}
 
 void	analyse_syntaxique(char *ligne, t_arbre *arbre)
 {
 	int	i;
-	int	dansparenthese;
-	int	dansguillemet;
+	int	inpar;
+	int	insimplegui;
+	int	indoublegui;
+	int	logical;
+	int	fork;
 
-	dansguillemet = 0;
-	dansparenthese = 0;
+	fork = 0;
+	logical = 0;
+	insimplegui = 0;
+	indoublegui = 0;
+	inpar = 0;
 	i = 0;
 	if (!ligne)
 		RENVOIE ;
-	add_history(ligne);
-	prendpart(ligne, arbre, &i);
 	while (ligne[i])
 	{
-		if (ligne[i] == '\'' || ligne[i] == '"')
-			dansguillemet = !dansguillemet;
-		if (i && !dansguillemet && !dansparenthese && ((ligne[i] == '&' && ligne[i - 1] == '&') \
-					|| (ligne[i] == '|' && ligne[i - 1] == '|')))
-			prendpart(ligne, arbre, &i);
-		else if (!dansguillemet && !dansparenthese && ligne[i] == '|' && ligne[i + 1] != '|')
-			prendpart(ligne, arbre, &i);
-		else if (i && !dansguillemet && !dansparenthese && ((ligne[i] == '>' && ligne[i - 1] == '>') || (ligne[i] == '<' && ligne[i - 1 ] == '<')))
-			prendpart(ligne, arbre, &i);
-		else if (!dansguillemet && !dansparenthese && ((ligne[i] == '>' && ligne[i + 1] != '>') || (ligne[i] == '<' && ligne[i + 1] != '<')))
-			prendpart(ligne, arbre, &i);
-		else if (!dansguillemet && ligne[i] == '(')
+		if (!indoublegui && ligne[i] == '\'')
+		   insimplegui = !insimplegui;
+		if (!insimplegui && ligne[i] == '"')
+			indoublegui = !indoublegui;
+		if (!insimplegui && !indoublegui && ligne[i] == ')')
+			inpar--;
+		if (!insimplegui && !indoublegui && ligne[i] == '(')
+			inpar++;
+		if (i && !insimplegui && !indoublegui && !inpar && ((ligne[i] == '&' && ligne[i - 1] == '&') \
+			|| (ligne[i] == '|' && ligne[i - 1] == '|')))
 		{
-			dansparenthese++;
-			getpar(ligne, arbre, &i);
+			logical++;
+			takelogical(ligne, arbre, i);
 		}
-		else if (!dansguillemet && ligne[i] == ')')
-			dansparenthese--;
+		i++;
+	}
+	if (logical)
+		takelogical(ligne, arbre, i);
+	i = 0;
+	while (ligne[i])
+	{
+		if (!indoublegui && ligne[i] == '\'')
+		   insimplegui = !insimplegui;
+		if (!insimplegui && ligne[i] == '"')
+			indoublegui = !indoublegui;
+		if (!insimplegui && !indoublegui && ligne[i] == ')')
+			inpar--;
+		if (!insimplegui && !indoublegui && ligne[i] == '(')
+			inpar++;
+		if (i && i < (int)ft_strlen(ligne) && !insimplegui && !indoublegui \
+				&& !inpar && (ligne[i] == '|' && ligne[i + 1] != '|' \
+					&& ligne[i - 1] != '|'))
+		{
+			takepipe(ligne, arbre, i);
+			takerepipe(ligne, arbre, i);
+		}
+		i++;
+	}
+	i = 0;
+	while (ligne[i])
+	{
+		if (!indoublegui && ligne[i] == '\'')
+		   insimplegui = !insimplegui;
+		if (!insimplegui && ligne[i] == '"')
+			indoublegui = !indoublegui;
+		if (!insimplegui && !indoublegui && ligne[i] == ')')
+			inpar--;
+		if (!insimplegui && !indoublegui && ligne[i] == '(')
+			inpar++;
+		if (!inpar && !insimplegui && !indoublegui && ligne[i] == ')')
+		{
+			fork++;
+			takefork(ligne, arbre, i);
+		}
 		i++;
 	}
 }

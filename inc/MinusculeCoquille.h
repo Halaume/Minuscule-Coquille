@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/25 12:04:55 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/28 18:01:57 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,13 @@ VIDE	analyse_syntaxique(CARACTERE *ligne, t_arbre *arbre);
 void	logique(char *ligne, t_info *info, int i);
 void	tuyau(char *ligne, t_info *info, int i);
 void	fourchette(char *ligne, t_info *info, int i);
+char	**no_quote(char *str);
 
 //				FAIS-DEDANS
 
-int		is_built_in(t_arbre *arbre);
-int		ft_echo(t_arbre **arg);
-int		ft_cd(t_arbre **arg);
+int		is_built_in(char *arbre);
+int		ft_echo(char **arg);
+int		ft_cd(char **arg);
 int		ft_pwd(char **splitted_str);
 int		ft_export(char **splitted_str);
 int		ft_unset(char **splitted_str);

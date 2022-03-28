@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/26 18:54:47 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/28 12:33:49 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	takelogical(char *ligne, t_arbre *arbre, int i)
 			inpar++;
 		if (!insimplegui && !indoublegui && ligne[j] == '(')
 			inpar--;
-		if (j && !indoublegui && !insimplegui && !inpar && ((ligne[j] == '|' && ligne[j - 1] == '|') || (ligne[j] == '&' && ligne[j - 1] == '&')))
+		if (j && !indoublegui && !insimplegui && inpar <= 0 && ((ligne[j] == '|' && ligne[j - 1] == '|') || (ligne[j] == '&' && ligne[j - 1] == '&')))
 			break ;
 		j--;
 	}
@@ -164,9 +164,8 @@ void	takefork(char *ligne, t_arbre *arbre, int i)
 
 	insimplegui = 0;
 	indoublegui = 0;
-	inpar = 1;
-	j = i - 1;
-	(void)arbre;
+	inpar = 0;
+	j = i;
 	while (j)
 	{
 		if (!indoublegui && ligne[j] == '\'')
@@ -177,12 +176,12 @@ void	takefork(char *ligne, t_arbre *arbre, int i)
 			inpar++;
 		if (!insimplegui && !indoublegui && ligne[j] == '(')
 			inpar--;
-		if (j && !indoublegui && !insimplegui && !inpar && ligne[j] == '(')
+		if (j && !inpar && !indoublegui && !insimplegui && !inpar && ligne[j] == '(')
 			break ;
 		j--;
 	}
 	if (i)
-		analyse_syntaxique(ft_strtrim(ft_substr(ligne, j, i - j), "()"), arbre);
+		analyse_syntaxique(ft_substr(ligne, j + 1, i - j - 1), arbre);
 }
 
 void	analyse_syntaxique(char *ligne, t_arbre *arbre)
@@ -223,6 +222,9 @@ void	analyse_syntaxique(char *ligne, t_arbre *arbre)
 	if (logical)
 		takelogical(ligne, arbre, i);
 	i = 0;
+	inpar = 0;
+	insimplegui = 0;
+	indoublegui = 0;
 	while (ligne[i])
 	{
 		if (!indoublegui && ligne[i] == '\'')
@@ -242,6 +244,9 @@ void	analyse_syntaxique(char *ligne, t_arbre *arbre)
 		}
 		i++;
 	}
+	inpar = 0;
+	insimplegui = 0;
+	indoublegui = 0;
 	i = 0;
 	while (ligne[i])
 	{
@@ -249,10 +254,10 @@ void	analyse_syntaxique(char *ligne, t_arbre *arbre)
 		   insimplegui = !insimplegui;
 		if (!insimplegui && ligne[i] == '"')
 			indoublegui = !indoublegui;
-		if (!insimplegui && !indoublegui && ligne[i] == ')')
-			inpar--;
 		if (!insimplegui && !indoublegui && ligne[i] == '(')
 			inpar++;
+		if (!insimplegui && !indoublegui && ligne[i] == ')')
+			inpar--;
 		if (!inpar && !insimplegui && !indoublegui && ligne[i] == ')')
 		{
 			fork++;

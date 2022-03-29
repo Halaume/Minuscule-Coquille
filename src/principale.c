@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/25 17:44:14 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/29 18:22:15 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	verifieligne(char *ligne)
 	simpleguillemet = 0;
 	while (ligne[i])
 	{
-		add_history(ligne);
 		if (ligne[i] == '"' && !simpleguillemet)
 			doubleguillemet = !doubleguillemet;
 		else if (ligne[i] == '\'' && !doubleguillemet)
@@ -43,19 +42,36 @@ int	verifieligne(char *ligne)
 	return (0);
 }
 
+void	print_arbre(t_arbre *arbre)
+{
+	if (arbre && arbre->commande)
+	{
+		printf("%s\n", arbre->commande);
+		print_arbre(arbre->fd);
+		print_arbre(arbre->fg);
+	}
+}
+
 int	principale(int ac, char **av, char **envp)
 {
 	char	*ligne;
 	t_info		info;
 
 	info.arbre = (t_arbre *)malloc(TAILLEDE(t_arbre));
+	info.arbre->fd = NULL;
+	info.arbre->fg = NULL;
 	ligne = readline("MinusculeCoquille$>");
 	while (ligne)
 	{
 		if (verifieligne(ligne))
 			printf("Erreur syntaxique\n");
 		else
+		{
 			analyse_syntaxique(ligne, info.arbre);
+			print_arbre(info.arbre);
+		}
+		if (ft_strlen(ligne))
+			add_history(ligne);
 		free(ligne);
 		ligne = readline("MinusculeCoquille$>");
 	}

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/25 12:04:55 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/29 16:11:25 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,8 @@
 typedef STRUCTURE s_arbre
 {
 	CARACTERE			*commande;
-	STRUCTURE s_arbre	**logique;
-	STRUCTURE s_arbre	**tuyau;
-	STRUCTURE s_arbre	*fourchette;
-	STRUCTURE s_arbre	**argument;
+	STRUCTURE s_arbre	*fd;
+	STRUCTURE s_arbre	*fg;
 }	t_arbre;
 
 typedef STRUCTURE s_info

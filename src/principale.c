@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/25 17:44:14 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/29 18:53:25 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,6 @@ int	principale(int ac, char **av, char **envp)
 
 int	main(int ac, char **av, char **envp)
 {
-	return (principale(ac, av, envp));
+
+//	return (principale(ac, av, envp));
 }

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 18:04:52 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/03/28 18:44:54 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/03/29 19:05:53 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ int	how_many_quote(char *str)
 			while (str[i] != '\'')
 				i++;
 		}
-		if (str[i] && str[i] == '\"')
+		if (str[i] && str[i] == '"')
 		{
 			nb_quote++;
-			while (str[i] != '\"')
+			while (str[i] != '"')
 				i++;
 		}
 		i++;
@@ -40,19 +40,61 @@ int	how_many_quote(char *str)
 	return (nb_quote);
 }
 
+void	**get_every_line(char *str, char **no_quote_str)
+{
+	int	i;
+	int	j;
+	int	k;
+
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (j < how_many_quote(str) && str[i])
+	{
+		k = 0;
+		while (str[i] && str[i] != '\'' && str[i] != '"' && str[i] != ' ')
+		{
+			no_quote_str[j][k] = str[i];
+			k++;
+			i++;
+		}
+		j++;
+		k = 0;
+		if(str[i] == '\'')
+		{
+			while (str[i] && str[i] != '\'')
+			{
+				no_quote_str[j][k] = str[i];
+				i++;
+			}
+			i++;
+			j++;
+		}
+		else if (str[i] == '"')
+		{
+			while (str[i] && str[i] != '"')
+			{
+				no_quote_str[j][k] = str[i];
+				i++;
+			}
+			i++;
+			j++;
+		}
+	}
+	no_quote_str[how_many_quote(str) + 1] = "\0";
+}
+
 char	**no_quote(char *str)
 {
 	char	**no_quote_str;
 	int		nbquote;
-	int		i;
 
-	i = 0;
 	if (!str)
 		return (NULL);
 	no_quote_str = NULL;
 	no_quote_str = malloc(sizeof(char *) * (how_many_quote(str) + 1));
 	if (!no_quote_str)
 		return (NULL);
-	no_quote_str[i] = "\0";
+	get_every_line(str, no_quote_str);
 	return (no_quote_str);
 }

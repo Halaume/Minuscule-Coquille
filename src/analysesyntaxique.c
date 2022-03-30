@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/29 18:19:09 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/30 14:59:26 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,13 @@ void	takefork(char *ligne, t_arbre *arbre, int i)
 		analyse_syntaxique(ft_substr(ligne, j + 1, i - j - 1), arbre);
 }
 
-void	analyse_syntaxique(char *ligne, t_arbre *arbre)
+t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 {
 	int	i;
 	int	inpar;
 	int	insimplegui;
 	int	indoublegui;
+	int	first_par;
 	int j;
 
 	insimplegui = 0;
@@ -120,7 +121,7 @@ void	analyse_syntaxique(char *ligne, t_arbre *arbre)
 	inpar = 0;
 	i = 0;
 	if (!ligne)
-		RENVOIE ;
+		RENVOIE arbre;
 	if (!arbre)
 	{
 		arbre = malloc(sizeof(t_arbre) * 1);
@@ -140,16 +141,16 @@ void	analyse_syntaxique(char *ligne, t_arbre *arbre)
 		if (i && !insimplegui && !indoublegui && !inpar && ((ligne[i] == '&' && ligne[i - 1] == '&') \
 			|| (ligne[i] == '|' && ligne[i - 1] == '|')))
 		{
-			analyse_syntaxique(ft_substr(ligne, 0, i - 1), arbre->fd);
+			arbre->fg = analyse_syntaxique(ft_substr(ligne, 0, i - 1), arbre->fg);
 			j = i;
 			while (ligne[j])
 				j++;
-			analyse_syntaxique(ft_substr(ligne, i + 1, j), arbre->fg);
+			arbre->fd = analyse_syntaxique(ft_substr(ligne, i + 1, j), arbre->fd);
 			if (ligne[i] == '|')
 				arbre->commande = "||";
 			if (ligne[i] == '&')
 				arbre->commande = "&&";
-			return ;
+			return arbre;
 		}
 		i++;
 	}
@@ -171,13 +172,13 @@ void	analyse_syntaxique(char *ligne, t_arbre *arbre)
 				&& !inpar && (ligne[i] == '|' && ligne[i + 1] != '|' \
 					&& ligne[i - 1] != '|'))
 		{
-			analyse_syntaxique(ft_substr(ligne, 0, i), arbre->fd);
+			arbre->fg = analyse_syntaxique(ft_substr(ligne, 0, i), arbre->fg);
 			j = i;
 			while (ligne[j])
 				j++;
-			analyse_syntaxique(ft_substr(ligne, i + 1, j), arbre->fg);
+			arbre->fd = analyse_syntaxique(ft_substr(ligne, i + 1, j), arbre->fd);
 			arbre->commande = "|";
-			return ;
+			return arbre;
 		}
 		i++;
 	}
@@ -185,6 +186,7 @@ void	analyse_syntaxique(char *ligne, t_arbre *arbre)
 	insimplegui = 0;
 	indoublegui = 0;
 	i = 0;
+	first_par = 0;
 	while (ligne[i])
 	{
 		if (!indoublegui && ligne[i] == '\'')
@@ -192,17 +194,22 @@ void	analyse_syntaxique(char *ligne, t_arbre *arbre)
 		if (!insimplegui && ligne[i] == '"')
 			indoublegui = !indoublegui;
 		if (!insimplegui && !indoublegui && ligne[i] == '(')
+		{
+			if (!inpar && !first_par)
+				first_par = i;
 			inpar++;
+		}
 		if (!insimplegui && !indoublegui && ligne[i] == ')')
 			inpar--;
 		if (!inpar && !insimplegui && !indoublegui && ligne[i] == ')')
 		{
-			analyse_syntaxique(ft_substr(ligne, 1, i - 1), arbre->fd);
-			return ;
+			arbre->fd = analyse_syntaxique(ft_substr(ligne, first_par + 1, i - first_par), arbre->fd);
+			arbre->commande = "()";
+			return (arbre);
 		}
 		i++;
 	}
-	insimplegui = 0;
+/*	insimplegui = 0;
 	indoublegui = 0;
 	i = 0;
 	while (ligne[i])
@@ -214,7 +221,8 @@ void	analyse_syntaxique(char *ligne, t_arbre *arbre)
 		if (!insimplegui && !indoublegui && (ligne[i] == '(' || ligne[i] == ')' || ligne[i] == '&' || ligne[i] == '|'))
 			return ;
 		i++;
-	}
-	printf("%s\n", ligne);
+	}*/
+//	printf("%s\n", ligne);
 	arbre->commande = ligne;
+	return (arbre);
 }

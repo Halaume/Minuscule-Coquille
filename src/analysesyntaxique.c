@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/30 14:59:26 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/30 17:48:46 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,25 +203,12 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 			inpar--;
 		if (!inpar && !insimplegui && !indoublegui && ligne[i] == ')')
 		{
-			arbre->fd = analyse_syntaxique(ft_substr(ligne, first_par + 1, i - first_par), arbre->fd);
+			arbre->fd = analyse_syntaxique(ft_substr(ligne, first_par + 1, i - first_par - 1), arbre->fd);
 			arbre->commande = "()";
 			return (arbre);
 		}
 		i++;
 	}
-/*	insimplegui = 0;
-	indoublegui = 0;
-	i = 0;
-	while (ligne[i])
-	{
-		if (!indoublegui && ligne[i] == '\'')
-			insimplegui = !insimplegui;
-		if (!insimplegui && ligne[i] == '"')
-			indoublegui = !indoublegui;
-		if (!insimplegui && !indoublegui && (ligne[i] == '(' || ligne[i] == ')' || ligne[i] == '&' || ligne[i] == '|'))
-			return ;
-		i++;
-	}*/
 //	printf("%s\n", ligne);
 	arbre->commande = ligne;
 	return (arbre);

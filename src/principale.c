@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/30 14:36:54 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/30 17:45:57 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,25 @@ int	verifieligne(char *ligne)
 	return (0);
 }
 
-void	print_arbre(t_arbre *arbre, int type)
+void padding ( char ch, int n )
 {
-	if (arbre && arbre->commande)
-	{
-		if (type == 0)
-			printf("root :");
-		if (type == 1)
-			printf("fg :");
-		if (type == 2)
-			printf("fd :");
-		printf("%s\n", arbre->commande);
-		print_arbre(arbre->fd, 2);
-		print_arbre(arbre->fg, 1);
-	}
+  int i;
+
+  for ( i = 0; i < n; i++ )
+    putchar ( ch );
+}
+
+void structure (t_arbre *root, int level)
+{
+  if (root == NULL) {
+    padding (' ', level);
+  }
+  else {
+    structure (root->fd, level + 1);
+    padding ('	', level);
+    printf ("%s\n", root->commande);
+    structure (root->fg, level + 1);
+  }
 }
 
 int	principale(int ac, char **av, char **envp)
@@ -74,7 +79,7 @@ int	principale(int ac, char **av, char **envp)
 		else
 		{
 			analyse_syntaxique(ligne, info.arbre);
-			print_arbre(info.arbre, 0);
+			structure(info.arbre, 0);
 		}
 		if (ft_strlen(ligne))
 			add_history(ligne);

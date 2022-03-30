@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/03/28 18:17:05 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/03/30 17:40:40 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_echo(char **arg)
 
 	i = 0;
 	is_n_here = 0;
-	if (arg[0] && ft_strncmp(arg[0], "-n", ft_strlen(arg[0])) == 0)
+	if (arg[1] && ft_strncmp(arg[1], "-n", ft_strlen(arg[0])) == 0)
 	{
 		while (arg[i] && ft_strncmp(arg[i], "-n", ft_strlen(arg[0])) == 0)
 			i++;

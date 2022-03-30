@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 18:04:52 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/03/30 15:03:27 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/03/30 17:41:42 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,14 @@ int	how_many_quote(char *str)
 		if (str[i] && str[i] == '\'')
 		{
 			nb_quote++;
+			i++;
 			while (str[i] != '\'')
 				i++;
 		}
 		if (str[i] && str[i] == '"')
 		{
 			nb_quote++;
+			i++;
 			while (str[i] != '"')
 				i++;
 		}
@@ -72,6 +74,7 @@ int	size_of_no_quote(char *str, int j)
 			i++;
 		}
 	}
+	printf("ligne = %d\n", i);
 	return (i);
 }
 
@@ -126,7 +129,7 @@ void	get_every_line(char *str, char **no_quote_str)
 		}
 		j++;
 	}
-	no_quote_str[how_many_quote(str)] = "\0";
+	no_quote_str[how_many_quote(str) + 1] = "\0";
 }
 
 char	**no_quote(char *str)
@@ -138,7 +141,7 @@ char	**no_quote(char *str)
 	if (how_many_quote(str) == 0)
 		return (ft_split(str, ' '));
 	no_quote_str = NULL;
-	no_quote_str = malloc(sizeof(char *) * (how_many_quote(str) + 1));
+	no_quote_str = malloc(sizeof(char *) * (how_many_quote(str) + 2));
 	if (!no_quote_str)
 		return (NULL);
 	no_quote_str[how_many_quote(str)] = NULL;

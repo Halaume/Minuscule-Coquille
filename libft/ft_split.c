@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 15:56:06 by tnaton            #+#    #+#             */
-/*   Updated: 2022/02/09 15:42:34 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/30 14:52:03 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,5 @@ char	**ft_split(char *s, char c)
 			return (NULL);
 		}
 	}
-	return (free(s), dest);
+	return (dest);
 }

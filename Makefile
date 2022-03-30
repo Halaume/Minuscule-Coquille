@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/23 11:46:46 by tnaton            #+#    #+#              #
-#    Updated: 2022/03/25 12:12:03 by tnaton           ###   ########.fr        #
+#    Updated: 2022/03/30 12:34:00 by ghanquer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ NAME = minishell
 
 LIBFT = libft/libft.a
 
-source = $(addprefix src/,principale.c analysesyntaxique.c)
+source = $(addprefix src/,principale.c analysesyntaxique.c no_quote.c)
 
 CFLAGS = -Wall -Werror -Wextra
 

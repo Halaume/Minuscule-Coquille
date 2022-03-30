@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/29 18:53:25 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/03/30 14:50:07 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,18 @@ int	principale(int ac, char **av, char **envp)
 
 int	main(int ac, char **av, char **envp)
 {
-
+	char **my_string = NULL;
+	my_string = no_quote(av[1]);
+	(void)ac;
+	(void)envp;
+	int	i = 0;
+	if (my_string[i])
+	{
+		while (my_string[i])
+		{
+			printf("str : %s\n", my_string[i]);
+			i++;
+		}
+	}
 //	return (principale(ac, av, envp));
 }

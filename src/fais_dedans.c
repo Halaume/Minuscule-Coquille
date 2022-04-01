@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/03/30 17:40:40 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/03/31 18:38:09 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	is_built_in(char *commande)
 	char	**no_quote_commande;
 
 	no_quote_commande = NULL;
-	no_quote_commande = no_quote(commande);
+	no_quote_commande = ft_split(no_quote(commande), ' ');
 	if (!no_quote_commande)
 		return (1);
 	if (!commande || !*commande)

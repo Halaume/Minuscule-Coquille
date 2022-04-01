@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/01 10:57:08 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/01 14:13:18 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ int	main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)envp;
-	char	*mystr = no_quote(av[1]);
-	printf("str : %s\n", mystr);
-	free(mystr);
+	printf("%d\n", is_built_in(av[1]));
 //	return (principale(ac, av, envp));
 }

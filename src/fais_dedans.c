@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/03/31 18:38:09 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/01 14:34:14 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@ int	ft_echo(char **arg)
 {
 	int	i;
 	int	is_n_here;
+	int	first_word;
 
-	i = 0;
+	first_word = 1;
+	i = 1;
 	is_n_here = 0;
-	if (arg[1] && ft_strncmp(arg[1], "-n", ft_strlen(arg[0])) == 0)
+	if (arg[1] && ft_strncmp(arg[1], "-n", ft_strlen(arg[1])) == 0)
 	{
 		while (arg[i] && ft_strncmp(arg[i], "-n", ft_strlen(arg[0])) == 0)
 			i++;
@@ -30,7 +32,11 @@ int	ft_echo(char **arg)
 	{
 		while (arg[i])
 		{
+			if (first_word == 0)
+				write(1, " ", 1);
 			write(1, arg[i], ft_strlen(arg[i]));
+			if (first_word == 1)
+				first_word = 0;
 			i++;
 		}
 	}
@@ -58,7 +64,7 @@ int	is_built_in(char *commande)
 		return (1);
 	if (!commande || !*commande)
 		return (1);
-	if (ft_strncmp("echo", commande, ft_strlen(commande)) == 0)
+	if (ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (ft_echo(no_quote_commande));
 //	else if (ft_strncmp("pwd", splitted_str[0], 3) == 0)
 //		return (ft_pwd(splitted_str));

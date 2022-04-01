@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 18:04:52 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/01 11:09:39 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/01 14:07:50 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	how_many_quote(char *str)
 		return (-1);
 	i = 0;
 	nb_quote = 0;
-	printf("str = %s\n", str);
 	while (str[i])
 	{
 		if (str[i] && str[i] == '\'')

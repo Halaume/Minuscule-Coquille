@@ -22,7 +22,7 @@ SRC = principale.c analysesyntaxique.c no_quote.c liberation.c fais_dedans.c
 
 source = $(addprefix src/,$(SRC))
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g3 -fsanitize=address
 
 CC =	clang
 

@@ -29,10 +29,10 @@ OBJS = $(SRCS:.c=.o)
 
 OBJSBONUS = $(BONUS:.c=.o)
 
-CC		= gcc
+CC		= clang
 RM		= rm -f
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 
 ifeq (libft,$(DIR))
 

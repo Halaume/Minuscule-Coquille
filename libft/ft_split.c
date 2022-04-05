@@ -19,6 +19,8 @@ static unsigned int	count_word(char const *s, char c)
 
 	i = 0;
 	count = 0;
+	if (!s || !*s)
+		return (-1);
 	while (s[i])
 	{
 		while (s[i] && s[i] == c)

@@ -6,13 +6,13 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/06 12:56:00 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/06 13:02:53 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
 
-void	takelogical(char *ligne, t_arbre *arbre, int i)
+/*void	takelogical(char *ligne, t_arbre *arbre, int i)
 {
 	int	j;
 	int	inpar;
@@ -105,7 +105,7 @@ void	takefork(char *ligne, t_arbre *arbre, int i)
 	}
 	if (i)
 		analyse_syntaxique(ft_substr(ligne, j + 1, i - j - 1), arbre);
-}
+}*/
 
 t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 {

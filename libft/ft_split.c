@@ -52,6 +52,9 @@ char	**ft_split(char *s, char c)
 
 	i = 0;
 	end = 0;
+	if (!s)
+		return (NULL);
+	dest = NULL;
 	dest = (char **)ft_calloc(sizeof(char *), count_word(s, c));
 	if (!dest)
 		return (NULL);

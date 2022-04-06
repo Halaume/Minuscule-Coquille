@@ -47,9 +47,9 @@ int	ft_echo(char **arg)
 
 int	ft_cd(char **arg)
 {
-	if (arg[1])
+	if (arg[2])
 		return (write(2, "cd: too many arguments\n", 24), 1);
-	if (chdir(arg[0]) == -1)
+	if (chdir(arg[1]) == -1)
 		return (perror("cd"), 1);
 	return (0);
 }
@@ -57,7 +57,9 @@ int	ft_cd(char **arg)
 int	is_built_in(char *commande)
 {
 	char	**no_quote_commande;
+	int		ret;
 
+	ret = 1;
 	no_quote_commande = NULL;
 	no_quote_commande = ft_split(no_quote(commande), ' ');
 	if (!no_quote_commande)
@@ -65,11 +67,11 @@ int	is_built_in(char *commande)
 	if (!commande || !*commande)
 		return (1);
 	if (ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
-		return (ft_echo(no_quote_commande));
+		ret = ft_echo(no_quote_commande);
 //	else if (ft_strncmp("pwd", splitted_str[0], 3) == 0)
 //		return (ft_pwd(splitted_str));
-	else if (ft_strncmp("cd", commande, ft_strlen(commande)) == 0)
-		return (ft_cd(no_quote_commande));
+	else if (ft_strncmp("cd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+		ret = ft_cd(no_quote_commande);
 //	else if (ft_strncmp("export", splitted_str[0], 6) == 0)
 //		return (ft_export(splitted_str));
 //	else if (ft_strncmp("unset", splitted_str[0], 5) == 0)
@@ -79,5 +81,5 @@ int	is_built_in(char *commande)
 //	else if (ft_strncmp("exit", splitted_str[0], 4) == 0)
 //		return (ft_exit(splitted_str));
 	free(no_quote_commande);
-	return (1);
+	return (ret);
 }

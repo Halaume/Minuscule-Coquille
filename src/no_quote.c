@@ -105,7 +105,6 @@ char	*no_quote(char *str)
 {
 	char	**no_quote_str;
 	char	*joined_str;
-	char	*to_free;
 	int		i;
 	int		nb_word;
 
@@ -126,10 +125,7 @@ char	*no_quote(char *str)
 		return (NULL);
 	while (no_quote_str[i])
 	{
-		to_free = joined_str;
 		joined_str = ft_strjoin(joined_str, no_quote_str[i]);
-		if (i != 0)
-			free(to_free);
 		i++;
 	}
 	free_char_char(no_quote_str);

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/30 17:48:46 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/06 12:56:00 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,41 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 	inpar = 0;
 	insimplegui = 0;
 	indoublegui = 0;
+	while (i)
+	{
+		if (!indoublegui && ligne[i] == '\'')
+		   insimplegui = !insimplegui;
+		if (!insimplegui && ligne[i] == '"')
+			indoublegui = !indoublegui;
+		if (!insimplegui && !indoublegui && ligne[i] == ')')
+			inpar--;
+		if (!insimplegui && !indoublegui && ligne[i] == '(')
+			inpar++;
+		if (!insimplegui && !indoublegui && !inpar && (ligne[i] == '<' || ligne[i] == '>'))
+		{
+			if (i && (ligne[i - 1] == '<' || ligne[i - 1] == '>'))
+				i--;
+			j = i;
+			while (ligne[j] && (ligne[j] != '('))
+				j++;
+			arbre->commande = ft_substr(ligne, i, j - i);
+			if (j != i)
+				arbre->fg = analyse_syntaxique(ft_substr(ligne, 0, i), arbre->fg);
+			i++;
+			if (ligne[i] == '<' || ligne[i] == '>')
+				i++;
+			while (ligne[i] != '<' && ligne[i] != '>' && ligne[i] != '&' && ligne[i] != '|' && ligne[i] != ' ')
+				i++;
+			while (ligne[j])
+				j++;
+			arbre->fd = analyse_syntaxique(ft_substr(ligne, i + 1, j - i - 1), arbre->fd);
+			return arbre;
+		}
+		i--;
+	}
+	inpar = 0;
+	insimplegui = 0;
+	indoublegui = 0;
 	i = 0;
 	first_par = 0;
 	while (ligne[i])
@@ -209,7 +244,7 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 		}
 		i++;
 	}
-//	printf("%s\n", ligne);
+	//	printf("%s\n", ligne);
 	arbre->commande = ligne;
 	return (arbre);
 }

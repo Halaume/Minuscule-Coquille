@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 11:23:31 by tnaton            #+#    #+#             */
-/*   Updated: 2022/02/22 16:59:25 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/08 14:11:55 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ long long			ft_atoi(const char *nptr);
 void				*ft_calloc(size_t nmemb, size_t size);
 char				*ft_strdup(const char *s);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
-char				*ft_strjoin(char const *s1, char const *s2);
+char				*ft_strjoin(char *s1, char *s2);
 char				*ft_strtrim(char *s1, char const *set);
 char				**ft_split(char *s, char c);
 char				*ft_itoa(int n);

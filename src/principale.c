@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/08 18:08:55 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/09 15:30:54 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	verifieligne(char *ligne)
 			doubleguillemet = !doubleguillemet;
 		else if (ligne[i] == '\'' && !doubleguillemet)
 			simpleguillemet = !simpleguillemet;
-		else if (ligne[i] == '(' && !simpleguillemet && !doubleguillemet) 
+		else if (ligne[i] == '(' && !simpleguillemet && !doubleguillemet)
 			parenthese++;
 		else if (ligne[i] == ')' && !simpleguillemet && !doubleguillemet)
 			parenthese--;
@@ -42,25 +42,25 @@ int	verifieligne(char *ligne)
 	return (0);
 }
 
-void padding ( char ch, int n )
+void	padding(char ch, int n)
 {
-  int i;
+	int	i;
 
-  for ( i = 0; i < n; i++ )
-    putchar ( ch );
+	for (i = 0; i < n; i++)
+		putchar(ch);
 }
 
-void structure (t_arbre *root, int level)
+void	structure(t_arbre *root, int level)
 {
-  if (root == NULL) {
-    padding(' ', level);
-  }
-  else {
-    structure(root->fd, level + 1);
-    padding('	', level);
-    printf("%s\n", root->commande);
-    structure (root->fg, level + 1);
-  }
+	if (root == NULL)
+		padding(' ', level);
+	else
+	{
+		structure(root->fd, level + 1);
+		padding('	', level);
+		printf(">%s<\n", root->commande);
+		structure (root->fg, level + 1);
+	}
 }
 
 void	freearbre(t_arbre *arbre)
@@ -73,10 +73,31 @@ void	freearbre(t_arbre *arbre)
 	free(arbre);
 }
 
+int	checkarbre(t_arbre *arbre)
+{
+	if (arbre)
+	{
+		if (!strcmp(arbre->commande, "()") || !strcmp(arbre->commande, "|") || !strcmp(arbre->commande, "&&") || !strcmp(arbre->commande, "||"))
+		{
+			if (arbre->fd && (!strcmp(arbre->fd->commande, "") || !strcmp(arbre->fd->commande, " ")))
+				return (1);
+			if (arbre->fg && (!strcmp(arbre->fg->commande, "") || !strcmp(arbre->fg->commande, " ")))
+				return (1);
+		}
+	}
+	if (arbre->fd && arbre->fg)
+		return (checkarbre(arbre->fd) + checkarbre(arbre->fg));
+	else if (arbre->fg)
+		return (checkarbre(arbre->fg));
+	else if (arbre->fd)
+		return (checkarbre(arbre->fd));
+	return (0);
+}
+
 int	principale(int ac, char **av, char **envp)
 {
 	char	*ligne;
-	t_info		info;
+	t_info	info;
 
 	ligne = readline("MinusculeCoquille$>");
 	while (ligne && strcmp(ligne, "exit"))
@@ -92,8 +113,13 @@ int	principale(int ac, char **av, char **envp)
 		else
 		{
 			info.arbre = analyse_syntaxique(ligne, info.arbre);
-			structure(info.arbre, 0);
-			printf("\n");
+			if (!checkarbre(info.arbre))
+			{
+				structure(info.arbre, 0);
+				printf("\n");
+			}
+			else
+				printf("Erreur syntaxique\n");
 		}
 		if (info.arbre)
 			freearbre(info.arbre);

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/09 14:26:42 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/19 12:58:37 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 	inpar = 0;
 	insimplegui = 0;
 	indoublegui = 0;
-	while (i)
+	while (i != -1)
 	{
 		if (!indoublegui && ligne[i] == '\'')
 			insimplegui = !insimplegui;

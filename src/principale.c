@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/09 15:30:54 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/19 12:04:45 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,20 +81,27 @@ int	checkarbre(t_arbre *arbre)
 	{
 		if (!strcmp(arbre->commande, "()") || !strcmp(arbre->commande, "|") || !strcmp(arbre->commande, "&&") || !strcmp(arbre->commande, "||"))
 		{
-			if (arbre->fd)// && (!strcmp(arbre->fd->commande, "") || !strcmp(ft_strtrim(arbre->fd->commande, " "), "")))
+			if (arbre->fd)
 			{
 				tmp = ft_strtrim(arbre->fd->commande, " ");
-				if (!strcmp(tmp, ""))
+				if (!strcmp(tmp, "") || !strcmp(tmp, ">") || !strcmp(tmp, ">>") || !strcmp(tmp, "<") || !strcmp(tmp, "<<"))
 					return (free(tmp), 1);
 				free(tmp);
 			}
-			if (arbre->fg)// && (!strcmp(arbre->fg->commande, "") || !strcmp(ft_strtrim(arbre->fg->commande, " "), "")))
+			if (arbre->fg)
 			{
 				tmp = ft_strtrim(arbre->fg->commande, " ");
-				if (!strcmp(tmp, ""))
+				if (!strcmp(tmp, "") || !strcmp(tmp, ">") || !strcmp(tmp, ">>") || !strcmp(tmp, "<") || !strcmp(tmp, "<<"))
 					return (free(tmp), 1);
 				free(tmp);
 			}
+		}
+		else
+		{
+			tmp	= ft_strtrim(arbre->commande, " ");
+			if (!strcmp(tmp, ">") || !strcmp(tmp, ">>") || !strcmp(tmp, "<") || !strcmp(tmp, "<<"))
+				return (free(tmp), 1);
+			free(tmp);
 		}
 	}
 	if (arbre->fd && arbre->fg)

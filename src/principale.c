@@ -75,14 +75,26 @@ void	freearbre(t_arbre *arbre)
 
 int	checkarbre(t_arbre *arbre)
 {
+	char *tmp;
+
 	if (arbre)
 	{
 		if (!strcmp(arbre->commande, "()") || !strcmp(arbre->commande, "|") || !strcmp(arbre->commande, "&&") || !strcmp(arbre->commande, "||"))
 		{
-			if (arbre->fd && (!strcmp(arbre->fd->commande, "") || !strcmp(arbre->fd->commande, " ")))
-				return (1);
-			if (arbre->fg && (!strcmp(arbre->fg->commande, "") || !strcmp(arbre->fg->commande, " ")))
-				return (1);
+			if (arbre->fd)// && (!strcmp(arbre->fd->commande, "") || !strcmp(ft_strtrim(arbre->fd->commande, " "), "")))
+			{
+				tmp = ft_strtrim(arbre->fd->commande, " ");
+				if (!strcmp(tmp, ""))
+					return (free(tmp), 1);
+				free(tmp);
+			}
+			if (arbre->fg)// && (!strcmp(arbre->fg->commande, "") || !strcmp(ft_strtrim(arbre->fg->commande, " "), "")))
+			{
+				tmp = ft_strtrim(arbre->fg->commande, " ");
+				if (!strcmp(tmp, ""))
+					return (free(tmp), 1);
+				free(tmp);
+			}
 		}
 	}
 	if (arbre->fd && arbre->fg)

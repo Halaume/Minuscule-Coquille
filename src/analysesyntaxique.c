@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/19 12:58:37 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/19 16:24:46 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 			inpar--;
 		if (!insimplegui && !indoublegui && ligne[i] == '(')
 			inpar++;
-		if (i && i < (int)ft_strlen(ligne) && !insimplegui && !indoublegui \
+		if (!insimplegui && !indoublegui \
 				&& !inpar && (ligne[i] == '|' && ligne[i + 1] != '|' \
 					&& ligne[i - 1] != '|'))
 		{
@@ -89,10 +89,11 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 		}
 		i++;
 	}
+	i = 0;
 	inpar = 0;
 	insimplegui = 0;
 	indoublegui = 0;
-	while (i != -1)
+	while (ligne[i])
 	{
 		if (!indoublegui && ligne[i] == '\'')
 			insimplegui = !insimplegui;
@@ -105,8 +106,8 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 		if (!insimplegui && !indoublegui && !inpar && (ligne[i] == '<' || ligne[i] == '>'))
 		{
 			j = i + 1;
-			if (i && (ligne[i - 1] == '<' || ligne[i - 1] == '>'))
-				i--;
+			if (ligne[i + 1] == ligne[i])
+				j++;
 			while (ligne[j] && ligne[j] == ' ')
 				j++;
 			while (ligne[j] && ligne[j] != ' ' && ligne[j] != '>' && ligne[j] != '<' && ligne[j] != '&' && ligne[j] != '|')
@@ -116,7 +117,7 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 			free(ligne);
 			return (arbre);
 		}
-		i--;
+		i++;
 	}
 	inpar = 0;
 	insimplegui = 0;

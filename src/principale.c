@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/19 12:04:45 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/19 15:13:49 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ int	checkarbre(t_arbre *arbre)
 					return (free(tmp), 1);
 				free(tmp);
 			}
+			if (!arbre->fg && !arbre->fd)
+				return (1);
 		}
 		else
 		{

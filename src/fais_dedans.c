@@ -59,12 +59,12 @@ int	is_built_in(char *commande)
 	char	**no_quote_commande;
 	int		ret;
 
+	if (!commande || !*commande)
+		return (1);
 	ret = 1;
 	no_quote_commande = NULL;
 	no_quote_commande = ft_split(no_quote(commande), ' ');
 	if (!no_quote_commande)
-		return (1);
-	if (!commande || !*commande)
 		return (1);
 	if (ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_echo(no_quote_commande);
@@ -82,4 +82,33 @@ int	is_built_in(char *commande)
 //		return (ft_exit(splitted_str));
 	free(no_quote_commande);
 	return (ret);
+}
+
+int	check_built_in(char *commande)
+{
+	char	**no_quote_commande;
+	int		ret;
+
+	if (!commande || !*commande)
+		return (1);
+	no_quote_commande = NULL;
+	no_quote_commande = ft_split(no_quote(commande), ' ');
+	if (!no_quote_commande)
+		return (1);
+	if (ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+		return (0);
+//	else if (ft_strncmp("pwd", splitted_str[0], 3) == 0)
+//		return (ft_pwd(splitted_str));
+	else if (ft_strncmp("cd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+		return (0);
+//	else if (ft_strncmp("export", splitted_str[0], 6) == 0)
+//		return (0);
+//	else if (ft_strncmp("unset", splitted_str[0], 5) == 0)
+//		return (0);
+//	else if (ft_strncmp("env", splitted_str[0], 3) == 0)
+//		return (0);
+//	else if (ft_strncmp("exit", splitted_str[0], 4) == 0)
+//		return (0);
+	free(no_quote_commande);
+	return (1);
 }

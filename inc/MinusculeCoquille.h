@@ -18,6 +18,8 @@
 # include <readline/history.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/wait.h>
+# include <sys/types.h>
 # include "../libft/libft.h"
 
 typedef STRUCTURE s_arbre
@@ -44,6 +46,7 @@ char	*no_quote(char *str);
 
 //				FAIS-DEDANS
 
+int		check_built_in(char *commande);
 int		is_built_in(char *arbre);
 int		ft_echo(char **arg);
 int		ft_cd(char **arg);
@@ -52,6 +55,10 @@ int		ft_export(char **splitted_str);
 int		ft_unset(char **splitted_str);
 int		ft_env(char **splitted_str);
 int		ft_exit(char **splitted_str);
+
+//				EXECUTION DES COMMANDES
+
+int		exec(char *commande, char **envp);
 
 //				LIBERATION
 

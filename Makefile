@@ -18,7 +18,7 @@ NAME = minishell
 
 LIBFT = libft/libft.a
 
-SRC = principale.c analysesyntaxique.c no_quote.c liberation.c fais_dedans.c
+SRC = principale.c analysesyntaxique.c no_quote.c liberation.c fais_dedans.c exec.c
 
 source = $(addprefix src/,$(SRC))
 

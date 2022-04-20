@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/19 15:13:49 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/20 17:44:10 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,14 +105,18 @@ int	checkarbre(t_arbre *arbre)
 				return (free(tmp), 1);
 			free(tmp);
 		}
+		if (arbre->fd && arbre->fg)
+			return (checkarbre(arbre->fd) + checkarbre(arbre->fg));
+		else if (arbre->fg)
+			return (checkarbre(arbre->fg));
+		else if (arbre->fd)
+			return (checkarbre(arbre->fd));
+		tmp = ft_strtrim(arbre->commande, " ");
+		if (!strcmp(tmp, ""))
+			return (free(tmp), 1);
+		return (0);
 	}
-	if (arbre->fd && arbre->fg)
-		return (checkarbre(arbre->fd) + checkarbre(arbre->fg));
-	else if (arbre->fg)
-		return (checkarbre(arbre->fg));
-	else if (arbre->fd)
-		return (checkarbre(arbre->fd));
-	return (0);
+	return (1);
 }
 
 int	principale(int ac, char **av, char **envp)
@@ -124,26 +128,28 @@ int	principale(int ac, char **av, char **envp)
 	while (ligne && strcmp(ligne, "exit"))
 	{
 		if (ft_strlen(ligne))
+		{
 			add_history(ligne);
-		info.arbre = NULL;
-		if (verifieligne(ligne))
-		{
-			printf("Erreur syntaxique\n");
-			free(ligne);
-		}
-		else
-		{
-			info.arbre = analyse_syntaxique(ligne, info.arbre);
-			if (!checkarbre(info.arbre))
+			info.arbre = NULL;
+			if (verifieligne(ligne))
 			{
-				structure(info.arbre, 0);
-				printf("\n");
+				printf("Erreur syntaxique\n");
+				free(ligne);
 			}
 			else
-				printf("Erreur syntaxique\n");
+			{
+				info.arbre = analyse_syntaxique(ligne, info.arbre);
+				if (!checkarbre(info.arbre))
+				{
+					structure(info.arbre, 0);
+					printf("\n");
+				}
+				else
+					printf("Erreur syntaxique\n");
+			}
+			if (info.arbre)
+				freearbre(info.arbre);
 		}
-		if (info.arbre)
-			freearbre(info.arbre);
 		ligne = readline("MinusculeCoquille$>");
 	}
 	free(ligne);

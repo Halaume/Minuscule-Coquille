@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/19 16:24:46 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/20 17:54:48 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 		arbre = malloc(sizeof(t_arbre) * 1);
 		arbre->fd = NULL;
 		arbre->fg = NULL;
+	}
+	if (!strcmp(ft_strtrim(ligne, " "), ""))
+	{
+		free(ligne);
+		return (NULL);
 	}
 	while (ligne[i])
 	{
@@ -110,8 +115,15 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 				j++;
 			while (ligne[j] && ligne[j] == ' ')
 				j++;
-			while (ligne[j] && ligne[j] != ' ' && ligne[j] != '>' && ligne[j] != '<' && ligne[j] != '&' && ligne[j] != '|')
+			while (ligne[j] && ligne[j] != ' ' && ligne[j] != '>' && ligne[j] != '<' && ligne[j] != '&' && ligne[j] != '|' && ligne[j] != '(')
 				j++;
+			while (ligne[j + 1] == ' ')
+				j++;
+			if (ligne[j + 1] == '(')
+			{
+				arbre->commande = ft_strdup("");
+				return (arbre);
+			}
 			arbre->commande = ft_substr(ligne, i, j - i);
 			arbre->fd = analyse_syntaxique(ft_strjoin(ft_substr(ligne, 0, i), ft_substr(ligne, j, ft_strlen(ligne) - j)), arbre->fd);
 			free(ligne);
@@ -140,6 +152,16 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 			inpar--;
 		if (!inpar && !insimplegui && !indoublegui && ligne[i] == ')')
 		{
+			j = 0;
+			while (j != first_par)
+			{
+				if (ligne[j] != ' ' && ligne[j] != '(')
+				{
+					arbre->commande = ft_strdup("");
+					return (arbre);
+				}
+				j++;
+			}
 			arbre->fd = analyse_syntaxique(ft_substr(ligne, first_par + 1, i - first_par - 1), arbre->fd);
 			arbre->commande = ft_strdup("()");
 			free(ligne);

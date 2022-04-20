@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/25 18:31:36 by tnaton            #+#    #+#              #
-#    Updated: 2022/03/25 10:39:47 by ghanquer         ###   ########.fr        #
+#    Updated: 2022/04/20 11:45:34 by ghanquer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ OBJSBONUS = $(BONUS:.c=.o)
 CC		= clang
 RM		= rm -f
 
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-g3 -fsanitize=address
 
 ifeq (libft,$(DIR))
 

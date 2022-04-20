@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/01 14:13:18 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/20 15:33:58 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,12 @@ int	main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)envp;
-	printf("%d\n", is_built_in(av[1]));
-	char	*color = "--color";
+	printf("%d\n", is_built_in(av[1], envp));
+	char	*color;
+	color = malloc(sizeof(char) * 11);
+	color = "ls --color";
 	printf("ioula\n");
-	execve("/bin/ls", &color, envp);
+//	exec(color, envp);
 	printf("oula\n");
 //	return (principale(ac, av, envp));
 }

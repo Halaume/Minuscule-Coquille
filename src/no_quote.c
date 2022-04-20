@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 18:04:52 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/01 14:07:50 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/20 15:51:12 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,15 @@ void	get_every_line(char *str, char **no_quote_str)
 	int	i;
 	int	j;
 	int	k;
+	int	is_dquote;
+	int	is_quote;
 
 	if (!*str)
 		return ;
 	j = 0;
 	i = 0;
+	is_quote = 0;
+	is_dquote = 0;
 	while (str[i])
 	{
 		k = 0;
@@ -78,19 +82,43 @@ void	get_every_line(char *str, char **no_quote_str)
 		no_quote_str[j][size_of_no_quote(str, i)] = '\0';
 		if (str[i] == '\'')
 		{
+			is_quote = 1;
 			i++;
 			while (str[i] && str[i] == '\'')
 				i++;
 		}
 		else if (str[i] == '"')
 		{
+			is_dquote = 1;
 			i++;
 			while (str[i] && str[i] == '"')
 				i++;
 		}
+		if (is_quote == 1)
+		{
+			while (str[i] && str[i] != '\'')
+			{
+				no_quote_str[j][k] = str[i];
+				k++;
+				i++;
+			}
+			is_quote = 0;
+			j++;
+		}
+		else if (is_dquote == 1)
+		{
+			while (str[i] && str[i] != '"')
+			{
+				no_quote_str[j][k] = str[i];
+				k++;
+				i++;
+			}
+			is_dquote = 0;
+			j++;
+		}
 		else
 		{
-			while (str[i] && str[i] != '\'' && str[i] != '"')
+			while (str[i] && str[i] != '"' && str[i] != '\'')
 			{
 				no_quote_str[j][k] = str[i];
 				k++;

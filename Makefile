@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/23 11:46:46 by tnaton            #+#    #+#              #
-#    Updated: 2022/03/31 18:39:13 by ghanquer         ###   ########.fr        #
+#    Updated: 2022/04/20 11:44:57 by ghanquer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ SRC = principale.c analysesyntaxique.c no_quote.c liberation.c fais_dedans.c exe
 
 source = $(addprefix src/,$(SRC))
 
-CFLAGS = -Wall -Werror -Wextra -g3 -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra #-g3 -fsanitize=address
 
 CC =	clang
 
@@ -37,7 +37,7 @@ $(LIBFT) : $(source) $(BONUS) libft.h
 	$(MAKE) bonus -C ./libft
 
 debug : $(object)
-	$(CC) $(CFLAGS) -g3 -fsanitize=address $(object) $(LIBFT) -o $@ -lreadline
+	$(CC) $(CFLAGS) #-g3 -fsanitize=address $(object) $(LIBFT) -o $@ -lreadline
 
 .PHONY: all
 all : $(NAME)

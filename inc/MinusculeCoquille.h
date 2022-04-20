@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/31 10:48:45 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/20 15:05:43 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ char	*no_quote(char *str);
 //				FAIS-DEDANS
 
 int		check_built_in(char *commande);
-int		is_built_in(char *arbre);
+int		is_built_in(char *arbre, char **envp);
 int		ft_echo(char **arg);
-int		ft_cd(char **arg);
-int		ft_pwd(char **splitted_str);
+int		ft_cd(char **arg, char **envp);
+int		ft_pwd(void);
 int		ft_export(char **splitted_str);
 int		ft_unset(char **splitted_str);
 int		ft_env(char **splitted_str);

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/20 15:05:43 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/21 13:11:15 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	logique(char *ligne, t_info *info, int i);
 void	tuyau(char *ligne, t_info *info, int i);
 void	fourchette(char *ligne, t_info *info, int i);
 char	*no_quote(char *str);
+char	**no_quote_tab(char *str);
+char	**split_empty_line(char *s, char c);
 
 //				FAIS-DEDANS
 
@@ -54,7 +56,7 @@ int		ft_pwd(void);
 int		ft_export(char **splitted_str);
 int		ft_unset(char **splitted_str);
 int		ft_env(char **splitted_str);
-int		ft_exit(char **splitted_str);
+int		ft_exit(int status);
 
 //				EXECUTION DES COMMANDES
 
@@ -63,5 +65,6 @@ int		exec(char *commande, char **envp);
 //				LIBERATION
 
 void	free_char_char(char **str);
+void	exit_func(int status);
 
 #endif

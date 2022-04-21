@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/21 13:09:18 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/21 18:25:55 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,11 +121,65 @@ int	checkarbre(t_arbre *arbre)
 	return (1);
 }
 
+t_env	*ft_getenv(char **envp)
+{
+	t_env	*first;
+	t_env	*tmp;
+	t_env	*current;
+	int	i;
+	int	j;
+	
+	first = NULL;
+	i = 0;
+	while (envp[i])
+	{
+		tmp = (t_env *)malloc(sizeof(t_env));
+		j = 0;
+		while (envp[i][j])
+		{
+			if (envp[i][j] == '=')
+			{
+				tmp->variable = ft_substr(envp[i], 0, j);
+				tmp->valeur = ft_substr(envp[i], j, ft_strlen(envp[i]) - j);
+				if (i == 0)
+				{ 
+					current = tmp;
+					first = current;
+				}
+				else
+				{
+					current->next = tmp;
+					current = current->next;
+				}
+				break;
+			}
+			j++;
+		}
+		i++;
+	}
+	return (first);
+}
+
+void	freeenv(t_env *current)
+{
+	t_env	*tmp;
+
+	while (current)
+	{
+		free(current->variable);
+		free(current->valeur);
+		tmp = current;
+		current = current->next;
+		free(tmp);
+	}
+}
+
 int	principale(int ac, char **av, char **envp)
 {
 	char	*ligne;
 	t_info	info;
 
+	info.env = ft_getenv(envp);
 	ligne = readline("MinusculeCoquille$>");
 	while (ligne && strcmp(ligne, "exit"))
 	{
@@ -155,6 +209,7 @@ int	principale(int ac, char **av, char **envp)
 		ligne = readline("MinusculeCoquille$>");
 	}
 	free(ligne);
+	freeenv(info.env);
 	(void)ac;
 	(void)av;
 	(void)envp;

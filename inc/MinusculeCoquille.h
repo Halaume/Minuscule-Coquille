@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/09 14:27:05 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/21 17:08:46 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@
 # include <stdlib.h>
 # include "../libft/libft.h"
 
+typedef	STRUCTURE s_env
+{
+	CARACTERE		*variable;
+	CARACTERE		*valeur;
+	STRUCTURE s_env	*next;
+}	t_env;
+
 typedef STRUCTURE s_arbre
 {
 	CARACTERE			*commande;
@@ -29,6 +36,7 @@ typedef STRUCTURE s_arbre
 
 typedef STRUCTURE s_info
 {
+	t_env	*env;
 	t_arbre	*arbre;
 }	t_info;
 

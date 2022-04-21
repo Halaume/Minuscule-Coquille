@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/20 17:54:48 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/21 12:59:07 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 	int	indoublegui;
 	int	first_par;
 	int	j;
+	char *tmp;
 
 	insimplegui = 0;
 	indoublegui = 0;
@@ -33,11 +34,10 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 		arbre->fd = NULL;
 		arbre->fg = NULL;
 	}
-	if (!strcmp(ft_strtrim(ligne, " "), ""))
-	{
-		free(ligne);
-		return (NULL);
-	}
+	tmp =  ft_strtrim(ligne, " ");
+	if (!strcmp(tmp, ""))
+		return (free(ligne), free(tmp), free(arbre), NULL);
+	free(tmp);
 	while (ligne[i])
 	{
 		if (!indoublegui && ligne[i] == '\'')
@@ -115,13 +115,25 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 				j++;
 			while (ligne[j] && ligne[j] == ' ')
 				j++;
-			while (ligne[j] && ligne[j] != ' ' && ligne[j] != '>' && ligne[j] != '<' && ligne[j] != '&' && ligne[j] != '|' && ligne[j] != '(')
+			insimplegui = 0;
+			indoublegui = 0;
+			printf("%c\n", ligne[j]);
+			while (ligne[j])
+			{
+				if (!indoublegui && ligne[i] == '\'')
+					insimplegui = !insimplegui;
+				if (!insimplegui && ligne[i] == '"')
+					indoublegui = !indoublegui;
+				if	(!insimplegui && !indoublegui && ligne[j] != ' ' && ligne[j] != '>' && ligne[j] != '<' && ligne[j] != '&' && ligne[j] != '|' && ligne[j] != '(')
+					break;
 				j++;
-			while (ligne[j + 1] == ' ')
+			}
+			while (ligne[j] && ligne[j + 1] && ligne[j + 1] == ' ')
 				j++;
-			if (ligne[j + 1] == '(')
+			if (ligne[j] && ligne[j + 1] == '(')
 			{
 				arbre->commande = ft_strdup("");
+				free(ligne);
 				return (arbre);
 			}
 			arbre->commande = ft_substr(ligne, i, j - i);
@@ -158,6 +170,7 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 				if (ligne[j] != ' ' && ligne[j] != '(')
 				{
 					arbre->commande = ft_strdup("");
+					free(ligne);
 					return (arbre);
 				}
 				j++;

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 15:22:26 by tnaton            #+#    #+#             */
-/*   Updated: 2022/02/09 12:50:32 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/21 12:39:09 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,5 @@ char	*ft_strtrim(char *s1, char const *set)
 	while (j < i)
 		dest[k++] = s1[j++];
 	dest[k] = '\0';
-//	free(s1);
 	return (dest);
 }

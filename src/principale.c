@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/20 17:44:10 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/21 13:09:18 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ int	checkarbre(t_arbre *arbre)
 					return (free(tmp), 1);
 				free(tmp);
 			}
+			if ((!arbre->fg || !arbre->fd) && (!strcmp(arbre->commande, "|") || !strcmp(arbre->commande, "&&") || !strcmp(arbre->commande, "||")))
+				return (1);
 			if (!arbre->fg && !arbre->fd)
 				return (1);
 		}
@@ -114,7 +116,7 @@ int	checkarbre(t_arbre *arbre)
 		tmp = ft_strtrim(arbre->commande, " ");
 		if (!strcmp(tmp, ""))
 			return (free(tmp), 1);
-		return (0);
+		return (free(tmp), 0);
 	}
 	return (1);
 }

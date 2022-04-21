@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/21 12:55:10 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/21 18:21:45 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,22 +102,30 @@ int	ft_exit(int status)
 int	is_built_in(char *commande, char **envp)
 {
 	char	**no_quote_commande;
+	char	*joined_commande;
 	int		ret;
+	int		i;
 
 	if (!commande || !*commande)
 		return (1);
 	ret = 1;
-	no_quote_commande = NULL;
-	no_quote_commande = no_quote_tab(commande);
-	if (!no_quote_commande)
-		return (1);
-	int	i;
-	i = 0;
+	i = 1;
+	no_quote_commande = split_empty_line(commande, ' ');
+	joined_commande = no_quote_commande[0];
+	printf("no_quote_commande[0] = %s\n", no_quote_commande[0]);
 	while (no_quote_commande[i])
 	{
-		printf("ooh eeh, %s\n", no_quote_commande[i]);
+		printf("no_quote_commande[%d] = %s\n", i, no_quote_commande[i]);
+		ft_strjoin(joined_commande, no_quote_commande[i]);
+		printf("current join str %s\n", joined_commande);
 		i++;
 	}
+	printf("final join str %s\n", joined_commande);
+	free_char_char(no_quote_commande);
+	no_quote_commande = NULL;
+	no_quote_commande = no_quote_tab(joined_commande);
+	if (!no_quote_commande)
+		return (1);
 	if (ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_echo(no_quote_commande);
 	else if (ft_strncmp("pwd", no_quote_commande[0], 3) == 0)

@@ -106,7 +106,7 @@ int	exec(char *commande, char **envp)
 
 	status = check_built_in(commande);
 	if (status == 0)
-		return (is_built_in(commande));
+		return (is_built_in(commande, envp));
 	my_pid = fork();
 	if (my_pid < 0)
 		return (write(2, "fork error\n", 12), -1);

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 15:56:06 by tnaton            #+#    #+#             */
-/*   Updated: 2022/02/09 15:42:34 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/03/30 14:52:03 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static unsigned int	count_word(char const *s, char c)
 
 	i = 0;
 	count = 0;
+	if (!s || !*s)
+		return (-1);
 	while (s[i])
 	{
 		while (s[i] && s[i] == c)
@@ -50,6 +52,9 @@ char	**ft_split(char *s, char c)
 
 	i = 0;
 	end = 0;
+	if (!s)
+		return (NULL);
+	dest = NULL;
 	dest = (char **)ft_calloc(sizeof(char *), count_word(s, c));
 	if (!dest)
 		return (NULL);
@@ -67,5 +72,5 @@ char	**ft_split(char *s, char c)
 			return (NULL);
 		}
 	}
-	return (free(s), dest);
+	return (dest);
 }

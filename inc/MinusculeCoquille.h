@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/22 16:06:10 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/22 16:12:17 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <sys/wait.h>
 # include <sys/types.h>
 # include <stdlib.h>
+# include <sys/wait.h>
+# include <sys/types.h>
 # include "../libft/libft.h"
 
 typedef	STRUCTURE s_env
@@ -48,6 +50,10 @@ t_arbre	*analyse_syntaxique(CARACTERE *ligne, t_arbre *arbre);
 void	logique(char *ligne, t_info *info, int i);
 void	tuyau(char *ligne, t_info *info, int i);
 void	fourchette(char *ligne, t_info *info, int i);
+char	*no_quote(char *str);
+char	**no_quote_tab(char *str);
+char	**split_empty_line(char *s, char c);
+char	*strjoin_space(char *s1, char *s2);
 
 //				STRING MANIP
 

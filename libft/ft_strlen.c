@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 16:28:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/08 13:24:38 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/22 16:15:17 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@ size_t	ft_strlen(const char *s)
 	int	i;
 
 	i = 0;
-	if (!s)
-		return (i);
-	while (s[i] != '\0')
-		i++;
+	if (s)
+		while (s[i] != '\0')
+			i++;
 	return (i);
 }

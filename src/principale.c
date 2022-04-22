@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/22 11:39:20 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/22 16:13:24 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,5 +219,12 @@ int	principale(int ac, char **av, char **envp)
 
 int	main(int ac, char **av, char **envp)
 {
-	return (principale(ac, av, envp));
+	(void)ac;
+	(void)envp;
+	printf("%d\n", is_built_in(av[1], envp));
+//	char	*color;
+//	color = malloc(sizeof(char) * 11);
+//	color = "ls --color";
+//	exec(color, envp);
+//	return (principale(ac, av, envp));
 }

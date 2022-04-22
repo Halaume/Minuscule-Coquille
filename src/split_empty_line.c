@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 13:10:03 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/21 18:03:40 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/22 14:22:57 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,53 @@ static unsigned int	count_word(char const *s, char c)
 	size_t	count;
 	int		is_in_quote;
 
-	is_in_quote = 0;
 	i = 0;
 	count = 0;
 	if (!s || !*s)
 		return (-1);
 	while (s[i])
 	{
-		while (s[i] && s[i] == c && (s[i] != '"' || s[i] != '\''))
+		is_in_quote = 0;
+		if (s[i] == '\'')
+			is_in_quote = 1;
+		else if (s[i] == '"')
+			is_in_quote = 2;
+		while (s[i] && s[i] == c && is_in_quote <= 0)
 		{
-			i++;
 			if (s[i] == '\'')
+			{
+				i++;
 				is_in_quote = 1;
+				while (s[i] == '\'')
+				{
+					is_in_quote *= -1;
+					i++;
+				}
+			}
 			else if (s[i] == '"')
+			{
+				i++;
 				is_in_quote = 2;
+				while (s[i] == '"')
+				{
+					is_in_quote *= -1;
+					i++;
+				}
+			}
+			else
+				i++;
 		}
+		printf("%d\n", is_in_quote);
 		if (s[i] && s[i] != c)
 			count++;
 		if (is_in_quote == 1)
-			while (s[i] && s[i] != '\'')
+		{
+			if (s[i] != '\'')
+				while (s[i] && s[i] != '\'')
+					i++;
+			else
 				i++;
+		}
 		else if (is_in_quote == 2)
 			while (s[i] && s[i] != '"')
 				i++;
@@ -66,28 +93,46 @@ char	**split_empty_line(char *s, char c)
 	size_t	end;
 	int		is_in_quote;
 
-	is_in_quote = 0;
 	i = 0;
 	end = 0;
 	if (!s)
 		return (NULL);
 	dest = NULL;
 	dest = (char **)ft_calloc(sizeof(char *), count_word(s, c));
+	printf("nb mots = %d\n", count_word(s, c));
 	if (!dest)
 		return (NULL);
 	while ((i + 1) < count_word(s, c))
 	{
+		is_in_quote = 0;
 		if (s[end] == '\'')
 			is_in_quote = 1;
 		else if (s[end] == '"')
 			is_in_quote = 2;
-		while (s[end] && (s[end] == c || s[end] != '"' || s[end] != '\''))
+		while (s[end] && s[end] == c && is_in_quote <= 0)
 		{
-			end++;
 			if (s[end] == '\'')
+			{
+				end++;
 				is_in_quote = 1;
+				while (s[end] == '\'')
+				{
+					is_in_quote *= -1;
+					end++;
+				}
+			}
 			else if (s[end] == '"')
+			{
+				end++;
 				is_in_quote = 2;
+				while (s[end] == '"')
+				{
+					is_in_quote *= -1;
+					end++;
+				}
+			}
+			else
+				end++;
 		}
 		start = end;
 		if (is_in_quote == 1)

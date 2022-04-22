@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/21 18:21:45 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/22 11:00:04 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,8 @@ int	is_built_in(char *commande, char **envp)
 	while (no_quote_commande[i])
 	{
 		printf("no_quote_commande[%d] = %s\n", i, no_quote_commande[i]);
-		ft_strjoin(joined_commande, no_quote_commande[i]);
-		printf("current join str %s\n", joined_commande);
+		joined_commande = strjoin_space(joined_commande, no_quote_commande[i]);
+//		printf("current join str %s\n", joined_commande);
 		i++;
 	}
 	printf("final join str %s\n", joined_commande);

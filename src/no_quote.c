@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 18:04:52 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/21 12:52:32 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/22 14:27:13 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,6 @@ char	*no_quote(char *str)
 	int		nb_word;
 
 	nb_word = how_many_quote(str);
-	joined_str = "\0";
 	if (!str)
 		return (NULL);
 	if (nb_word == 0)
@@ -148,7 +147,8 @@ char	*no_quote(char *str)
 		return (NULL);
 	no_quote_str[nb_word + 1] = NULL;
 	get_every_line(str, no_quote_str);
-	i = 0;
+	i = 1;
+	joined_str = no_quote_str[0];
 	if (!no_quote_str)
 		return (NULL);
 	while (no_quote_str[i])
@@ -163,14 +163,14 @@ char	*no_quote(char *str)
 char	**no_quote_tab(char *str)
 {
 	char	**no_quote_str;
-	char	*joined_str;
 	int		i;
 	int		nb_word;
 
 	nb_word = how_many_quote(str);
-	joined_str = "\0";
 	if (!str)
 		return (NULL);
+	if (nb_word == 0)
+		return (ft_split(str, ' '));
 	no_quote_str = NULL;
 	no_quote_str = malloc(sizeof(char *) * (nb_word + 2));
 	if (!no_quote_str)
@@ -180,7 +180,7 @@ char	**no_quote_tab(char *str)
 	i = 0;
 	if (!no_quote_str)
 		return (NULL);
-	while (no_quote_str[i])
+	while (no_quote_str[i] != NULL)
 	{
 		printf("str = %s\n", no_quote_str[i]);
 		i++;

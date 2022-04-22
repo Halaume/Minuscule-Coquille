@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/22 11:00:04 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/22 17:11:22 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,11 +126,11 @@ int	is_built_in(char *commande, char **envp)
 	no_quote_commande = no_quote_tab(joined_commande);
 	if (!no_quote_commande)
 		return (1);
-	if (ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	if (ft_strncmp("echo", no_quote_commande[0], 5) == 0)
 		ret = ft_echo(no_quote_commande);
-	else if (ft_strncmp("pwd", no_quote_commande[0], 3) == 0)
+	else if (ft_strncmp("pwd", no_quote_commande[0], 4) == 0)
 		return (ft_pwd());
-	else if (ft_strncmp("cd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	else if (ft_strncmp("cd", no_quote_commande[0], 3) == 0)
 		ret = ft_cd(no_quote_commande, envp);
 //	else if (ft_strncmp("export", splitted_str[0], 6) == 0)
 //		return (ft_export(splitted_str));

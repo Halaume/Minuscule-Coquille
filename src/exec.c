@@ -23,6 +23,7 @@ char	*get_my_path(char **envp)
 	}
 	if (!*envp)
 		return (NULL);
+	printf("c kc\n");
 	return (*envp + 5);
 }
 
@@ -91,7 +92,6 @@ int	executing(char *commande, char **envp)
 	{
 		perror("command error");
 		free(arg);
-		free(env);
 		exit(1);
 	}
 	execve(cmd, arg, envp);

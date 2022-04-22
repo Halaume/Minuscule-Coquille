@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/23 11:46:46 by tnaton            #+#    #+#              #
-#    Updated: 2022/04/22 16:11:41 by ghanquer         ###   ########.fr        #
+#    Updated: 2022/04/22 20:01:00 by tnaton           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ NAME = minishell
 
 LIBFT = libft/libft.a
 
-SRC = principale.c analysesyntaxique.c no_quote.c liberation.c fais_dedans.c exec.c split_empty_line.c strjoin_space.c
+SRC = principale.c analysesyntaxique.c no_quote.c liberation.c fais_dedans.c \
+	  exec.c split_empty_line.c strjoin_space.c heredoc.c
 
 source = $(addprefix src/,$(SRC))
 

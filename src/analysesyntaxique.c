@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/21 15:21:20 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/22 19:32:47 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,11 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 		if (i && !insimplegui && !indoublegui && !inpar && ((ligne[i] == '&'\
 			&& ligne[i - 1] == '&') || (ligne[i] == '|' && ligne[i - 1] == '|')))
 		{
-			arbre->fg = analyse_syntaxique(ft_substr(ligne, 0, i - 1), arbre->fg);
+			arbre->fd = analyse_syntaxique(ft_substr(ligne, 0, i - 1), arbre->fd);
 			j = i;
 			while (ligne[j])
 				j++;
-			arbre->fd = analyse_syntaxique(ft_substr(ligne, i + 1, j), arbre->fd);
+			arbre->fg = analyse_syntaxique(ft_substr(ligne, i + 1, j), arbre->fg);
 			if (ligne[i] == '|')
 				arbre->commande = ft_strdup("||");
 			if (ligne[i] == '&')
@@ -83,11 +83,11 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 				&& !inpar && (ligne[i] == '|' && ligne[i + 1] != '|' \
 					&& ligne[i - 1] != '|'))
 		{
-			arbre->fg = analyse_syntaxique(ft_substr(ligne, 0, i), arbre->fg);
+			arbre->fd = analyse_syntaxique(ft_substr(ligne, 0, i), arbre->fd);
 			j = i;
 			while (ligne[j])
 				j++;
-			arbre->fd = analyse_syntaxique(ft_substr(ligne, i + 1, j), arbre->fd);
+			arbre->fg = analyse_syntaxique(ft_substr(ligne, i + 1, j), arbre->fg);
 			arbre->commande = ft_strdup("|");
 			free(ligne);
 			return (arbre);

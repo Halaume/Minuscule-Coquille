@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/22 16:13:24 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/22 19:59:39 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ int	checkarbre(t_arbre *arbre)
 			tmp	= ft_strtrim(arbre->commande, " ");
 			if (!strcmp(tmp, ">") || !strcmp(tmp, ">>") || !strcmp(tmp, "<") || !strcmp(tmp, "<<"))
 				return (free(tmp), 1);
+			if (!strncmp(tmp, "<<", 2))
+				open_heredoc(ft_substr(tmp, 2, ft_strlen(tmp) - 2));
 			free(tmp);
 		}
 		if (arbre->fd && arbre->fg)
@@ -140,7 +142,7 @@ t_env	*ft_getenv(char **envp)
 			if (envp[i][j] == '=')
 			{
 				tmp->variable = ft_substr(envp[i], 0, j);
-				tmp->valeur = ft_substr(envp[i], j, ft_strlen(envp[i]) - j);
+				tmp->valeur = ft_substr(envp[i], j + 1, ft_strlen(envp[i]) - j);
 				if (i == 0)
 				{ 
 					current = tmp;
@@ -150,6 +152,7 @@ t_env	*ft_getenv(char **envp)
 				{
 					current->next = tmp;
 					current = current->next;
+					current->next = NULL;
 				}
 				break;
 			}
@@ -219,12 +222,5 @@ int	principale(int ac, char **av, char **envp)
 
 int	main(int ac, char **av, char **envp)
 {
-	(void)ac;
-	(void)envp;
-	printf("%d\n", is_built_in(av[1], envp));
-//	char	*color;
-//	color = malloc(sizeof(char) * 11);
-//	color = "ls --color";
-//	exec(color, envp);
-//	return (principale(ac, av, envp));
+	return (principale(ac, av, envp));
 }

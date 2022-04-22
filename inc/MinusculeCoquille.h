@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/21 17:08:46 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/22 16:06:10 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdio.h>
+# include <sys/wait.h>
+# include <sys/types.h>
 # include <stdlib.h>
 # include "../libft/libft.h"
 
@@ -47,15 +49,32 @@ void	logique(char *ligne, t_info *info, int i);
 void	tuyau(char *ligne, t_info *info, int i);
 void	fourchette(char *ligne, t_info *info, int i);
 
+//				STRING MANIP
+
+char	*no_quote(char *str);
+char	**no_quote_tab(char *str);
+char	**split_empty_line(char *s, char c);
+char	*strjoin_space(char *s1, char *s2);
+
 //				FAIS-DEDANS
 
-int		is_built_in(t_arbre *arbre);
-int		ft_echo(t_arbre **arg);
-int		ft_cd(t_arbre **arg);
-int		ft_pwd(char **splitted_str);
+int		check_built_in(char *commande);
+int		is_built_in(char *arbre, char **envp);
+int		ft_echo(char **arg);
+int		ft_cd(char **arg, char **envp);
+int		ft_pwd(void);
 int		ft_export(char **splitted_str);
 int		ft_unset(char **splitted_str);
 int		ft_env(char **splitted_str);
-int		ft_exit(char **splitted_str);
+int		ft_exit(int status);
+
+//				EXECUTION DES COMMANDES
+
+int		exec(char *commande, char **envp);
+
+//				LIBERATION
+
+void	free_char_char(char **str);
+void	exit_func(int status);
 
 #endif

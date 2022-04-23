@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/23 11:46:46 by tnaton            #+#    #+#              #
-#    Updated: 2022/04/22 20:01:00 by tnaton           ###   ########.fr        #
+#    Updated: 2022/04/23 19:55:22 by tnaton           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,21 +23,21 @@ SRC = principale.c analysesyntaxique.c no_quote.c liberation.c fais_dedans.c \
 
 source = $(addprefix src/,$(SRC))
 
-CFLAGS = -Wall -Werror -Wextra #-g3 -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra -Iinc/MinusculeCoquille.h #-g3 -fsanitize=address
 
 CC =	clang
 
 object = $(source:.c=.o)
 
-$(NAME) : $(object) $(LIBFT)
+$(NAME) : $(object) $(LIBFT) 
 	$(CC) $(CFLAGS) $(object) $(LIBFT) -o $@ -lreadline
 
 -include libft/Makefile
 
-$(LIBFT) : $(source) $(BONUS) libft.h
+$(LIBFT) : $(source) $(BONUS) $(SRCS) libft/libft.h
 	$(MAKE) bonus -C ./libft
 
-$(object) : inc/MinusculeCoquille.h
+$(object) : inc/MinusculeCoquille.h libft/libft.h
 
 debug : $(object)
 	$(CC) $(CFLAGS) #-g3 -fsanitize=address $(object) $(LIBFT) -o $@ -lreadline

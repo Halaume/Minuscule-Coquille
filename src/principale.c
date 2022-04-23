@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/22 19:59:39 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/23 19:45:37 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,16 @@ void	structure(t_arbre *root, int level)
 
 void	freearbre(t_arbre *arbre)
 {
+	char	*tmp;
+
 	if (arbre->fd)
 		freearbre(arbre->fd);
 	if (arbre->fg)
 		freearbre(arbre->fg);
+	tmp = ft_strtrim(arbre->commande, "\"");
+	if (!ft_strncmp(tmp, "/tmp/.", 6))
+		unlink(tmp);
+	free(tmp);
 	free(arbre->commande);
 	free(arbre);
 }
@@ -106,7 +112,10 @@ int	checkarbre(t_arbre *arbre)
 			if (!strcmp(tmp, ">") || !strcmp(tmp, ">>") || !strcmp(tmp, "<") || !strcmp(tmp, "<<"))
 				return (free(tmp), 1);
 			if (!strncmp(tmp, "<<", 2))
-				open_heredoc(ft_substr(tmp, 2, ft_strlen(tmp) - 2));
+			{
+				free(arbre->commande);
+				arbre->commande = open_heredoc(ft_substr(tmp, 2, ft_strlen(tmp) - 2));
+			}
 			free(tmp);
 		}
 		if (arbre->fd && arbre->fg)
@@ -209,6 +218,8 @@ int	principale(int ac, char **av, char **envp)
 			if (info.arbre)
 				freearbre(info.arbre);
 		}
+		else
+			free(ligne);
 		ligne = readline("MinusculeCoquille$>");
 	}
 	free(ligne);

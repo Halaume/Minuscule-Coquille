@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/22 19:32:47 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/23 19:27:07 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 			inpar++;
 		if (!insimplegui && !indoublegui \
 				&& !inpar && (ligne[i] == '|' && ligne[i + 1] != '|' \
-					&& ligne[i - 1] != '|'))
+					&& (!i || ligne[i - 1] != '|')))
 		{
 			arbre->fd = analyse_syntaxique(ft_substr(ligne, 0, i), arbre->fd);
 			j = i;
@@ -136,7 +136,7 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 				return (arbre);
 			}
 			arbre->commande = ft_substr(ligne, i, j - i);
-			arbre->fd = analyse_syntaxique(ft_strjoin(ft_substr(ligne, 0, i), ft_substr(ligne, j, ft_strlen(ligne) - j)), arbre->fd);
+			arbre->fd = analyse_syntaxique(ft_strjoin_free(ft_substr(ligne, 0, i), ft_substr(ligne, j, ft_strlen(ligne) - j)), arbre->fd);
 			free(ligne);
 			return (arbre);
 		}

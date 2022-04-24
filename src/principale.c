@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/24 12:07:35 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/24 18:22:01 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,23 +85,32 @@ int	checkarbre(t_arbre *arbre)
 
 	if (arbre)
 	{
-		if (!ft_strcmp(arbre->commande, "()") || !ft_strcmp(arbre->commande, "|") || !ft_strcmp(arbre->commande, "&&") || !ft_strcmp(arbre->commande, "||"))
+		if (!ft_strcmp(arbre->commande, "()") || \
+				!ft_strcmp(arbre->commande, "|") || \
+				!ft_strcmp(arbre->commande, "&&") || \
+				!ft_strcmp(arbre->commande, "||"))
 		{
 			if (arbre->fd)
 			{
 				tmp = ft_strtrim(arbre->fd->commande, " ");
-				if (!ft_strcmp(tmp, "") || !ft_strcmp(tmp, ">") || !ft_strcmp(tmp, ">>") || !ft_strcmp(tmp, "<") || !ft_strcmp(tmp, "<<"))
+				if (!ft_strcmp(tmp, "") || !ft_strcmp(tmp, ">") || \
+						!ft_strcmp(tmp, ">>") || !ft_strcmp(tmp, "<") \
+						|| !ft_strcmp(tmp, "<<"))
 					return (free(tmp), 1);
 				free(tmp);
 			}
 			if (arbre->fg)
 			{
 				tmp = ft_strtrim(arbre->fg->commande, " ");
-				if (!ft_strcmp(tmp, "") || !ft_strcmp(tmp, ">") || !ft_strcmp(tmp, ">>") || !ft_strcmp(tmp, "<") || !ft_strcmp(tmp, "<<"))
+				if (!ft_strcmp(tmp, "") || !ft_strcmp(tmp, ">") || \
+						!ft_strcmp(tmp, ">>") || !ft_strcmp(tmp, "<") || \
+						!ft_strcmp(tmp, "<<"))
 					return (free(tmp), 1);
 				free(tmp);
 			}
-			if ((!arbre->fg || !arbre->fd) && (!ft_strcmp(arbre->commande, "|") || !ft_strcmp(arbre->commande, "&&") || !ft_strcmp(arbre->commande, "||")))
+			if ((!arbre->fg || !arbre->fd) && (!ft_strcmp(arbre->commande, "|")\
+					   	|| !ft_strcmp(arbre->commande, "&&") \
+						|| !ft_strcmp(arbre->commande, "||")))
 				return (1);
 			if (!arbre->fg && !arbre->fd)
 				return (1);
@@ -109,7 +118,8 @@ int	checkarbre(t_arbre *arbre)
 		else
 		{
 			tmp	= ft_strtrim(arbre->commande, " ");
-			if (!ft_strcmp(tmp, ">") || !ft_strcmp(tmp, ">>") || !ft_strcmp(tmp, "<") || !ft_strcmp(tmp, "<<"))
+			if (!ft_strcmp(tmp, ">") || !ft_strcmp(tmp, ">>") || \
+					!ft_strcmp(tmp, "<") || !ft_strcmp(tmp, "<<"))
 				return (free(tmp), 1);
 			if (!ft_strncmp(tmp, "<<", 2))
 			{

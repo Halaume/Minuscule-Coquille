@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/23 11:46:46 by tnaton            #+#    #+#              #
-#    Updated: 2022/04/24 11:21:10 by tnaton           ###   ########.fr        #
+#    Updated: 2022/04/24 19:04:48 by tnaton           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ $(LIBFT) : $(BONUS) $(SRCS) libft/libft.h
 $(object) : inc/MinusculeCoquille.h libft/libft.h
 
 debug : $(object)
-	$(CC) $(CFLAGS) #-g3 -fsanitize=address $(object) $(LIBFT) -o $@ -lreadline
+	$(CC) $(CFLAGS) -g3 -fsanitize=address $(object) $(LIBFT) -o $@ -lreadline
 
 .PHONY: all
 all : $(NAME)

@@ -6,11 +6,53 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/24 12:04:08 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/24 19:21:54 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
+
+char	*vireguillemet(char *str)
+{
+	char	*tmp;
+
+	if (!ft_strncmp(str, ">>", 2))
+	{
+		tmp = ft_strtrim(str, " >");
+		free(str);
+		str = get_del(tmp);
+		tmp = ft_strjoin(">>", str);
+		free(str);
+		return (tmp);
+	}
+	else if (!ft_strncmp(str, ">", 1))
+	{
+		tmp = ft_strtrim(str, " >");
+		free(str);
+		str = get_del(tmp);
+		tmp = ft_strjoin(">", str);
+		free(str);
+		return (tmp);
+	}
+	else if (!ft_strncmp(str, "<<", 2))
+	{
+		tmp = ft_strtrim(str, " <");
+		free(str);
+		str = get_del(tmp);
+		tmp = ft_strjoin("<<", str);
+		free(str);
+		return (tmp);
+	}
+	else
+	{
+		tmp = ft_strtrim(str, " <");
+		free(str);
+		str = get_del(tmp);
+		tmp = ft_strjoin("<", str);
+		free(str);
+		return (tmp);
+	}
+}
 
 t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 {
@@ -136,6 +178,7 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre)
 				return (arbre);
 			}
 			arbre->commande = ft_substr(ligne, i, j - i);
+			arbre->commande = vireguillemet(arbre->commande);
 			arbre->fd = analyse_syntaxique(ft_strjoin_free(ft_substr(ligne, 0, i), ft_substr(ligne, j, ft_strlen(ligne) - j)), arbre->fd);
 			free(ligne);
 			return (arbre);

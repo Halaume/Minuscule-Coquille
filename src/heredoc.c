@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/24 12:04:38 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/24 18:51:43 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,11 @@ char	*get_del(char *del)
 	int	indoublegui;
 	int *list;
 	int	j;
+	char	*tmp;
 
+	tmp = ft_strtrim(del, " ");
+	free(del);
+	del = tmp;
 	list = (int *)malloc(sizeof(int) * (ft_strlen(del) + 1));
 	i = 0;
 	j = 1;
@@ -144,13 +148,10 @@ char	*open_heredoc(char *heredoc)
 	char	*tmp;
 
 	path = checkopen(ft_itoa(0));
-	path = addquote(path, heredoc);
-	heredoc = get_del(heredoc);
-	ligne = ft_strtrim(path, "\"");
-	fd = open(ligne, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
 		printf("cannot open tmp file\n");
-	free(ligne);
+	path = addquote(path, heredoc);
 	tmp = ft_strjoin(heredoc, ">");
 	ligne = readline(tmp);
 	while (ft_strcmp(ligne, heredoc))

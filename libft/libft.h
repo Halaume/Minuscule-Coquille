@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 11:23:31 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/23 16:22:47 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/24 11:58:21 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,6 @@ t_list				*ft_lstmap(t_list *lst, char *(*f)(char *), \
 unsigned long long	ft_power(int nb, int pow);
 unsigned long long	ft_atoi_base(char *nb, char *base);
 char				*ft_strjoin_free(char *s1, char *s2);
+int					ft_strcmp(const char *s1, const char *s2);
 
 #endif

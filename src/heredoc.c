@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/23 18:51:20 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/24 12:04:38 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ char	*open_heredoc(char *heredoc)
 	free(ligne);
 	tmp = ft_strjoin(heredoc, ">");
 	ligne = readline(tmp);
-	while (strcmp(ligne, heredoc))
+	while (ft_strcmp(ligne, heredoc))
 	{
 		write(fd, ligne, ft_strlen(ligne));
 		write(fd, "\n", 1);

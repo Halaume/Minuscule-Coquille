@@ -17,13 +17,12 @@ char	*get_my_path(char **envp)
 {
 	while (*envp && ft_strncmp("PATH=", *envp, 5) != 0)
 	{
-		envp++;
-		if (envp == NULL)
+		if (*envp == NULL)
 			return (NULL);
+		envp++;
 	}
 	if (!*envp)
 		return (NULL);
-	printf("c kc\n");
 	return (*envp + 5);
 }
 

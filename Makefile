@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/23 11:46:46 by tnaton            #+#    #+#              #
-#    Updated: 2022/04/23 19:55:22 by tnaton           ###   ########.fr        #
+#    Updated: 2022/04/24 11:21:10 by tnaton           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ $(NAME) : $(object) $(LIBFT)
 
 -include libft/Makefile
 
-$(LIBFT) : $(source) $(BONUS) $(SRCS) libft/libft.h
+$(LIBFT) : $(BONUS) $(SRCS) libft/libft.h
 	$(MAKE) bonus -C ./libft
 
 $(object) : inc/MinusculeCoquille.h libft/libft.h

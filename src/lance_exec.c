@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/25 16:34:27 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/25 18:38:31 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ t_toyo	*getcommande(t_arbre *arbre)
 		}
 		arbre = arbre->fd;
 	}
-
 	toyo->commande = arbre->commande;
 	return (toyo);
 }
@@ -112,7 +111,7 @@ t_toyo	*rec_toyo(t_arbre *arbre)
 		toyo->next = rec_toyo(arbre->fg);
 		return (toyo);
 	}
-	toyo = getcommande(arbre->fg);
+	toyo = getcommande(arbre);
 	toyo->next = NULL;
 	return (toyo);
 }
@@ -131,19 +130,39 @@ void freetoyo(t_toyo *toyo)
 	free(current);
 }
 
+int	badet(t_info *info, t_arbre *arbre)
+{
+	while (!ft_strcmp(arbre->commande, "&&"))
+		arbre = arbre->fg;
+	if (!ft_strcmp(arbre->commande, "||"))
+		return (lance_exec(info, arbre->fg));
+	return (0);
+}
+
+int	badou(t_info *info, t_arbre *arbre)
+{
+	while (!ft_strcmp(arbre->commande, "||"))
+		arbre = arbre->fg;
+	if (!ft_strcmp(arbre->commande, "&&"))
+		return (lance_exec(info, arbre->fg));
+	return (0);
+}
+
 int	lance_exec(t_info *info, t_arbre *arbre)
 {
 	if (!ft_strcmp(arbre->commande, "&&"))
 	{
 		if (!lance_exec(info, arbre->fd))
 			return (lance_exec(info, arbre->fg));
+		else
+			return (badet(info, arbre->fg));
 	}
 	else if (!ft_strcmp(arbre->commande, "||"))
 	{
 		if (lance_exec(info, arbre->fd))
 			return (lance_exec(info, arbre->fg));
 		else
-			return (info->exit_status);
+			return (badou(info, arbre->fg));
 	}
 	else if (!ft_strcmp(arbre->commande, "|"))
 		return (exec(rec_toyo(arbre), info));

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/25 18:37:26 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/25 19:10:38 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,6 @@ int	lance_exec(t_info *info, t_arbre *arbre)
 			return (info->exit_status);
 	}
 	else if (!ft_strcmp(arbre->commande, "|"))
-		return (exec(rec_toyo(arbre), info));
+		return (toyotage(rec_toyo(arbre), info));
 	return (exec(getcommande(arbre), info));
 }

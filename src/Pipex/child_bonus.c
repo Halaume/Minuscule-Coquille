@@ -6,11 +6,11 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 14:34:01 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/25 18:23:50 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/25 19:19:49 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/MinusculeCoquille.h"
+#include "../../inc/MinusculeCoquille.h"
 
 void	duping_closing(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1)
 {

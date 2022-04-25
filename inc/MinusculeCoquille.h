@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/25 18:35:17 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/25 19:23:56 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ void	free_toyo(t_toyo *toyo);
 # include <string.h>
 # include <stdio.h>
 # include <errno.h>
-# include "get_next_line.h"
 
 typedef struct s_struct
 {
@@ -146,6 +145,7 @@ void		second_fun(t_struct *pipex, char **argv, char **envp);
 t_struct	init_pipex(char **argv, char **envp);
 void		fun_here_doc(char *argv, t_struct *pipex);
 void		child(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1);
+int			toyotage(t_toyo *toyo, t_info *info);
 
 //			ERROR / FREE / END PROG
 

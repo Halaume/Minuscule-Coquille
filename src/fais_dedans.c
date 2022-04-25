@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/24 11:26:12 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/25 14:48:14 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,15 @@ int	ft_pwd(void)
 	return (0);
 }
 
-int	ft_exit(int status)
+/*int	ft_exit(char **exit, t_info *info)
 {
+	if (exit[1])
+	{
+		info->exit_status = ft_atoi(exit[1]);
+	}
 	exit_func(status);
 	return (0);
-}
+}*/
 
 int	is_built_in(char *commande, char **envp)
 {

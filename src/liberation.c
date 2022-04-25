@@ -6,17 +6,31 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 10:47:02 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/21 12:28:08 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/25 14:40:35 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
 
-void	exit_func(int status)
+int	exit_func(int status)
 {
 	//	TODO
 	//	FREE ALL
-	(void)status;
+	return (status);
+}
+
+void	free_toyo(t_toyo *toyo)
+{
+	t_toyo *current;
+
+	current = toyo;
+	while (current)
+	{
+		toyo = current;
+		current = current->next;
+		free(toyo);
+	}
+	free(current);
 }
 
 void	free_char_char(char **str)

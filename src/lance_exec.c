@@ -6,11 +6,11 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/25 13:07:11 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/25 16:34:27 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "MinusculeCoquille.h"
+#include "../inc/MinusculeCoquille.h"
 
 int	get_fd_concat(char *path)
 {
@@ -18,7 +18,7 @@ int	get_fd_concat(char *path)
 	char	*tmp;
 
 	tmp = ft_substr(path, 2, ft_strlen(path) - 2);
-	fd = open(tmp, O_APPEND | O_WRONLY | O_CREAT);
+	fd = open(tmp, O_APPEND | O_WRONLY | O_CREAT, 00644);
 	free(tmp);
 	return (fd);
 }
@@ -29,7 +29,7 @@ int	get_fd_out(char *path)
 	char	*tmp;
 
 	tmp = ft_substr(path, 1, ft_strlen(path) - 1);
-	fd = open(tmp, O_TRUNC | O_WRONLY | O_CREAT);
+	fd = open(tmp, O_TRUNC | O_WRONLY | O_CREAT, 00644);
 	free(tmp);
 	return (fd);
 }
@@ -50,7 +50,7 @@ int	get_fd_here(char *path)
 	int		fd;
 	char	*tmp;
 
-	tmp = ft_substr(path, 6, ft_strlen(path) - 6);
+	tmp = ft_strtrim(path, "\"");
 	fd = open(tmp, O_RDONLY);
 	free(tmp);
 	return (fd);
@@ -60,24 +60,25 @@ t_toyo	*getcommande(t_arbre *arbre)
 {
 	t_toyo	*toyo;
 
-	toyo = (t_toyo *)malloc(sizeof(toyo));
+	toyo = (t_toyo *)malloc(sizeof(t_toyo));
 	toyo->in = 0;
 	toyo->out = 1;
+	toyo->next = NULL;
 	while (arbre->fd)
 	{
-		if (ft_strncmp(arbre->commande, ">>", 2))
+		if (!ft_strncmp(arbre->commande, ">>", 2))
 		{
 			if (toyo->out != 1)
 				close(toyo->out);
-			toyo->in = get_fd_concat(arbre->commande);
+			toyo->out = get_fd_concat(arbre->commande);
 		}
-		else if (ft_strncmp(arbre->commande, ">", 1))
+		else if (!ft_strncmp(arbre->commande, ">", 1))
 		{
 			if (toyo->out != 1)
 				close(toyo->out);
 			toyo->out = get_fd_out(arbre->commande);
 		}
-		else if (ft_strncmp(arbre->commande, "<", 1))
+		else if (!ft_strncmp(arbre->commande, "<", 1))
 		{
 			if (toyo->in != 0)
 				close(toyo->in);
@@ -130,25 +131,21 @@ void freetoyo(t_toyo *toyo)
 	free(current);
 }
 
-int	lance_toyo(t_info *info, t_toyo *toyo)
-{
-	return (pipex(info, toyo));
-}
-
-int	lance_exec(t_info *info, t_arbre *arbre, int in, int out)
+int	lance_exec(t_info *info, t_arbre *arbre)
 {
 	if (!ft_strcmp(arbre->commande, "&&"))
 	{
-		if (lance_exec(info, arbre->fd, 0, 1))
-			return (lance_exec(info, arbre->fg, 0, 1));
+		if (!lance_exec(info, arbre->fd))
+			return (lance_exec(info, arbre->fg));
 	}
 	else if (!ft_strcmp(arbre->commande, "||"))
 	{
-		if (!lance_exec(info, arbre->fd, 0, 1))
-			return (lance_exec(info, arbre->fg, 0, 1));
+		if (lance_exec(info, arbre->fd))
+			return (lance_exec(info, arbre->fg));
+		else
+			return (info->exit_status);
 	}
 	else if (!ft_strcmp(arbre->commande, "|"))
-		return (lance_toyo(info, rec_toyo(arbre)));
-	else
-		return (exec(getcommande(arbre), info));
+		return (exec(rec_toyo(arbre), info));
+	return (exec(getcommande(arbre), info));
 }

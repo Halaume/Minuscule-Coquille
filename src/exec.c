@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/25 15:05:57 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/25 15:10:27 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int	executing(t_toyo *toyo, t_info *info)
 	env = NULL;
 	arg = NULL;
 	cmd = NULL;
-	printf("%d\t%d\n", toyo->in, toyo->out);
 	dup2(toyo->in, 0);
 	dup2(toyo->out, 1);
 	arg = ft_split(toyo->commande, ' ');

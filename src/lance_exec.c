@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/25 14:59:58 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/25 15:52:15 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	get_fd_concat(char *path)
 	char	*tmp;
 
 	tmp = ft_substr(path, 2, ft_strlen(path) - 2);
-	fd = open(tmp, O_APPEND | O_WRONLY | O_CREAT, 644);
+	fd = open(tmp, O_APPEND | O_WRONLY | O_CREAT, 00644);
 	free(tmp);
 	return (fd);
 }
@@ -29,8 +29,7 @@ int	get_fd_out(char *path)
 	char	*tmp;
 
 	tmp = ft_substr(path, 1, ft_strlen(path) - 1);
-	printf("%s\n", tmp);
-	fd = open(tmp, O_TRUNC | O_WRONLY | O_CREAT, 644);
+	fd = open(tmp, O_TRUNC | O_WRONLY | O_CREAT, 00644);
 	free(tmp);
 	return (fd);
 }
@@ -51,7 +50,7 @@ int	get_fd_here(char *path)
 	int		fd;
 	char	*tmp;
 
-	tmp = ft_substr(path, 6, ft_strlen(path) - 6);
+	tmp = ft_strtrim(path, "\"");
 	fd = open(tmp, O_RDONLY);
 	free(tmp);
 	return (fd);

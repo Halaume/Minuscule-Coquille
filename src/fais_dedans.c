@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/25 14:48:14 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/25 17:10:41 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,17 +160,17 @@ int	check_built_in(char *commande)
 		return (1);
 	if (ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (0);
-	else if (ft_strncmp("pwd", no_quote_commande[0], 3) == 0)
+	else if (ft_strncmp("pwd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (0);
 	else if (ft_strncmp("cd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (0);
-	else if (ft_strncmp("export", no_quote_commande[0], 6) == 0)
+	else if (ft_strncmp("export", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (0);
-	else if (ft_strncmp("unset", no_quote_commande[0], 5) == 0)
+	else if (ft_strncmp("unset", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (0);
-	else if (ft_strncmp("env", no_quote_commande[0], 3) == 0)
+	else if (ft_strncmp("env", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (0);
-	else if (ft_strncmp("exit", no_quote_commande[0], 4) == 0)
+	else if (ft_strncmp("exit", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (0);
 	free(no_quote_commande);
 	return (1);

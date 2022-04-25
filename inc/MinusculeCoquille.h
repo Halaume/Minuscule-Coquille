@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/25 16:32:21 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/25 18:35:17 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,67 @@ int		ft_exit(int status);
 //				EXECUTION DES COMMANDES
 
 int		exec(t_toyo *toyo, t_info *info);
+int		exec(t_toyo *toyo, t_info *info);
 int		lance_exec(t_info *info, t_arbre *arbre);
+char	*get_my_path(char **envp);
+int		check_abs_path(char *argv);
+char	*get_cmd(char **path, char *cmd);
 
 //				LIBERATION
 
 void	free_char_char(char **str);
 int		exit_func(int status);
 void	free_toyo(t_toyo *toyo);
+
+//				PIPEX
+
+# include <unistd.h>
+# include <sys/types.h>
+# include <sys/uio.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include <string.h>
+# include <stdio.h>
+# include <errno.h>
+# include "get_next_line.h"
+
+typedef struct s_struct
+{
+	pid_t	forkcmd1;
+	pid_t	forkcmd2;
+	pid_t	*pid_tab;
+	int		nb_cmd;
+	int		indexarg;
+	char	*envpath;
+	char	**envpathcut;
+	char	**arg;
+	char	*cmd;
+	char	**argv;
+	char	**envp;
+}	t_struct;
+
+//			STRING MANIP
+
+char		**ft_split(char *s, char c);
+char		*ft_join(char *s1, char *s2);
+void		ft_putstr(char *str);
+void		get_outfile(char *argv, t_struct *pipex);
+int			args_min(char *arg, t_struct *pipex);
+
+//			PIPEX FUN
+
+void		first_fun(t_struct *pipex, char **argv, char **envp);
+void		spamdup2(int elem1, int elem2);
+void		second_fun(t_struct *pipex, char **argv, char **envp);
+t_struct	init_pipex(char **argv, char **envp);
+void		fun_here_doc(char *argv, t_struct *pipex);
+void		child(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1);
+
+//			ERROR / FREE / END PROG
+
+void		error_func(t_struct *pipex, char *msg);
+void		free_func(t_struct *pipex);
+void		close_pipe(t_struct *pipex);
 
 #endif

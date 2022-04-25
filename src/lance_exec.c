@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/25 16:34:27 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/25 18:37:26 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ t_toyo	*rec_toyo(t_arbre *arbre)
 		toyo->next = rec_toyo(arbre->fg);
 		return (toyo);
 	}
-	toyo = getcommande(arbre->fg);
+	toyo = getcommande(arbre);
 	toyo->next = NULL;
 	return (toyo);
 }

@@ -6,13 +6,13 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 14:34:01 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/03/19 13:09:23 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/25 18:23:50 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/pipex_bonus.h"
+#include "../inc/MinusculeCoquille.h"
 
-void	duping_closing(t_struct *pipex, int fd[2], int fd1)
+void	duping_closing(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1)
 {
 	if (pipex->indexarg == 0)
 	{
@@ -27,20 +27,18 @@ void	duping_closing(t_struct *pipex, int fd[2], int fd1)
 		dup2(fd[1], 1);
 		close(fd[0]);
 	}
-	if (pipex->argv[2 + pipex->is_heredoc + pipex->indexarg][0] == '\0')
+	if (!toyo->commande)
 		error_func(pipex, "Command not found");
-	pipex->arg = ft_split(pipex->argv[2 + pipex->is_heredoc + \
-			pipex->indexarg], ' ');
+	pipex->arg = ft_split(toyo->commande, ' ');
 }
 
-void	child(t_struct *pipex, int fd[2], int fd1)
+void	child(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1)
 {
 	pipex->pid_tab[pipex->indexarg] = fork();
 	if (pipex->pid_tab[pipex->indexarg] == 0)
 	{
-		duping_closing(pipex, fd, fd1);
-		if (check_abs_path(pipex->argv, 2 + pipex->is_heredoc + \
-					pipex->indexarg))
+		duping_closing(toyo, pipex, fd, fd1);
+		if (check_abs_path(toyo->commande))
 		{
 			if (access(pipex->arg[0], X_OK) == 0)
 				execve(pipex->arg[0], \

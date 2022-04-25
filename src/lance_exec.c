@@ -6,35 +6,36 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/24 19:25:28 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/25 14:59:58 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "MinusculeCoquille.h"
+#include "../inc/MinusculeCoquille.h"
 
-int	get>>fd(char *path)
+int	get_fd_concat(char *path)
 {
 	int		fd;
 	char	*tmp;
 
 	tmp = ft_substr(path, 2, ft_strlen(path) - 2);
-	fd = open(tmp, O_APPEND | O_WRONLY | O_CREAT);
+	fd = open(tmp, O_APPEND | O_WRONLY | O_CREAT, 644);
 	free(tmp);
 	return (fd);
 }
 
-int	get>fd(char *path)
+int	get_fd_out(char *path)
 {
 	int		fd;
 	char	*tmp;
 
 	tmp = ft_substr(path, 1, ft_strlen(path) - 1);
-	fd = open(tmp, O_TRUNC | O_WRONLY | O_CREAT);
+	printf("%s\n", tmp);
+	fd = open(tmp, O_TRUNC | O_WRONLY | O_CREAT, 644);
 	free(tmp);
 	return (fd);
 }
 
-int	get<fd(char *path)
+int	get_fd_in(char *path)
 {
 	int		fd;
 	char	*tmp;
@@ -45,7 +46,7 @@ int	get<fd(char *path)
 	return (fd);
 }
 
-int	get<<fd(char *path)
+int	get_fd_here(char *path)
 {
 	int		fd;
 	char	*tmp;
@@ -60,34 +61,36 @@ t_toyo	*getcommande(t_arbre *arbre)
 {
 	t_toyo	*toyo;
 
-	toyo = (t_toyo *)malloc(sizeof(toyo));
+	toyo = (t_toyo *)malloc(sizeof(t_toyo));
 	toyo->in = 0;
 	toyo->out = 1;
+	toyo->next = NULL;
 	while (arbre->fd)
 	{
-		if (ft_strncmp(arbre->commande, ">>"), 2)
+		printf("%s\n", arbre->commande);
+		if (!ft_strncmp(arbre->commande, ">>", 2))
 		{
 			if (toyo->out != 1)
 				close(toyo->out);
-			toyo->in = get>>fd(arbre->commande);
+			toyo->out = get_fd_concat(arbre->commande);
 		}
-		else if (ft_strncmp(arbre->commande, ">"), 1)
+		else if (!ft_strncmp(arbre->commande, ">", 1))
 		{
 			if (toyo->out != 1)
 				close(toyo->out);
-			toyo->out = get>fd(arbre->commande);
+			toyo->out = get_fd_out(arbre->commande);
 		}
-		else if (ft_strncmp(arbre->commande, "<"), 1)
+		else if (!ft_strncmp(arbre->commande, "<", 1))
 		{
 			if (toyo->in != 0)
 				close(toyo->in);
-			toyo->in = get<fd(arbre->commande);
+			toyo->in = get_fd_in(arbre->commande);
 		}
 		else
 		{
 			if (toyo->in != 0)
 				close(toyo->in);
-			toyo->in = get<<fd(arbre->commande);
+			toyo->in = get_fd_here(arbre->commande);
 		}
 		arbre = arbre->fd;
 	}
@@ -102,7 +105,7 @@ t_toyo	*rec_toyo(t_arbre *arbre)
 	if (!ft_strcmp(arbre->commande, "|"))
 	{
 		toyo = getcommande(arbre->fd);
-		toyo->next = rec_toyo(arbre->fg, in, out);
+		toyo->next = rec_toyo(arbre->fg);
 		return (toyo);
 	}
 	toyo = (t_toyo *)malloc(sizeof(t_toyo));
@@ -113,7 +116,7 @@ t_toyo	*rec_toyo(t_arbre *arbre)
 	return (toyo);
 }
 
-int	lance_toyo(t_info *info, t_toyo *toyo)
+/*int	lance_toyo(t_info *info, t_toyo *toyo)
 {
 	char	**pipe;
 	t_toyo	*current;
@@ -136,22 +139,23 @@ int	lance_toyo(t_info *info, t_toyo *toyo)
 		current = current->next;
 	}
 	return (pipex(pipe));
-}
+}*/
 
-int	lance_exec(t_info *info, t_arbre *arbre, int in, int out)
+int	lance_exec(t_info *info, t_arbre *arbre)
 {
 	if (!ft_strcmp(arbre->commande, "&&"))
 	{
-		if (lance_exec(info, arbre->fd, 0, 1))
-			return (lance_exec(info, arbre->fg, 0, 1));
+		if (!lance_exec(info, arbre->fd))
+			return (lance_exec(info, arbre->fg));
 	}
 	else if (!ft_strcmp(arbre->commande, "||"))
 	{
-		if (!lance_exec(info, arbre->fd, 0, 1))
-			return (lance_exec(info, arbre->fg, 0, 1));
+		if (lance_exec(info, arbre->fd))
+			return (lance_exec(info, arbre->fg));
+		else
+			return (info->exit_status);
 	}
-	else if (!ft_strcmp(arbre->commande, "|"))
-		return (lance_toyo(info, rec_toyo(arbre)));
-	else
-		return (exec(arbre->commande));
+//	else if (!ft_strcmp(arbre->commande, "|"))
+//		return (lance_toyo(info, rec_toyo(arbre)));
+	return (exec(getcommande(arbre), info));
 }

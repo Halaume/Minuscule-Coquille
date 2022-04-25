@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/24 18:06:19 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/25 14:40:48 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef STRUCTURE s_info
 	char	**envp;
 	t_env	*env;
 	t_arbre	*arbre;
+	int		exit_status;
 }	t_info;
 
 //				ANALYSE-SYNTAXIQUE
@@ -88,11 +89,13 @@ int		ft_exit(int status);
 
 //				EXECUTION DES COMMANDES
 
-int		exec(char *commande, char **envp);
+int		exec(t_toyo *toyo, t_info *info);
+int		lance_exec(t_info *info, t_arbre *arbre);
 
 //				LIBERATION
 
 void	free_char_char(char **str);
-void	exit_func(int status);
+int		exit_func(int status);
+void	free_toyo(t_toyo *toyo);
 
 #endif

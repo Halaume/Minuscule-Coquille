@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/25 15:52:15 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/25 16:24:24 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ t_toyo	*rec_toyo(t_arbre *arbre)
 	return (toyo);
 }
 
-/*int	lance_toyo(t_info *info, t_toyo *toyo)
+int	lance_toyo(t_info *info, t_toyo *toyo)
 {
 	char	**pipe;
 	t_toyo	*current;
@@ -138,7 +138,7 @@ t_toyo	*rec_toyo(t_arbre *arbre)
 		current = current->next;
 	}
 	return (pipex(pipe));
-}*/
+}
 
 int	lance_exec(t_info *info, t_arbre *arbre)
 {
@@ -154,7 +154,7 @@ int	lance_exec(t_info *info, t_arbre *arbre)
 		else
 			return (info->exit_status);
 	}
-//	else if (!ft_strcmp(arbre->commande, "|"))
-//		return (lance_toyo(info, rec_toyo(arbre)));
+	else if (!ft_strcmp(arbre->commande, "|"))
+		return (lance_toyo(info, rec_toyo(arbre)));
 	return (exec(getcommande(arbre), info));
 }

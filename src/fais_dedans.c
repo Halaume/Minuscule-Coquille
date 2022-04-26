@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/26 15:28:28 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 17:39:56 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,7 @@ int	is_built_in(char *commande, t_info *info)
 //	else if (ft_strncmp("exit", no_quote_commande[0], 4) == 0)
 //		ret = ft_exit(status);
 	free_char_char(info->envp);
-	info->envp = getenv_char_char(info->env);
+	info->envp = ft_getenvp(info->env);
 	free_char_char(no_quote_commande);
 	return (ret);
 }

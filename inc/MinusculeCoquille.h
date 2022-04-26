@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/26 12:55:30 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 17:39:46 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ typedef struct s_struct
 
 //			STRING MANIP
 
+char		**ft_getenvp(t_env *env);
 char		**ft_split(char *s, char c);
 char		*ft_join(char *s1, char *s2);
 void		ft_putstr(char *str);

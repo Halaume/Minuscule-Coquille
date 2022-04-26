@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:03:35 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/26 13:06:39 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 14:38:56 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	**ft_splitsane(char	*str)
 			indoublegui = !indoublegui;
 		if (!insimplegui && !indoublegui && str[i] == ' ')
 		{
-			dest[j++] = ft_substr(str, last, i - last);
+			dest[j++] = get_del(ft_substr(str, last, i - last));
 			while (str[i] && str[i] == ' ')
 				i++;
 			last = i;
@@ -77,7 +77,7 @@ char	**ft_splitsane(char	*str)
 			i++;
 	}
 	if (last != i)
-		dest[j++] = ft_substr(str, last, i - last);
+		dest[j++] = get_del(ft_substr(str, last, i - last));
 	dest[j] = NULL;
 	return (dest);
 }

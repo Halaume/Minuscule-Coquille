@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/25 14:48:14 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 11:03:00 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	ft_pwd(void)
 
 	if (getcwd(curdir, sizeof(curdir)) == NULL)
 	{
-		return (printf("erreur pwd wtf\n"), -1000);
+		return (perror("erreur pwd wtf"), -1000);
 	}
 	else
 		write(1, curdir, ft_strlen(curdir));
@@ -103,7 +103,22 @@ int	ft_pwd(void)
 	return (0);
 }*/
 
-int	is_built_in(char *commande, char **envp)
+int	ft_env(t_env *env)
+{
+	t_env	*tmp;
+
+	tmp = env;
+	while (tmp)
+	{
+		ft_putstr_fd(tmp->variable, 1);
+		ft_putstr_fd("=", 1);
+		ft_putstr_fd(tmp->valeur, 1);
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
+int	is_built_in(char *commande, t_info *info)
 {
 	char	**no_quote_commande;
 	char	*joined_commande;
@@ -135,13 +150,13 @@ int	is_built_in(char *commande, char **envp)
 	else if (ft_strncmp("pwd", no_quote_commande[0], 4) == 0)
 		return (ft_pwd());
 	else if (ft_strncmp("cd", no_quote_commande[0], 3) == 0)
-		ret = ft_cd(no_quote_commande, envp);
+		ret = ft_cd(no_quote_commande, info->envp);
 //	else if (ft_strncmp("export", splitted_str[0], 6) == 0)
 //		return (ft_export(splitted_str));
 //	else if (ft_strncmp("unset", splitted_str[0], 5) == 0)
 //		return (ft_unset(splitted_str));
-//	else if (ft_strncmp("env", splitted_str[0], 3) == 0)
-//		return (ft_env(splitted_str));
+	else if (ft_strncmp("env", no_quote_commande[0], 3) == 0)
+		return (ft_env(info->env));
 //	else if (ft_strncmp("exit", no_quote_commande[0], 4) == 0)
 //		return (ft_exit(status));
 	free(no_quote_commande);
@@ -160,17 +175,17 @@ int	check_built_in(char *commande)
 		return (1);
 	if (ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (0);
-	else if (ft_strncmp("pwd", no_quote_commande[0], 3) == 0)
+	else if (ft_strncmp("pwd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (0);
 	else if (ft_strncmp("cd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (0);
-	else if (ft_strncmp("export", no_quote_commande[0], 6) == 0)
+	else if (ft_strncmp("export", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (0);
-	else if (ft_strncmp("unset", no_quote_commande[0], 5) == 0)
+	else if (ft_strncmp("unset", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (0);
-	else if (ft_strncmp("env", no_quote_commande[0], 3) == 0)
+	else if (ft_strncmp("env", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (0);
-	else if (ft_strncmp("exit", no_quote_commande[0], 4) == 0)
+	else if (ft_strncmp("exit", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (0);
 	free(no_quote_commande);
 	return (1);

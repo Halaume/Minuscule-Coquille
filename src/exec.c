@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/25 16:39:47 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 11:29:35 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	exec(t_toyo *toyo, t_info *info)
 		return (1);
 	status = check_built_in(toyo->commande);
 	if (status == 0)
-		return (is_built_in(toyo->commande,info->envp));
+		return (is_built_in(toyo->commande,info));
 	my_pid = fork();
 	if (my_pid < 0)
 		return (write(2, "fork error\n", 12), -1);

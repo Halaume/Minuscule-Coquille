@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/25 14:52:16 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 15:30:00 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,13 +196,45 @@ void	freeenv(t_env *current)
 	}
 }
 
+int	getsize(t_env *env)
+{
+	int i;
+	
+	i = 0;
+	while (env)
+	{
+		env = env->next;
+		i++;
+	}
+	return (i);
+}
+
+char	**ft_getenvp(t_env *env)
+{
+	char	**envp;
+	char	*tmp;
+	int		i;
+
+	i = 0;
+	envp = (char **)malloc(sizeof(char *) * (getsize(env) + 1));
+	while (env)
+	{
+		tmp = ft_strjoin(env->variable, "=");
+		envp[i++] = ft_strjoin(tmp, env->valeur);
+		free(tmp);
+		env = env->next;
+	}
+	envp[i] = NULL;
+	return (envp);
+}
+
 int	principale(int ac, char **av, char **envp)
 {
 	char	*ligne;
 	t_info	info;
 
-	info.envp = envp;
 	info.env = ft_getenv(envp);
+	info.envp = ft_getenvp(info.env);
 	ligne = readline("MinusculeCoquille$>");
 	while (ligne && ft_strcmp(ligne, "exit"))
 	{

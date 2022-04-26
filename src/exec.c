@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/26 15:00:07 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 18:58:11 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	check_abs_path(char *argv)
 	int	i;
 
 	i = 0;
-	if (argv[0] == '/')
+	if (ft_strchr(argv, '/'))
 		return (1);
 	return (0);
 }
@@ -71,13 +71,13 @@ int	executing(t_toyo *toyo, t_info *info)
 	dup2(toyo->in, 0);
 	dup2(toyo->out, 1);
 	arg = ft_splitsane(toyo->commande);
-	if (check_abs_path(toyo->commande))
+	if (check_abs_path(arg[0]))
 	{
 		if (access(arg[0], X_OK) == 0)
 			execve(arg[0], arg, info->envp);
 		else
 		{
-			perror("Command error");
+			ft_putstr_fd("Command error\n", 2);
 			free_toyo(toyo);
 			free_char_char(arg);
 			exit(1);
@@ -87,7 +87,7 @@ int	executing(t_toyo *toyo, t_info *info)
 	cmd = get_cmd(ft_split(env, ':'), arg[0]);
 	if (cmd == NULL)
 	{
-		perror("command error");
+		ft_putstr_fd("Command error\n", 2);
 		free_toyo(toyo);
 		free_char_char(arg);
 		exit(1);

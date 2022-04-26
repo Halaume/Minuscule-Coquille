@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 14:43:46 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/25 19:46:29 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 14:52:30 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,11 @@ int	toyotage(t_toyo *toyo, t_info *info)
 		i++;
 	}
 	free_toyo(toyo);
+	free_func(&pipex);
 	if (WIFEXITED(status))
 	{
 		info->exit_status = WEXITSTATUS(status);
 		return(info->exit_status);
 	}
-//	free_func(&pipex);
 	return (0);
 }

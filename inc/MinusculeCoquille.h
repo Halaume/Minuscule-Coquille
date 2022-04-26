@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/25 16:32:21 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 11:03:54 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,24 +78,79 @@ char	*strjoin_space(char *s1, char *s2);
 //				FAIS-DEDANS
 
 int		check_built_in(char *commande);
-int		is_built_in(char *arbre, char **envp);
+int		is_built_in(char *arbre, t_info *info);
 int		ft_echo(char **arg);
 int		ft_cd(char **arg, char **envp);
 int		ft_pwd(void);
 int		ft_export(char **splitted_str);
 int		ft_unset(char **splitted_str);
-int		ft_env(char **splitted_str);
+int		ft_env(t_env *env);
 int		ft_exit(int status);
 
 //				EXECUTION DES COMMANDES
 
 int		exec(t_toyo *toyo, t_info *info);
+int		exec(t_toyo *toyo, t_info *info);
 int		lance_exec(t_info *info, t_arbre *arbre);
+char	*get_my_path(char **envp);
+int		check_abs_path(char *argv);
+char	*get_cmd(char **path, char *cmd);
 
 //				LIBERATION
 
 void	free_char_char(char **str);
 int		exit_func(int status);
 void	free_toyo(t_toyo *toyo);
+
+//				PIPEX
+
+# include <unistd.h>
+# include <sys/types.h>
+# include <sys/uio.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include <string.h>
+# include <stdio.h>
+# include <errno.h>
+
+typedef struct s_struct
+{
+	pid_t	forkcmd1;
+	pid_t	forkcmd2;
+	pid_t	*pid_tab;
+	int		nb_cmd;
+	int		indexarg;
+	char	*envpath;
+	char	**envpathcut;
+	char	**arg;
+	char	*cmd;
+	char	**argv;
+	char	**envp;
+}	t_struct;
+
+//			STRING MANIP
+
+char		**ft_split(char *s, char c);
+char		*ft_join(char *s1, char *s2);
+void		ft_putstr(char *str);
+void		get_outfile(char *argv, t_struct *pipex);
+int			args_min(char *arg, t_struct *pipex);
+
+//			PIPEX FUN
+
+void		first_fun(t_struct *pipex, char **argv, char **envp);
+void		spamdup2(int elem1, int elem2);
+void		second_fun(t_struct *pipex, char **argv, char **envp);
+t_struct	init_pipex(char **argv, char **envp);
+void		fun_here_doc(char *argv, t_struct *pipex);
+void		child(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1);
+int			toyotage(t_toyo *toyo, t_info *info);
+
+//			ERROR / FREE / END PROG
+
+void		error_func(t_struct *pipex, char *msg);
+void		free_func(t_struct *pipex);
+void		close_pipe(t_struct *pipex);
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 14:34:08 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/03/19 12:48:33 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/25 19:26:11 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/pipex_bonus.h"
+#include "../../inc/MinusculeCoquille.h"
 
-void	free_func(t_struct *pipex)
+/*void	free_func(t_struct *pipex)
 {
 	int	i;
 
@@ -39,10 +39,11 @@ void	free_func(t_struct *pipex)
 	if (pipex->is_heredoc)
 		unlink(".heredoc_tmp");
 }
-
+*/
 void	error_func(t_struct *pipex, char *msg)
 {
-	free_func(pipex);
-	ft_putstr(msg);
+//	free_func(pipex);
+	(void)pipex;
+	ft_putstr_fd(msg, 2);
 	exit(1);
 }

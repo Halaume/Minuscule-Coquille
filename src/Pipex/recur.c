@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 14:43:46 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/26 18:26:30 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 18:49:50 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@ void	recur_pipe(t_toyo *toyo, int pipefd, t_struct *pipex)
 		if (pipe(fd) < 0)
 			return (perror("Error on pipe"), exit(1));
 	}
-	printf("Le toyo in : %d\nLe toyo out : %d\n", toyo->in, toyo->out);
-	printf("Nb cmd: %d\n", pipex->nb_cmd);
-	printf("Index: %d\n", pipex->indexarg);
 	child(toyo, pipex, fd, pipefd);
 //	if (pipex->indexarg == 0)
 //		close(fd[1]);

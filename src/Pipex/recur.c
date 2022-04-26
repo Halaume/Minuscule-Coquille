@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 14:43:46 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/26 14:52:30 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 18:26:30 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,26 +21,22 @@ void	recur_pipe(t_toyo *toyo, int pipefd, t_struct *pipex)
 		if (pipe(fd) < 0)
 			return (perror("Error on pipe"), exit(1));
 	}
-	if (toyo->in != 0)
-	{
-		close(fd[0]);
-		fd[0] = toyo->in;
-	}
-	if (toyo->out != 1)
-	{
-		close(fd[1]);
-		fd[1] = toyo->out;
-	}
+	printf("Le toyo in : %d\nLe toyo out : %d\n", toyo->in, toyo->out);
+	printf("Nb cmd: %d\n", pipex->nb_cmd);
+	printf("Index: %d\n", pipex->indexarg);
 	child(toyo, pipex, fd, pipefd);
-	if (pipex->indexarg == 0)
+//	if (pipex->indexarg == 0)
+//		close(fd[1]);
+//	if (pipex->indexarg == (pipex->nb_cmd - 1))
+//		close(pipefd);
+	if (toyo->in != 0)
+		close(toyo->in);
+	if (toyo->out != 1)
+		close(toyo->out);
+	if (pipex->indexarg != (pipex->nb_cmd - 1))
 		close(fd[1]);
-	else if (pipex->indexarg == (pipex->nb_cmd - 1))
+	if (pipex->indexarg != 0)
 		close(pipefd);
-	else
-	{
-		close(fd[1]);
-		close(pipefd);
-	}
 	pipex->indexarg++;
 	toyo = toyo->next;
 	if (pipex->indexarg < pipex->nb_cmd)
@@ -54,6 +50,7 @@ void	nb_toyo_cmd(t_struct *pipex, t_toyo *toyo)
 	pipex->indexarg = 0;
 	pipex->nb_cmd = 0;
 	pipex->arg = NULL;
+	pipex->envpathcut = NULL;
 	tmp = toyo;
 	while (tmp)
 	{
@@ -72,6 +69,7 @@ int	toyotage(t_toyo *toyo, t_info *info)
 
 	nb_toyo_cmd(&pipex, toyo);
 	pipex.envp = info->envp;
+	pipex.info = info;
 	pipex.envpath = get_my_path(info->envp);
 	if (pipex.envpath)
 		pipex.envpathcut = ft_split(pipex.envpath, ':');

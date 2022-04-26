@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/26 15:28:28 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 15:46:30 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,12 @@ int	ft_pwd(void)
 	char	curdir[4096];
 
 	if (getcwd(curdir, sizeof(curdir)) == NULL)
-	{
 		return (perror("erreur pwd wtf"), -1000);
-	}
 	else
+	{
 		write(1, curdir, ft_strlen(curdir));
+		write(1, "\n", 1);
+	}
 	return (0);
 }
 
@@ -126,7 +127,7 @@ int	is_this_var(char *env_commande, char *commande)
 	i = 0;
 	while (commande[i] != '=')
 		i++;
-	if (strncmp(env_commande, commande, i) == 0)
+	if (ft_strncmp(env_commande, commande, i) == 0)
 		return (0);
 	return (1);
 }
@@ -139,14 +140,14 @@ int	ft_export(t_env *env, char **commande)
 
 	tmp = env;
 	new = NULL;
-	while (tmp->next && !is_this_var(tmp->variable, commande[1]))
+	while (tmp->next && is_this_var(tmp->variable, commande[1]))
 		tmp = tmp->next;
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return (perror("malloc issue"), -1);
 	new->next = NULL;
 	i = 0;
-	if (is_this_var(tmp->variable, commande[1]))
+	if (!is_this_var(tmp->variable, commande[1]))
 	{
 		while (commande[1][i])
 		{
@@ -193,7 +194,6 @@ int	is_built_in(char *commande, t_info *info)
 	i = 1;
 	no_quote_commande = NULL;
 	no_quote_commande = ft_splitsane(commande);
-	printf("%s\n", no_quote_commande[1]);
 	if (!no_quote_commande)
 		return (1);
 	if (ft_strncmp("echo", no_quote_commande[0], 5) == 0)
@@ -211,7 +211,7 @@ int	is_built_in(char *commande, t_info *info)
 //	else if (ft_strncmp("exit", no_quote_commande[0], 4) == 0)
 //		ret = ft_exit(status);
 	free_char_char(info->envp);
-	info->envp = getenv_char_char(info->env);
+	info->envp = ft_getenvp(info->env);
 	free_char_char(no_quote_commande);
 	return (ret);
 }

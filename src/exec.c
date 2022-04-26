@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/26 15:00:07 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 16:16:44 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	executing(t_toyo *toyo, t_info *info)
 			execve(arg[0], arg, info->envp);
 		else
 		{
-			perror("Command error");
+			ft_putstr_fd("Command error\n", 2);
 			free_toyo(toyo);
 			free_char_char(arg);
 			exit(1);
@@ -87,7 +87,7 @@ int	executing(t_toyo *toyo, t_info *info)
 	cmd = get_cmd(ft_split(env, ':'), arg[0]);
 	if (cmd == NULL)
 	{
-		perror("command error");
+		ft_putstr_fd("Command error\n", 2);
 		free_toyo(toyo);
 		free_char_char(arg);
 		exit(1);

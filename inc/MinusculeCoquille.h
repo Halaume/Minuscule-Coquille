@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/26 12:55:30 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 16:04:37 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,10 @@ char	**split_empty_line(char *s, char c);
 char	*strjoin_space(char *s1, char *s2);
 char	**ft_splitsane(char *str);
 
+//				ENVIRONNEMENTALE
+
+char	**ft_getenvp(t_env *env);
+
 //				FAIS-DEDANS
 
 int		check_built_in(char *commande);
@@ -117,6 +121,7 @@ void	free_toyo(t_toyo *toyo);
 
 typedef struct s_struct
 {
+	t_info	*info;
 	pid_t	forkcmd1;
 	pid_t	forkcmd2;
 	pid_t	*pid_tab;

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 14:34:08 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/26 14:53:22 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 16:08:58 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ void	free_func(t_struct *pipex)
 
 	i = -1;
 	if (pipex->envpathcut)
-		while (pipex->envpathcut[++i])
-			free(pipex->envpathcut[i]);
+		if (pipex->envpathcut[i + 1])
+			while (pipex->envpathcut[++i])
+				free(pipex->envpathcut[i]);
 	if (pipex->envpathcut)
 		free(pipex->envpathcut);
 	if (pipex->pid_tab)
@@ -28,7 +29,7 @@ void	free_func(t_struct *pipex)
 
 void	error_func(t_struct *pipex, char *msg)
 {
-	free_func(pipex);
+//	free_func(pipex);
 	(void)pipex;
 	ft_putstr_fd(msg, 2);
 	exit(1);

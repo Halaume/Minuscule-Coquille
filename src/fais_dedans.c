@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/26 11:03:00 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 12:35:32 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,38 @@ int	ft_env(t_env *env)
 	return (0);
 }
 
+int	ft_export(t_env *env, char **commande)
+{
+	t_env	*tmp;
+	t_env	*new;
+	int		i;
+
+	new = NULL;
+	while (tmp->next)
+		tmp = tmp->next;
+	new = malloc(sizeof(t_env));
+	if (!new)
+		return (perror("malloc issue"), -1);
+	i = 0;
+	while (commande[1][i])
+	{
+		if (commande[1][i] == '=')
+		{
+			new->variable = ft_substr(commande[1], 0, i);
+			new->valeur = ft_substr(commande[1], i + 1, ft_strlen(commande[0]) - i);
+			new = tmp->next;
+			break ;
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	ft_unset(t_env *env, char **commande)
+{
+
+}
+
 int	is_built_in(char *commande, t_info *info)
 {
 	char	**no_quote_commande;
@@ -151,10 +183,10 @@ int	is_built_in(char *commande, t_info *info)
 		return (ft_pwd());
 	else if (ft_strncmp("cd", no_quote_commande[0], 3) == 0)
 		ret = ft_cd(no_quote_commande, info->envp);
-//	else if (ft_strncmp("export", splitted_str[0], 6) == 0)
-//		return (ft_export(splitted_str));
-//	else if (ft_strncmp("unset", splitted_str[0], 5) == 0)
-//		return (ft_unset(splitted_str));
+	else if (ft_strncmp("export", no_quote_commande[0], 6) == 0)
+		return (ft_export(info->env, no_quote_commande));
+	else if (ft_strncmp("unset", no_quote_commande[0], 5) == 0)
+		return (ft_unset(info->env, no_quote_commande));
 	else if (ft_strncmp("env", no_quote_commande[0], 3) == 0)
 		return (ft_env(info->env));
 //	else if (ft_strncmp("exit", no_quote_commande[0], 4) == 0)

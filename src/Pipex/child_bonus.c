@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 14:34:01 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/25 19:19:49 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 13:11:35 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	duping_closing(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1)
 	}
 	if (!toyo->commande)
 		error_func(pipex, "Command not found");
-	pipex->arg = ft_split(toyo->commande, ' ');
+	pipex->arg = ft_splitsane(toyo->commande);
 }
 
 void	child(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1)

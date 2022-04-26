@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/26 12:35:32 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 12:58:23 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ int	ft_export(t_env *env, char **commande)
 	t_env	*new;
 	int		i;
 
+	tmp = env;
 	new = NULL;
 	while (tmp->next)
 		tmp = tmp->next;
@@ -147,7 +148,10 @@ int	ft_export(t_env *env, char **commande)
 
 int	ft_unset(t_env *env, char **commande)
 {
+	(void)env;
+	(void)commande;
 
+	return (0);
 }
 
 int	is_built_in(char *commande, t_info *info)

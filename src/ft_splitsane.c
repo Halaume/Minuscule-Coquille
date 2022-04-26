@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:03:35 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/26 12:40:56 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/26 13:06:39 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,13 @@ char	**ft_splitsane(char	*str)
 
 	j = 0;
 	i = 0;
-	last = 0;
 	insimplegui = 0;
 	indoublegui = 0;
 	nbword = countword(str);
-	printf("%d\n", nbword);
 	dest = (char **)malloc(sizeof(char *) * (nbword + 1));
+	while (str[i] && str[i] == ' ')
+		i++;
+	last = i;
 	while (str[i])
 	{
 		if (!indoublegui && str[i] == '\'')

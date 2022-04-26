@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/26 11:29:35 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/26 13:11:39 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	executing(t_toyo *toyo, t_info *info)
 	cmd = NULL;
 	dup2(toyo->in, 0);
 	dup2(toyo->out, 1);
-	arg = ft_split(toyo->commande, ' ');
+	arg = ft_splitsane(toyo->commande);
 	if (check_abs_path(toyo->commande))
 	{
 		if (access(arg[0], X_OK) == 0)

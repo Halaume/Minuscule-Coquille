@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/26 11:28:40 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/27 12:03:15 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,17 @@ int	get_fd_here(char *path)
 t_toyo	*getcommande(t_arbre *arbre)
 {
 	t_toyo	*toyo;
+	char	*tmp;
 
 	toyo = (t_toyo *)malloc(sizeof(t_toyo));
 	toyo->in = 0;
 	toyo->out = 1;
 	toyo->next = NULL;
-	while (arbre->fd)
+	toyo->commande = NULL;
+	while (arbre && (!ft_strncmp(arbre->commande, ">>", 2) ||\
+			!ft_strncmp(arbre->commande, ">", 1) ||\
+			!ft_strncmp(arbre->commande, "<", 1) ||\
+			!ft_strncmp(arbre->commande, "/tmp/.", 6)))
 	{
 		if (!ft_strncmp(arbre->commande, ">>", 2))
 		{
@@ -92,12 +97,15 @@ t_toyo	*getcommande(t_arbre *arbre)
 		}
 		if (toyo->in < 0 || toyo->out < 0)
 		{
-			toyo->commande = NULL;
+			tmp = ft_strtrim(arbre->commande, "<");
+			perror(tmp);
+			free(tmp);
 			return (toyo);
 		}
 		arbre = arbre->fd;
 	}
-	toyo->commande = arbre->commande;
+	if (arbre)
+		toyo->commande = arbre->commande;
 	return (toyo);
 }
 

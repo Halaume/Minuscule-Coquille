@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 14:34:08 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/26 16:08:58 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/27 11:23:21 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@ void	free_func(t_struct *pipex)
 		free(pipex->pid_tab);
 }
 
-void	error_func(t_struct *pipex, char *msg)
+void	error_func(t_struct *pipex, char *msg, char *cmd)
 {
 //	free_func(pipex);
 	(void)pipex;
+	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd(msg, 2);
 	exit(1);
 }

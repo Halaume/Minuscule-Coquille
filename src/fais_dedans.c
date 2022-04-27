@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/26 19:39:28 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/27 11:30:56 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,22 @@ int	is_this_var(char *env_commande, char *commande)
 	return (1);
 }
 
+int	check_identifier(char *commande)
+{
+	int	i;
+
+	i = 0;
+	if (ft_isdigit(commande[i]))
+		return (1);
+	while (commande[i])
+	{
+		if (commande[i] <= 47 || (commande[i] >= 58 && commande[i] <= 64) || commande[i] > 122 || (commande[i] >= 91 && commande[i] <= 94) || commande[i] == 96)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	ft_export(t_env *env, char **commande)
 {
 	t_env	*tmp;
@@ -140,11 +156,13 @@ int	ft_export(t_env *env, char **commande)
 
 	tmp = env;
 	new = NULL;
+	if (!check_identifier(commande[0]))
+		return (ft_putstr_fd("export: not a valid identifier\n", 2), 1);
 	while (tmp->next && is_this_var(tmp->variable, commande[1]))
 		tmp = tmp->next;
 	new = malloc(sizeof(t_env));
 	if (!new)
-		return (perror("malloc issue"), -1);
+		return (perror("export malloc issue"), -1);
 	new->next = NULL;
 	i = 0;
 	if (!is_this_var(tmp->variable, commande[1]))
@@ -174,11 +192,35 @@ int	ft_export(t_env *env, char **commande)
 	return (0);
 }
 
-int	ft_unset(t_env *env, char **commande)
+int	ft_unset(t_env *env, char *commande)
 {
-	(void)env;
-	(void)commande;
+	int		i;
+	t_env	*tmp;
+	t_env	*keep;
 
+	tmp = env;
+	i = 0;
+	if (!check_identifier(commande))
+		return (ft_putstr_fd("unset: not a valid identifier\n", 2), 1);
+	while (tmp)
+	{
+		if (is_this_var(env->variable, commande) == 0)
+		{
+			if (tmp == env)
+			{
+				env = env->next;
+				free(tmp);
+			}
+			else
+			{
+				keep->next = tmp->next;
+				free(tmp);
+			}
+			return (0);
+		}
+		keep = tmp;
+		tmp = tmp->next;
+	}
 	return (0);
 }
 
@@ -205,7 +247,7 @@ int	is_built_in(char *commande, t_info *info)
 	else if (ft_strncmp("export", no_quote_commande[0], 6) == 0)
 		ret = ft_export(info->env, no_quote_commande);
 	else if (ft_strncmp("unset", no_quote_commande[0], 5) == 0)
-		ret = ft_unset(info->env, no_quote_commande);
+		ret = ft_unset(info->env, no_quote_commande[1]);
 	else if (ft_strncmp("env", no_quote_commande[0], 3) == 0)
 		ret = ft_env(info->env);
 //	else if (ft_strncmp("exit", no_quote_commande[0], 4) == 0)

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/26 19:39:49 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/27 16:36:47 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 typedef	STRUCTURE s_toyo
 {
 	CARACTERE			*commande;	
+	STRUCTURE s_arbre	*arbre;
 	ENTIER				in;
 	ENTIER				out;
 	STRUCTURE s_toyo	*next;

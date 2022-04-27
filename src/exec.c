@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/27 18:32:21 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/27 19:24:20 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,6 @@ int	exec(t_toyo *toyo, t_info *info)
 	}
 	if (toyo == NULL)
 		return (info->exit_status);
-	dup2(toyo->in, 0);
-	dup2(toyo->out, 1);
 	status = check_built_in(toyo->commande);
 	if (status == 0)
 	{
@@ -133,7 +131,11 @@ int	exec(t_toyo *toyo, t_info *info)
 	if (my_pid < 0)
 		return (write(2, "fork error\n", 12), -1);
 	if (my_pid == 0)
+	{
+		dup2(toyo->in, 0);
+		dup2(toyo->out, 1);
 		executing(toyo, info);
+	}
 	waitpid(my_pid, &status, 0);
 	free_toyo(toyo);
 	if (WIFEXITED(status))

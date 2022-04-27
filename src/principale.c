@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/27 17:46:26 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/27 19:32:10 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,7 @@ int	principale(int ac, char **av, char **envp)
 				info.arbre = analyse_syntaxique(ligne, info.arbre);
 				if (!checkarbre(info.arbre))
 				{
-//					structure(info.arbre, 0);
+				//	structure(info.arbre, 0);
 					lance_exec(&info, info.arbre);
 				}
 				else

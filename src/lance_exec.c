@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/27 17:32:00 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/27 19:31:35 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,22 @@ int	get_fd_here(char *path)
 	return (fd);
 }
 
+int	isredirect(char *str)
+{
+	char	*tmp;
+
+	if (!ft_strncmp(str, ">>", 2))
+		return (1);
+	else if (!ft_strncmp(str, ">", 1))
+		return (1);
+	else if (!ft_strncmp(str, "<", 1))
+		return (1);
+	tmp = ft_strtrim(str, "\"");
+	if (!ft_strncmp(tmp, "/tmp/.", 6))
+		return (free(tmp), 1);
+	return (free(tmp), 0);
+}
+
 t_toyo	*getcommande(t_arbre *arbre)
 {
 	t_toyo	*toyo;
@@ -67,10 +83,7 @@ t_toyo	*getcommande(t_arbre *arbre)
 	toyo->next = NULL;
 	toyo->commande = NULL;
 	toyo->arbre = NULL;
-	while (arbre && (!ft_strncmp(arbre->commande, ">>", 2) ||\
-			!ft_strncmp(arbre->commande, ">", 1) ||\
-			!ft_strncmp(arbre->commande, "<", 1) ||\
-			!ft_strncmp(arbre->commande, "/tmp/.", 6)))
+	while (arbre && isredirect(arbre->commande))
 	{
 		if (!ft_strncmp(arbre->commande, ">>", 2))
 		{

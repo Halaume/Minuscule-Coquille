@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/27 16:52:29 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/27 17:46:26 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,6 +236,7 @@ int	principale(int ac, char **av, char **envp)
 
 	info.env = ft_getenv(envp);
 	info.envp = ft_getenvp(info.env);
+	info.exit_status = 0;
 	ligne = readline("MinusculeCoquille$>");
 	while (ligne)
 	{

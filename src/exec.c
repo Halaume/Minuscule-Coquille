@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/27 12:13:54 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/27 18:32:21 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,6 @@ int	executing(t_toyo *toyo, t_info *info)
 	env = NULL;
 	arg = NULL;
 	cmd = NULL;
-	dup2(toyo->in, 0);
-	dup2(toyo->out, 1);
 	arg = ft_splitsane(toyo->commande);
 	if (check_abs_path(arg[0]))
 	{
@@ -104,9 +102,26 @@ int	exec(t_toyo *toyo, t_info *info)
 	pid_t	my_pid;
 	int		status;
 	int		ret;
+	pid_t	forking;
 
 	if (!toyo->commande)
 		return (free_toyo(toyo), 1);
+	if (!ft_strncmp("()", toyo->commande, 2))
+	{
+		forking = fork();
+		if (forking == 0)
+		{
+			lance_exec(info, toyo->arbre);
+			exit(info->exit_status);
+		}
+		waitpid(forking, &status, 0);
+		free_toyo(toyo);
+		return (status);
+	}
+	if (toyo == NULL)
+		return (info->exit_status);
+	dup2(toyo->in, 0);
+	dup2(toyo->out, 1);
 	status = check_built_in(toyo->commande);
 	if (status == 0)
 	{
@@ -126,5 +141,5 @@ int	exec(t_toyo *toyo, t_info *info)
 		info->exit_status = WEXITSTATUS(status);
 		return(info->exit_status);
 	}
-	return(0);
+	return (0);
 }

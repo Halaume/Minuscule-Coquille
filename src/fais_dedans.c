@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/27 11:30:56 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/27 17:09:25 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,12 @@ int	ft_cd(char **arg, char **envp)
 	char	*home;
 
 	if (arg[2])
-		return (write(2, "cd: too many arguments\n", 24), 1);
+		return (write(2, "cd: arguments trop nombreux\n", 24), 1);
 	if (!arg[1])
 	{
 		home = get_my_home(envp);
 		if (home == NULL)
-			return (write(2, "bash: cd: HOME not set\n", 23), 1);
+			return (write(2, "coquille: cd: HOME non set\n", 23), 1);
 		else		
 			if (chdir(home) == -1)
 				return (perror("cd"), 1);
@@ -94,15 +94,46 @@ int	ft_pwd(void)
 	return (0);
 }
 
-/*int	ft_exit(char **exit, t_info *info)
+int	is_exiting(char *numero)
 {
+	int	i;
+
+	i = 0;
+	if (numero[i] == '-' || numero[i] == '+')
+		i++;
+	while (numero[i])
+	{
+		if (!ft_isdigit(numero[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	ft_exit(char **exit, t_info *info)
+{
+	int	i;
+
+	i = 0;
 	if (exit[1])
 	{
-		info->exit_status = ft_atoi(exit[1]);
+		while (exit[1][i])
+		{
+			if (is_exiting(exit[1]))
+			{
+				ft_putstr_fd("exit: Besoin argument numerique\n", 2);
+				info->exit_status = 2;
+				break ;
+			}
+			else
+				info->exit_status = ft_atoi(exit[1]);
+			i++;
+		}
 	}
-	exit_func(status);
+	ft_putstr_fd("exit\n", 1);
+	exit_func(info);
 	return (0);
-}*/
+}
 
 int	ft_env(t_env *env)
 {
@@ -125,7 +156,7 @@ int	is_this_var(char *env_commande, char *commande)
 	int	i;
 
 	i = 0;
-	while (commande[i] != '=')
+	while (commande[i] && commande[i] != '=')
 		i++;
 	if (ft_strncmp(env_commande, commande, i) == 0)
 		return (0);
@@ -138,41 +169,56 @@ int	check_identifier(char *commande)
 
 	i = 0;
 	if (ft_isdigit(commande[i]))
-		return (1);
+		return (0);
 	while (commande[i])
 	{
 		if (commande[i] <= 47 || (commande[i] >= 58 && commande[i] <= 64) || commande[i] > 122 || (commande[i] >= 91 && commande[i] <= 94) || commande[i] == 96)
-			return (1);
+			return (0);
 		i++;
 	}
-	return (0);
+	return (1);
 }
 
-int	ft_export(t_env *env, char **commande)
+int	ft_export(t_info *info, char **commande)
 {
 	t_env	*tmp;
 	t_env	*new;
 	int		i;
 
-	tmp = env;
+	i = 0;
+	tmp = info->env;
 	new = NULL;
 	if (!check_identifier(commande[0]))
-		return (ft_putstr_fd("export: not a valid identifier\n", 2), 1);
-	while (tmp->next && is_this_var(tmp->variable, commande[1]))
-		tmp = tmp->next;
+		return (ft_putstr_fd("export: identifier invalide\n", 2), 1);
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return (perror("export malloc issue"), -1);
 	new->next = NULL;
-	i = 0;
-	if (!is_this_var(tmp->variable, commande[1]))
+	if (!info->env)
+	{
+		while (commande[1][i])
+		{
+			if (commande[1][i] == '=')
+			{
+				new->variable = ft_substr(commande[1], 0, i);
+				new->valeur = ft_substr(commande[1], i + 1, ft_strlen(commande[1]) - i);
+				freeenv(info->env);
+				info->env = new;
+				return (0);
+			}
+			i++;
+		}
+	}
+	while (tmp && tmp->next && is_this_var(tmp->variable, commande[1]))
+		tmp = tmp->next;
+	if (tmp && !is_this_var(tmp->variable, commande[1]))
 	{
 		while (commande[1][i])
 		{
 			if (commande[1][i] == '=')
 			{
 				tmp->variable = ft_substr(commande[1], 0, i);
-				tmp->valeur = ft_substr(commande[1], i + 1, ft_strlen(commande[0]) - i);
+				tmp->valeur = ft_substr(commande[1], i + 1, ft_strlen(commande[1]) - i);
 				return (free(new), 0);
 			}
 			i++;
@@ -183,7 +229,7 @@ int	ft_export(t_env *env, char **commande)
 		if (commande[1][i] == '=')
 		{
 			new->variable = ft_substr(commande[1], 0, i);
-			new->valeur = ft_substr(commande[1], i + 1, ft_strlen(commande[0]) - i);
+			new->valeur = ft_substr(commande[1], i + 1, ft_strlen(commande[1]) - i);
 			tmp->next = new;
 			return (0);
 		}
@@ -192,28 +238,36 @@ int	ft_export(t_env *env, char **commande)
 	return (0);
 }
 
-int	ft_unset(t_env *env, char *commande)
+int	ft_unset(t_info *info, char *commande)
 {
 	int		i;
 	t_env	*tmp;
 	t_env	*keep;
 
-	tmp = env;
+	tmp = info->env;
 	i = 0;
 	if (!check_identifier(commande))
-		return (ft_putstr_fd("unset: not a valid identifier\n", 2), 1);
+		return (ft_putstr_fd("unset: identifier invalide\n", 2), 1);
 	while (tmp)
 	{
-		if (is_this_var(env->variable, commande) == 0)
+		if (is_this_var(tmp->variable, commande) == 0)
 		{
-			if (tmp == env)
+			if (tmp == info->env)
 			{
-				env = env->next;
+				info->env = info->env->next;
+				free(tmp->variable);
+				free(tmp->valeur);
+				tmp->variable = NULL;
+				tmp->valeur = NULL;
 				free(tmp);
 			}
 			else
 			{
 				keep->next = tmp->next;
+				free(tmp->variable);
+				free(tmp->valeur);
+				tmp->variable = NULL;
+				tmp->valeur = NULL;
 				free(tmp);
 			}
 			return (0);
@@ -238,20 +292,20 @@ int	is_built_in(char *commande, t_info *info)
 	no_quote_commande = ft_splitsane(commande);
 	if (!no_quote_commande)
 		return (1);
-	if (ft_strncmp("echo", no_quote_commande[0], 5) == 0)
+	if (ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_echo(no_quote_commande);
-	else if (ft_strncmp("pwd", no_quote_commande[0], 4) == 0)
+	else if (ft_strncmp("pwd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_pwd();
-	else if (ft_strncmp("cd", no_quote_commande[0], 3) == 0)
+	else if (ft_strncmp("cd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_cd(no_quote_commande, info->envp);
-	else if (ft_strncmp("export", no_quote_commande[0], 6) == 0)
-		ret = ft_export(info->env, no_quote_commande);
-	else if (ft_strncmp("unset", no_quote_commande[0], 5) == 0)
-		ret = ft_unset(info->env, no_quote_commande[1]);
-	else if (ft_strncmp("env", no_quote_commande[0], 3) == 0)
+	else if (ft_strncmp("export", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+		ret = ft_export(info, no_quote_commande);
+	else if (ft_strncmp("unset", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+		ret = ft_unset(info, no_quote_commande[1]);
+	else if (ft_strncmp("env", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_env(info->env);
-//	else if (ft_strncmp("exit", no_quote_commande[0], 4) == 0)
-//		ret = ft_exit(status);
+	else if (ft_strncmp("exit", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+		ret = ft_exit(no_quote_commande, info);
 	free_char_char(info->envp);
 	info->envp = ft_getenvp(info->env);
 	free_char_char(no_quote_commande);

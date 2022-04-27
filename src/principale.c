@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/26 18:05:47 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/27 16:52:29 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ int	principale(int ac, char **av, char **envp)
 	info.env = ft_getenv(envp);
 	info.envp = ft_getenvp(info.env);
 	ligne = readline("MinusculeCoquille$>");
-	while (ligne && ft_strcmp(ligne, "exit"))
+	while (ligne)
 	{
 		tmp = ft_strtrim(ligne, " ");
 		if (ft_strlen(tmp))
@@ -254,7 +254,7 @@ int	principale(int ac, char **av, char **envp)
 				info.arbre = analyse_syntaxique(ligne, info.arbre);
 				if (!checkarbre(info.arbre))
 				{
-				//	structure(info.arbre, 0);
+//					structure(info.arbre, 0);
 					lance_exec(&info, info.arbre);
 				}
 				else
@@ -271,10 +271,10 @@ int	principale(int ac, char **av, char **envp)
 	free(ligne);
 	freeenv(info.env);
 	free_char_char(info.envp);
+	rl_clear_history();
 	(void)ac;
 	(void)av;
 	(void)envp;
-	rl_clear_history();
 	return (0);
 }
 

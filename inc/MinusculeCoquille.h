@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/27 11:23:44 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/27 16:46:46 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,12 @@
 # include <sys/types.h>
 # include <fcntl.h>
 # include "../libft/libft.h"
+# include <unistd.h>
+# include <sys/uio.h>
+# include <string.h>
+# include <errno.h>
 
-typedef	STRUCTURE s_toyo
+typedef STRUCTURE s_toyo
 {
 	CARACTERE			*commande;	
 	ENTIER				in;
@@ -33,7 +37,7 @@ typedef	STRUCTURE s_toyo
 	STRUCTURE s_toyo	*next;
 }	t_toyo;
 
-typedef	STRUCTURE s_env
+typedef STRUCTURE s_env
 {
 	CARACTERE		*variable;
 	CARACTERE		*valeur;
@@ -57,67 +61,59 @@ typedef STRUCTURE s_info
 
 //				ANALYSE-SYNTAXIQUE
 
-t_arbre	*analyse_syntaxique(CARACTERE *ligne, t_arbre *arbre);
-void	logique(char *ligne, t_info *info, int i);
-void	tuyau(char *ligne, t_info *info, int i);
-void	fourchette(char *ligne, t_info *info, int i);
-char	*no_quote(char *str);
-char	**no_quote_tab(char *str);
-char	**split_empty_line(char *s, char c);
-char	*strjoin_space(char *s1, char *s2);
-char	*open_heredoc(char *heredoc);
-char	*get_del(char *del);
+t_arbre		*analyse_syntaxique(CARACTERE *ligne, t_arbre *arbre);
+void		logique(char *ligne, t_info *info, int i);
+void		tuyau(char *ligne, t_info *info, int i);
+void		fourchette(char *ligne, t_info *info, int i);
+char		*no_quote(char *str);
+char		**no_quote_tab(char *str);
+char		**split_empty_line(char *s, char c);
+char		*strjoin_space(char *s1, char *s2);
+char		*open_heredoc(char *heredoc);
+char		*get_del(char *del);
 
 //				STRING MANIP
 
-char	*no_quote(char *str);
-char	**no_quote_tab(char *str);
-char	**split_empty_line(char *s, char c);
-char	*strjoin_space(char *s1, char *s2);
-char	**ft_splitsane(char *str);
+char		*no_quote(char *str);
+char		**no_quote_tab(char *str);
+char		**split_empty_line(char *s, char c);
+char		*strjoin_space(char *s1, char *s2);
+char		**ft_splitsane(char *str);
 
 //				ENVIRONNEMENTALE
 
-char	**ft_getenvp(t_env *env);
+char		**ft_getenvp(t_env *env);
 
 //				FAIS-DEDANS
 
-int		check_built_in(char *commande);
-int		is_built_in(char *arbre, t_info *info);
-int		ft_echo(char **arg);
-int		ft_cd(char **arg, char **envp);
-int		ft_pwd(void);
-int		ft_export(t_env *env, char **commande);
-int		ft_unset(t_env *env, char *commande);
-int		ft_env(t_env *env);
-int		ft_exit(int status);
+int			check_built_in(char *commande);
+int			is_built_in(char *arbre, t_info *info);
+int			ft_echo(char **arg);
+int			ft_cd(char **arg, char **envp);
+int			ft_pwd(void);
+int			ft_export(t_info *info, char **commande);
+int			ft_unset(t_info *info, char *commande);
+int			ft_env(t_env *env);
+int			ft_exit(char **status, t_info *info);
 
 //				EXECUTION DES COMMANDES
 
-int		exec(t_toyo *toyo, t_info *info);
-int		exec(t_toyo *toyo, t_info *info);
-int		lance_exec(t_info *info, t_arbre *arbre);
-char	*get_my_path(char **envp);
-int		check_abs_path(char *argv);
-char	*get_cmd(char **path, char *cmd);
+int			exec(t_toyo *toyo, t_info *info);
+int			exec(t_toyo *toyo, t_info *info);
+int			lance_exec(t_info *info, t_arbre *arbre);
+char		*get_my_path(char **envp);
+int			check_abs_path(char *argv);
+char		*get_cmd(char **path, char *cmd);
 
 //				LIBERATION
 
-void	free_char_char(char **str);
-int		exit_func(int status);
-void	free_toyo(t_toyo *toyo);
+void		free_char_char(char **str);
+void		exit_func(t_info *info);
+void		free_toyo(t_toyo *toyo);
+void		freeenv(t_env *env);
+void		freearbre(t_arbre *arbre);
 
 //				PIPEX
-
-# include <unistd.h>
-# include <sys/types.h>
-# include <sys/uio.h>
-# include <stdlib.h>
-# include <fcntl.h>
-# include <sys/wait.h>
-# include <string.h>
-# include <stdio.h>
-# include <errno.h>
 
 typedef struct s_struct
 {

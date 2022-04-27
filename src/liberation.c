@@ -6,17 +6,19 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 10:47:02 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/25 14:40:35 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/27 16:46:27 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
 
-int	exit_func(int status)
+void	exit_func(t_info *info)
 {
-	//	TODO
-	//	FREE ALL
-	return (status);
+	freearbre(info->arbre);
+	freeenv(info->env);
+	free_char_char(info->envp);
+	rl_clear_history();
+	exit(info->exit_status);
 }
 
 void	free_toyo(t_toyo *toyo)

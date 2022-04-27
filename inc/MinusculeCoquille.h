@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/26 19:39:49 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/04/27 11:23:44 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int		ft_echo(char **arg);
 int		ft_cd(char **arg, char **envp);
 int		ft_pwd(void);
 int		ft_export(t_env *env, char **commande);
-int		ft_unset(t_env *env, char **splitted_str);
+int		ft_unset(t_env *env, char *commande);
 int		ft_env(t_env *env);
 int		ft_exit(int status);
 
@@ -156,7 +156,7 @@ int			toyotage(t_toyo *toyo, t_info *info);
 
 //			ERROR / FREE / END PROG
 
-void		error_func(t_struct *pipex, char *msg);
+void		error_func(t_struct *pipex, char *msg, char *cmd);
 void		free_func(t_struct *pipex);
 void		close_pipe(t_struct *pipex);
 

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/26 18:58:11 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/04/27 12:13:54 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ int	executing(t_toyo *toyo, t_info *info)
 			execve(arg[0], arg, info->envp);
 		else
 		{
-			ft_putstr_fd("Command error\n", 2);
+			ft_putstr_fd(arg[0], 2);
+			ft_putstr_fd(": Command error\n", 2);
 			free_toyo(toyo);
 			free_char_char(arg);
 			exit(1);
@@ -87,7 +88,8 @@ int	executing(t_toyo *toyo, t_info *info)
 	cmd = get_cmd(ft_split(env, ':'), arg[0]);
 	if (cmd == NULL)
 	{
-		ft_putstr_fd("Command error\n", 2);
+		ft_putstr_fd(arg[0], 2);
+		ft_putstr_fd(": Command not found\n", 2);
 		free_toyo(toyo);
 		free_char_char(arg);
 		exit(1);
@@ -104,7 +106,7 @@ int	exec(t_toyo *toyo, t_info *info)
 	int		ret;
 
 	if (!toyo->commande)
-		return (1);
+		return (free_toyo(toyo), 1);
 	status = check_built_in(toyo->commande);
 	if (status == 0)
 	{

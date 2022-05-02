@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/27 17:14:31 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/02 16:35:05 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdio.h>
 # include <sys/wait.h>
 # include <sys/types.h>
+# include <dirent.h>
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <sys/types.h>
@@ -44,6 +45,12 @@ typedef STRUCTURE s_env
 	CARACTERE		*valeur;
 	STRUCTURE s_env	*next;
 }	t_env;
+
+typedef STRUCTURE s_name
+{
+	CARACTERE			*name;
+	STRUCTURE s_name	*next;
+}	t_name;
 
 typedef STRUCTURE s_arbre
 {
@@ -113,6 +120,10 @@ void		exit_func(t_info *info);
 void		free_toyo(t_toyo *toyo);
 void		freeenv(t_env *env);
 void		freearbre(t_arbre *arbre);
+
+//				WildCards
+
+void	lst_add(char *str, t_name *list);
 
 //				PIPEX
 

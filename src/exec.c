@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/02 14:24:46 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/03 15:27:23 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,6 @@ char	*get_my_path(char **envp)
 
 int	check_abs_path(char *argv)
 {
-	int	i;
-
-	i = 0;
 	if (ft_strchr(argv, '/'))
 		return (1);
 	return (0);

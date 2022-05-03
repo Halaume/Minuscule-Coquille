@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/02 16:35:05 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/03 11:52:09 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,13 @@ void		exit_func(t_info *info);
 void		free_toyo(t_toyo *toyo);
 void		freeenv(t_env *env);
 void		freearbre(t_arbre *arbre);
+void		free_name(t_name *list);
 
 //				WildCards
 
-void	lst_add(char *str, t_name *list);
+void	lst_add(t_name **alst, t_name *list);
+t_name	*new_lst(char *str);
+char	**cartes_sauvages(char *arg);
 
 //				PIPEX
 

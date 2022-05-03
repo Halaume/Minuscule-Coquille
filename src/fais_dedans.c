@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/27 17:09:25 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/03 16:45:24 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	ft_echo(char **arg)
 	first_word = 1;
 	i = 1;
 	is_n_here = 0;
+	if (!arg[1])
+		return (write(1, "\n", 1), 0);
 	if (arg[1] && ft_strncmp(arg[1], "-n", ft_strlen(arg[1])) == 0)
 	{
 		while (arg[i] && ft_strncmp(arg[i], "-n", ft_strlen(arg[i])) == 0)
@@ -240,12 +242,10 @@ int	ft_export(t_info *info, char **commande)
 
 int	ft_unset(t_info *info, char *commande)
 {
-	int		i;
 	t_env	*tmp;
 	t_env	*keep;
 
 	tmp = info->env;
-	i = 0;
 	if (!check_identifier(commande))
 		return (ft_putstr_fd("unset: identifier invalide\n", 2), 1);
 	while (tmp)
@@ -282,12 +282,10 @@ int	is_built_in(char *commande, t_info *info)
 {
 	char	**no_quote_commande;
 	int		ret;
-	int		i;
 
 	if (!commande || !*commande)
 		return (1);
 	ret = 1;
-	i = 1;
 	no_quote_commande = NULL;
 	no_quote_commande = ft_splitsane(commande);
 	if (!no_quote_commande)

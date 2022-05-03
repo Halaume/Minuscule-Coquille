@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/02 16:36:50 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/03 16:44:11 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,33 @@ int	is_good_word(char *arg, char *str)
 	while (arg[j] && (arg[j] == arg[i] || arg[j] == '*'))
 	{
 		if (arg[j] == '*')
-		while (str[i] && ft_strncmp(arg + j, str + i, len_before_star(arg + j)) != 0)
 		{
-			i++;
-			if (str[i] == '\0')
-				return (1);
+			if (arg[j + 1] == '\0')
+				return (0);
+			while (str[i] && ft_strncmp(arg + j, str + i, len_before_star(arg + j)) != 0)
+			{
+				i++;
+				if (str[i] == '\0')
+					return (1);
+			}
 		}
 		j++;
+	}
+	return (0);
+}
+
+int	nb_of_good_word(char *arg, t_name *name)
+{
+	int		i;
+	t_name	*tmp;
+
+	tmp = name;
+	i= 0;
+	while (tmp)
+	{
+		if (is_good_word(arg, name->name) == 0)
+			i++;
+		tmp = tmp->next;
 	}
 	return (0);
 }
@@ -46,24 +66,61 @@ int	is_good_word(char *arg, char *str)
 char	**cartes_sauvages(char *arg)
 {
 	DIR				*my_dir;
-	int				fd[2];
 	char			**ret;
 	struct dirent	*reading;
 	t_name			*fichier;
+	t_name			*tmp;
+	int				nb_word;
+	int				i;
 
 	reading = NULL;
 	ret = NULL;
 	fichier = NULL;
+	i = 0;
 	my_dir = opendir(".");
 	if (!my_dir)
 		return (perror("Wildcards: "), NULL);
-	if (!pipe(fd))
-		return ("Wildcards: ", NULL);
-	fichier = malloc(sizeof(t_name));
-	if (!fichier)
-		return (NULL);
 	while ((reading = readdir(my_dir)) != NULL)
-		lst_add(reading->d_name, fichier);
+		lst_add(&fichier, new_lst(ft_strdup(reading->d_name)));
+	nb_word = nb_of_good_word(arg, fichier);
+	ret = malloc(sizeof(char *) * (nb_word + 1));
+	if (!ret)
+		return (NULL);
+	ret[nb_of_good_word(arg, fichier)] = "\0";
+	tmp = fichier;
+	while (tmp && i < nb_word)
+	{
+		if (is_good_word(arg, tmp->name))
+		{
+			ret[i] = ft_strdup(tmp->name);
+			i++;
+		}
+		tmp = tmp->next;
+	}
+	if (i < nb_word - 1)
+		printf("Counting error\n");
+	free_name(fichier);
 	closedir(my_dir);
+	i = 0;
+	while (ret[i])
+	{
+		printf("%s\n", ret[i]);
+		i++;
+	}
 	return (ret);
+}
+
+int	main(int argc, char **argv)
+{
+	(void)argc;
+	char **test = cartes_sauvages(argv[1]);
+	int i;
+	i = 0;
+	while (test[i])
+	{
+		printf("%s\n", test[i]);
+		i++;
+	}
+	free(test);
+	return (0);
 }

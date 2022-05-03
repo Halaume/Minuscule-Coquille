@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 16:39:52 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/01 14:17:58 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/03 12:00:33 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	if (!s1 || !s2)
 		return (2000);
-//	if (*s1 && *s2)
-//		return (1000);
 	if (s1 == s2 || !n)
 		return (0);
 	while (n--)

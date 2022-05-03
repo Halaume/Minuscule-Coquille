@@ -6,29 +6,65 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 16:20:23 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/02 16:30:52 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/03 11:53:11 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
 
-void	lst_add(char *str, t_name *list)
+t_name	*new_lst(char *str)
+{
+	t_name *new;
+
+	new = NULL;
+	new = malloc(sizeof(t_name));
+	if (!new)
+		return (NULL);
+	new->next = NULL;
+	new->name = str;
+	return (new);
+}
+
+t_name	*lst_last(t_name *lst)
+{
+	t_name	*current;
+
+	current = lst;
+	if (!current)
+		return (NULL);
+	if (!current -> next)
+		return (current);
+	while (current -> next)
+		current = current -> next;
+	return (current);
+}
+
+void	lst_add(t_name **alst, t_name *new)
 {
 	t_name	*tmp;
 
-	tmp = NULL;
-	if (list->name == NULL)
+	if (alst)
 	{
-		list->name = str;
-		return ;
+		if (*alst)
+		{
+			tmp = lst_last(*alst);
+			tmp->next = new;
+		}
+		else
+			*alst = new;
 	}
-	tmp = malloc(sizeof(t_name));
-	if (!tmp)
+}
+
+void	free_name(t_name *list)
+{
+	t_name	*tmp;
+
+	while (list)
 	{
-		perror("Malloc lst_name : ");
-		return ;
+		tmp = list->next;
+		free(list->name);
+		free(list);
+		list = NULL;
+		list = tmp;
 	}
-	tmp->name = str;
-	tmp->next = NULL;
-	list->next = tmp;
 }

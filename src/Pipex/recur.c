@@ -6,13 +6,13 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 14:43:46 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/27 16:13:29 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/03 12:47:21 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/MinusculeCoquille.h"
 
-void	recur_pipe(t_toyo *toyo, int pipefd, t_struct *pipex)
+void	recur_pipe(t_toyo *toyo, int pipefd, t_struct *pipex, t_info *info)
 {
 	int	fd[2];
 
@@ -21,7 +21,7 @@ void	recur_pipe(t_toyo *toyo, int pipefd, t_struct *pipex)
 		if (pipe(fd) < 0)
 			return (perror("Error on pipe"), exit(1));
 	}
-	child(toyo, pipex, fd, pipefd);
+	child(toyo, pipex, fd, pipefd, info);
 	if (toyo->in != 0)
 		close(toyo->in);
 	if (toyo->out != 1)
@@ -33,7 +33,7 @@ void	recur_pipe(t_toyo *toyo, int pipefd, t_struct *pipex)
 	pipex->indexarg++;
 	toyo = toyo->next;
 	if (pipex->indexarg < pipex->nb_cmd)
-		recur_pipe(toyo, fd[0], pipex);
+		recur_pipe(toyo, fd[0], pipex, info);
 }
 
 void	nb_toyo_cmd(t_struct *pipex, t_toyo *toyo)
@@ -68,7 +68,7 @@ int	toyotage(t_toyo *toyo, t_info *info)
 		pipex.envpathcut = ft_split(pipex.envpath, ':');
 	pipex.indexarg = 0;
 	tmp = toyo;
-	recur_pipe(tmp, 0, &pipex);
+	recur_pipe(tmp, 0, &pipex, info);
 	i = 0;
 	while (i < pipex.nb_cmd)
 	{

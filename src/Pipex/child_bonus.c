@@ -6,13 +6,13 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 14:34:01 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/27 17:25:59 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/03 12:46:21 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/MinusculeCoquille.h"
 
-void	duping_closing(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1)
+void	duping_closing(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1, t_info *info)
 {
 	if (pipex->indexarg == 0)
 	{
@@ -33,23 +33,23 @@ void	duping_closing(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1)
 		dup2(toyo->out, 1);
 	if (!toyo->commande)
 		error_func(pipex, "Command not found\n", "");
-	pipex->arg = ft_splitsane(toyo->commande);
+	pipex->arg = ft_splitsane(toyo->commande, info);
 }
 
-void	child(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1)
+void	child(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1, t_info *info)
 {
 	pipex->pid_tab[pipex->indexarg] = fork();
 	if (pipex->pid_tab[pipex->indexarg] == 0)
 	{
 		if (toyo->commande == NULL)
 			exit (1);
-		duping_closing(toyo, pipex, fd, fd1);
+		duping_closing(toyo, pipex, fd, fd1, info);
 		if (!ft_strncmp("()", toyo->commande, 2))
 		{
 			lance_exec(pipex->info, toyo->arbre);
 			exit(pipex->info->exit_status);
 		}
-		if (check_built_in(toyo->commande) == 0)
+		if (check_built_in(toyo->commande, info) == 0)
 			exit(is_built_in(toyo->commande, pipex->info));
 		if (check_abs_path(pipex->arg[0]))
 		{

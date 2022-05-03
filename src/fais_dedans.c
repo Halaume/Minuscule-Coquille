@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/27 17:09:25 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/03 19:25:09 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	ft_echo(char **arg)
 	first_word = 1;
 	i = 1;
 	is_n_here = 0;
+	if (!ft_strcmp(arg[1], ""))
+		return (write(1, "\n", 1), 0);
 	if (arg[1] && ft_strncmp(arg[1], "-n", ft_strlen(arg[1])) == 0)
 	{
 		while (arg[i] && ft_strncmp(arg[i], "-n", ft_strlen(arg[i])) == 0)
@@ -172,7 +174,7 @@ int	check_identifier(char *commande)
 		return (0);
 	while (commande[i])
 	{
-		if (commande[i] <= 47 || (commande[i] >= 58 && commande[i] <= 64) || commande[i] > 122 || (commande[i] >= 91 && commande[i] <= 94) || commande[i] == 96)
+	if (commande[i] < '0' || (commande[i] > '9'  && commande[i] < 'A') || commande[i] >= 'z' || (commande[i] > 'Z' && commande[i] < '_') || commande[i] == '`')
 			return (0);
 		i++;
 	}
@@ -240,12 +242,10 @@ int	ft_export(t_info *info, char **commande)
 
 int	ft_unset(t_info *info, char *commande)
 {
-	int		i;
 	t_env	*tmp;
 	t_env	*keep;
 
 	tmp = info->env;
-	i = 0;
 	if (!check_identifier(commande))
 		return (ft_putstr_fd("unset: identifier invalide\n", 2), 1);
 	while (tmp)
@@ -282,14 +282,12 @@ int	is_built_in(char *commande, t_info *info)
 {
 	char	**no_quote_commande;
 	int		ret;
-	int		i;
 
 	if (!commande || !*commande)
 		return (1);
 	ret = 1;
-	i = 1;
 	no_quote_commande = NULL;
-	no_quote_commande = ft_splitsane(commande);
+	no_quote_commande = ft_splitsane(commande, info);
 	if (!no_quote_commande)
 		return (1);
 	if (ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
@@ -312,14 +310,14 @@ int	is_built_in(char *commande, t_info *info)
 	return (ret);
 }
 
-int	check_built_in(char *commande)
+int	check_built_in(char *commande, t_info *info)
 {
 	char	**no_quote_commande;
 
 	if (!commande || !*commande)
 		return (1);
 	no_quote_commande = NULL;
-	no_quote_commande = ft_splitsane(commande);
+	no_quote_commande = ft_splitsane(commande, info);
 	if (!no_quote_commande)
 		return (1);
 	if (ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)

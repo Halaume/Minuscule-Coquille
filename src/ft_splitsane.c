@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:03:35 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/26 14:38:56 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/03 12:22:19 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	countword(char *str)
 	return (nbword);
 }
 
-char	**ft_splitsane(char	*str)
+char	**ft_splitsane(char	*str, t_info *info)
 {
 	char	**dest;
 	int		nbword;
@@ -68,7 +68,7 @@ char	**ft_splitsane(char	*str)
 			indoublegui = !indoublegui;
 		if (!insimplegui && !indoublegui && str[i] == ' ')
 		{
-			dest[j++] = get_del(ft_substr(str, last, i - last));
+			dest[j++] = get_del(ft_substr(str, last, i - last), info);
 			while (str[i] && str[i] == ' ')
 				i++;
 			last = i;
@@ -77,7 +77,7 @@ char	**ft_splitsane(char	*str)
 			i++;
 	}
 	if (last != i)
-		dest[j++] = get_del(ft_substr(str, last, i - last));
+		dest[j++] = get_del(ft_substr(str, last, i - last), info);
 	dest[j] = NULL;
 	return (dest);
 }

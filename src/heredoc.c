@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/25 14:15:24 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/03 20:24:40 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,79 @@ char	*rmquote(char *del, int *list)
 	return (tmp);
 }
 
-char	*get_del(char *del)
+char	*getvalfromenv(char *var, t_info *info, int ingui, char next)
+{
+	t_env	*current;
+
+	if (!ft_strcmp(var, "$?"))
+		return (free(var), ft_itoa(info->exit_status));
+	if (!ft_strcmp(var, "$") && (ingui || next == ' ' || next == '\0' ))
+		return (free(var), ft_strdup("$"));
+	else if (!ft_strcmp(var, "$"))
+		return (free(var), ft_strdup(""));
+	current = info->env;
+	while (current && ft_strcmp(var + 1, current->variable))
+		current = current->next;
+	free(var);
+	if (!current)
+		return (ft_strdup(""));
+	return (ft_strdup(current->valeur));
+}
+
+int	getfuturesizeoftheexpandedshit(char *del, int i, t_info *info, int ingui)
+{
+	int		j;
+	char	*var;
+
+	j = i;
+	while (del[j] && del[j] != '"' && del[j] != '\'' && del[j] != ' ')
+	{
+		if (j != i && del[j] == '$')
+			break;
+		j++;
+	}
+	var = ft_substr(del, i, j - i);
+	var = getvalfromenv(var, info, ingui, del[j]);
+	j = ft_strlen(var);
+	return (free(var), j);
+}
+
+char	*changedel(char *del, int *i, t_info *info, int ingui)
+{
+	char	*ret;
+	int		lenexpanded;
+	int		j;
+	int		souvenir;
+
+	souvenir = *i;
+	j = 0;
+	lenexpanded = getfuturesizeoftheexpandedshit(del, *i, info, ingui);
+	ret = (char *)malloc(sizeof(char *) * (ft_strlen(del) + lenexpanded));
+	while (j < *i)
+	{
+		ret[j] = del[j];
+		j++;
+	}
+	while (del[*i] && del[*i] != '"' && del[*i] != '\'' && del[*i] != ' ')
+	{
+		if (souvenir != *i && del[*i] == '$')
+			break;
+		*i += 1;
+	}
+	ret[j] = '\0';
+	ret = ft_strjoin_free(ret, getvalfromenv(ft_substr(del, j, *i - j), info, ingui, del[*i]));
+	ret = ft_strjoin_free(ret, ft_substr(del, *i, ft_strlen(del) - *i));
+	*i = souvenir + lenexpanded - 1;
+	return (free(del), ret);
+}
+
+char	*get_del(char *del, t_info *info)
 {
 	int	i;
 	int	insimplegui;
 	int	indoublegui;
-	int *list;
-	int	j;
+	int		*list;
+	int		j;
 	char	*tmp;
 
 	tmp = ft_strtrim(del, " ");
@@ -105,6 +171,12 @@ char	*get_del(char *del)
 		{
 			list[j] = i;
 			j++;
+		}
+		if ((!insimplegui && del[i] == '$'))
+		{
+			del = changedel(del, &i, info, (insimplegui || indoublegui));
+			if (!ft_strlen(del))
+				break;
 		}
 		i++;
 	}

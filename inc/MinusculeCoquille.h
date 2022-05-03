@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/27 17:14:31 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/03 12:45:47 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef STRUCTURE s_info
 
 //				ANALYSE-SYNTAXIQUE
 
-t_arbre		*analyse_syntaxique(CARACTERE *ligne, t_arbre *arbre);
+t_arbre		*analyse_syntaxique(CARACTERE *ligne, t_arbre *arbre, t_info *info);
 void		logique(char *ligne, t_info *info, int i);
 void		tuyau(char *ligne, t_info *info, int i);
 void		fourchette(char *ligne, t_info *info, int i);
@@ -71,7 +71,7 @@ char		**no_quote_tab(char *str);
 char		**split_empty_line(char *s, char c);
 char		*strjoin_space(char *s1, char *s2);
 char		*open_heredoc(char *heredoc);
-char		*get_del(char *del);
+char		*get_del(char *del, t_info *info);
 
 //				STRING MANIP
 
@@ -79,7 +79,7 @@ char		*no_quote(char *str);
 char		**no_quote_tab(char *str);
 char		**split_empty_line(char *s, char c);
 char		*strjoin_space(char *s1, char *s2);
-char		**ft_splitsane(char *str);
+char		**ft_splitsane(char *str, t_info *info);
 
 //				ENVIRONNEMENTALE
 
@@ -87,7 +87,7 @@ char		**ft_getenvp(t_env *env);
 
 //				FAIS-DEDANS
 
-int			check_built_in(char *commande);
+int			check_built_in(char *commande, t_info *info);
 int			is_built_in(char *arbre, t_info *info);
 int			ft_echo(char **arg);
 int			ft_cd(char **arg, char **envp);
@@ -148,7 +148,7 @@ void		spamdup2(int elem1, int elem2);
 void		second_fun(t_struct *pipex, char **argv, char **envp);
 t_struct	init_pipex(char **argv, char **envp);
 void		fun_here_doc(char *argv, t_struct *pipex);
-void		child(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1);
+void		child(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1, t_info *info);
 int			toyotage(t_toyo *toyo, t_info *info);
 
 //			ERROR / FREE / END PROG

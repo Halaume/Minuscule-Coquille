@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 15:05:42 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/22 16:17:10 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/03 16:04:17 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@ char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*dest;
 	int		i;
-	int		j;
 
 	i = 0;
-	j = 0;
 	dest = malloc(sizeof(char) * ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!dest)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/27 19:24:20 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/03 16:53:52 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,6 @@ char	*get_my_path(char **envp)
 
 int	check_abs_path(char *argv)
 {
-	int	i;
-
-	i = 0;
 	if (ft_strchr(argv, '/'))
 		return (1);
 	return (0);
@@ -68,7 +65,7 @@ int	executing(t_toyo *toyo, t_info *info)
 	env = NULL;
 	arg = NULL;
 	cmd = NULL;
-	arg = ft_splitsane(toyo->commande);
+	arg = ft_splitsane(toyo->commande, info);
 	if (check_abs_path(arg[0]))
 	{
 		if (access(arg[0], X_OK) == 0)
@@ -101,7 +98,6 @@ int	exec(t_toyo *toyo, t_info *info)
 {
 	pid_t	my_pid;
 	int		status;
-	int		ret;
 	pid_t	forking;
 
 	if (!toyo->commande)
@@ -120,12 +116,12 @@ int	exec(t_toyo *toyo, t_info *info)
 	}
 	if (toyo == NULL)
 		return (info->exit_status);
-	status = check_built_in(toyo->commande);
+	status = check_built_in(toyo->commande, info);
 	if (status == 0)
 	{
-		ret = is_built_in(toyo->commande,info);
+		info->exit_status = is_built_in(toyo->commande,info);
 		free_toyo(toyo);
-		return (ret);
+		return (info->exit_status);
 	}
 	my_pid = fork();
 	if (my_pid < 0)

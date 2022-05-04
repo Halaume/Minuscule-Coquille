@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/03 16:45:24 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/04 12:08:45 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	ft_echo(char **arg)
 	first_word = 1;
 	i = 1;
 	is_n_here = 0;
-	if (!arg[1])
+	if (arg[1] && strcmp(arg[1], "") && !arg[2])
 		return (write(1, "\n", 1), 0);
 	if (arg[1] && ft_strncmp(arg[1], "-n", ft_strlen(arg[1])) == 0)
 	{
@@ -290,19 +290,19 @@ int	is_built_in(char *commande, t_info *info)
 	no_quote_commande = ft_splitsane(commande);
 	if (!no_quote_commande)
 		return (1);
-	if (ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	if (ft_strlen(no_quote_commande[0]) == ft_strlen("echo") && ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_echo(no_quote_commande);
-	else if (ft_strncmp("pwd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("pwd") && ft_strncmp("pwd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_pwd();
-	else if (ft_strncmp("cd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("cd") && ft_strncmp("cd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_cd(no_quote_commande, info->envp);
-	else if (ft_strncmp("export", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("export") && ft_strncmp("export", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_export(info, no_quote_commande);
-	else if (ft_strncmp("unset", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("unset") && ft_strncmp("unset", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_unset(info, no_quote_commande[1]);
-	else if (ft_strncmp("env", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("env") && ft_strncmp("env", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_env(info->env);
-	else if (ft_strncmp("exit", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("exit") && ft_strncmp("exit", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_exit(no_quote_commande, info);
 	free_char_char(info->envp);
 	info->envp = ft_getenvp(info->env);
@@ -320,19 +320,19 @@ int	check_built_in(char *commande)
 	no_quote_commande = ft_splitsane(commande);
 	if (!no_quote_commande)
 		return (1);
-	if (ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	if (ft_strlen(no_quote_commande[0]) == ft_strlen("echo") && ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (free_char_char(no_quote_commande), 0);
-	else if (ft_strncmp("pwd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("pwd") && ft_strncmp("pwd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (free_char_char(no_quote_commande), 0);
-	else if (ft_strncmp("cd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("cd") && ft_strncmp("cd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (free_char_char(no_quote_commande), 0);
-	else if (ft_strncmp("export", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("export") && ft_strncmp("export", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (free_char_char(no_quote_commande), 0);
-	else if (ft_strncmp("unset", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("unset") && ft_strncmp("unset", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (free_char_char(no_quote_commande), 0);
-	else if (ft_strncmp("env", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("env") && ft_strncmp("env", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (free_char_char(no_quote_commande), 0);
-	else if (ft_strncmp("exit", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("exit") && ft_strncmp("exit", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (free_char_char(no_quote_commande), 0);
 	return (free_char_char(no_quote_commande), 1);
 }

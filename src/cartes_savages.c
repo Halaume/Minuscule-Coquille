@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/03 16:44:11 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/04 16:43:17 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ char	**cartes_sauvages(char *arg)
 	return (ret);
 }
 
-int	main(int argc, char **argv)
+/*int	main(int argc, char **argv)
 {
 	(void)argc;
 	char **test = cartes_sauvages(argv[1]);
@@ -123,4 +123,4 @@ int	main(int argc, char **argv)
 	}
 	free(test);
 	return (0);
-}
+}*/

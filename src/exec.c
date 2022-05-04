@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/03 16:53:52 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/04 17:12:46 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	executing(t_toyo *toyo, t_info *info)
 	}
 	execve(cmd, arg, info->envp);
 	perror("execve");
-	return (1);
+	exit(1);
 }
 
 int	exec(t_toyo *toyo, t_info *info)

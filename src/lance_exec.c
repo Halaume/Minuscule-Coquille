@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/04/27 19:31:35 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/04 20:20:34 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,124 @@ int	get_fd_in(char *path)
 	return (fd);
 }
 
-int	get_fd_here(char *path)
+char	*getvalfromenvheredoc(char *var, t_info *info, int ingui, char next)
 {
-	int		fd;
+	t_env	*current;
+
+	if (!ft_strcmp(var, "$?"))
+		return (free(var), ft_itoa(info->exit_status));
+	if (!ft_strcmp(var, "$") && (ingui || next == ' ' || next == '\0' || next == '$'))
+		return (free(var), ft_strdup("$"));
+	else if (!ft_strcmp(var, "$"))
+		return (free(var), ft_strdup(""));
+	current = info->env;
+	while (current && ft_strcmp(var + 1, current->variable))
+		current = current->next;
+	free(var);
+	if (!current)
+		return (ft_strdup(""));
+	return (ft_strdup(current->valeur));
+}
+
+int	futuresizeofexpandedheredoc(char *str, t_info *info)
+{
+	int		futuresize;
+	int		i;
+	int		j;
 	char	*tmp;
 
+	i = 0;
+	futuresize = 0;
+	while (str[i])
+	{
+		while (str[i] && str[i] != '$')
+		{
+			i++;
+			futuresize += 1;
+		}
+		j = i;
+		if (str[j] == '$')
+			j++;
+		while (str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] >= 'a' && str[j] <= 'z')))
+			j++;
+		if (i != j)
+		{
+			tmp = getvalfromenvheredoc(ft_substr(str, i, j - i), info, 1, 0);
+			futuresize += ft_strlen(tmp);
+			free(tmp);
+			i = j;
+		}
+	}
+	return (futuresize);
+}
+
+char	*expand(char *str, t_info *info)
+{
+	char	*newstr;
+	int		i;
+	int		j;
+	int		k;
+	char	*tmp;
+
+	i = 0;
+	k = 0;
+	newstr = (char *)malloc(sizeof(char) * (futuresizeofexpandedheredoc(str, info) + 1));
+	while (str[i])
+	{
+		while (str[i] && str[i] != '$')
+			newstr[k++] = str[i++];
+		j = i;
+		if (str[j] == '$')
+			j++;
+		while (str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] >= 'a' && str[j] <= 'z')))
+			j++;
+		if (i != j)
+		{
+			tmp = getvalfromenvheredoc(ft_substr(str, i, j - i), info, 1, 0);
+			i = j;
+			j = 0;
+			while (tmp[j])
+				newstr[k++] = tmp[j++];
+			free(tmp);
+		}
+	}
+	free(str);
+	newstr[k] = '\0';
+	return (newstr);
+}
+
+int	get_fd_here(char *path, t_info *info)
+{
+	int		fd;
+	int		fd2;
+	char	*tmp;
+	int		quote;
+
+	quote = asquote(path);
 	tmp = ft_strtrim(path, "\"");
-	fd = open(tmp, O_RDONLY);
+	if (!quote)
+	{
+		fd = open(tmp, O_RDWR);
+		path = checkopen(ft_itoa(0));
+		fd2 = open(path, O_CREAT | O_RDWR, 00644);
+		while (tmp)
+		{
+			free(tmp);
+			tmp = get_next_line(fd);
+			if (tmp)
+			{
+				tmp = expand(tmp, info);
+				write (fd2, tmp, ft_strlen(tmp));
+			}
+		}
+		close(fd2);
+		fd2 = open(path, O_RDONLY);
+		free(tmp);
+		free(path);
+		return (fd2);
+	}
+	else
+		fd = open(tmp, O_RDONLY);
 	free(tmp);
 	return (fd);
 }
@@ -72,7 +183,7 @@ int	isredirect(char *str)
 	return (free(tmp), 0);
 }
 
-t_toyo	*getcommande(t_arbre *arbre)
+t_toyo	*getcommande(t_arbre *arbre, t_info *info)
 {
 	t_toyo	*toyo;
 	char	*tmp;
@@ -107,7 +218,7 @@ t_toyo	*getcommande(t_arbre *arbre)
 		{
 			if (toyo->in != 0)
 				close(toyo->in);
-			toyo->in = get_fd_here(arbre->commande);
+			toyo->in = get_fd_here(arbre->commande, info);
 		}
 		if (toyo->in < 0 || toyo->out < 0)
 		{
@@ -125,17 +236,17 @@ t_toyo	*getcommande(t_arbre *arbre)
 	return (toyo);
 }
 
-t_toyo	*rec_toyo(t_arbre *arbre)
+t_toyo	*rec_toyo(t_arbre *arbre, t_info *info)
 {
 	t_toyo	*toyo;
 
 	if (!ft_strcmp(arbre->commande, "|"))
 	{
-		toyo = getcommande(arbre->fd);
-		toyo->next = rec_toyo(arbre->fg);
+		toyo = getcommande(arbre->fd, info);
+		toyo->next = rec_toyo(arbre->fg, info);
 		return (toyo);
 	}
-	toyo = getcommande(arbre);
+	toyo = getcommande(arbre, info);
 	toyo->next = NULL;
 	return (toyo);
 }
@@ -189,6 +300,6 @@ int	lance_exec(t_info *info, t_arbre *arbre)
 			return (badou(info, arbre->fg));
 	}
 	else if (!ft_strcmp(arbre->commande, "|"))
-		return (toyotage(rec_toyo(arbre), info));
-	return (exec(getcommande(arbre), info));
+		return (toyotage(rec_toyo(arbre, info), info));
+	return (exec(getcommande(arbre, info), info));
 }

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/04 11:41:31 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/04 19:00:29 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ void	freearbre(t_arbre *arbre)
 
 int	checkarbre(t_arbre *arbre, t_info *info)
 {
-	char *tmp;
+	char	*tmp;
+	char	*tmp2;
 
 	if (arbre)
 	{
@@ -121,11 +122,16 @@ int	checkarbre(t_arbre *arbre, t_info *info)
 			if (!ft_strcmp(tmp, ">") || !ft_strcmp(tmp, ">>") || \
 					!ft_strcmp(tmp, "<") || !ft_strcmp(tmp, "<<"))
 				return (free(tmp), 1);
-			if (!ft_strncmp(tmp, "<<", 2))
+			tmp2 = ft_strtrim(tmp, "\"");
+			if (!ft_strncmp(tmp2, "<<", 2))
 			{
 				free(arbre->commande);
-				arbre->commande = open_heredoc(ft_substr(tmp, 2, ft_strlen(tmp) - 2), info);
+				if (asquote(tmp))
+					arbre->commande = open_heredoc(tmp);
+				else
+					arbre->commande = open_heredoc(ft_substr(tmp, 2, ft_strlen(tmp) - 2));
 			}
+			free(tmp2);
 			free(tmp);
 		}
 		if (arbre->fd && arbre->fg)

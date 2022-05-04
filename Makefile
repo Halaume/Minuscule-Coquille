@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/23 11:46:46 by tnaton            #+#    #+#              #
-#    Updated: 2022/05/03 16:05:21 by tnaton           ###   ########.fr        #
+#    Updated: 2022/05/04 17:04:40 by ghanquer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,8 @@ LIBFT = libft/libft.a
 #
 SRC = principale.c analysesyntaxique.c no_quote.c liberation.c fais_dedans.c \
 	  exec.c split_empty_line.c strjoin_space.c heredoc.c lance_exec.c \
-	  Pipex/child_bonus.c Pipex/free_fun_bonus.c Pipex/recur.c ft_splitsane.c
+	  Pipex/child_bonus.c Pipex/free_fun_bonus.c Pipex/recur.c ft_splitsane.c \
+	  cartes_savages.c lst_name_utils.c
 
 source = $(addprefix src/,$(SRC))
 

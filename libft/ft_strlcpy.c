@@ -6,15 +6,15 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 16:31:07 by tnaton            #+#    #+#             */
-/*   Updated: 2021/11/26 09:35:58 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/04 18:12:27 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char *dest, const char *src, size_t size)
+int	ft_strlcpy(char *dest, const char *src, int size)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	while (src[i] != '\0' && (i + 1) < size)

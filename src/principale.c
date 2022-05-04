@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/03 12:44:07 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/04 11:41:31 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	freearbre(t_arbre *arbre)
 	free(arbre);
 }
 
-int	checkarbre(t_arbre *arbre)
+int	checkarbre(t_arbre *arbre, t_info *info)
 {
 	char *tmp;
 
@@ -124,16 +124,16 @@ int	checkarbre(t_arbre *arbre)
 			if (!ft_strncmp(tmp, "<<", 2))
 			{
 				free(arbre->commande);
-				arbre->commande = open_heredoc(ft_substr(tmp, 2, ft_strlen(tmp) - 2));
+				arbre->commande = open_heredoc(ft_substr(tmp, 2, ft_strlen(tmp) - 2), info);
 			}
 			free(tmp);
 		}
 		if (arbre->fd && arbre->fg)
-			return (checkarbre(arbre->fd) + checkarbre(arbre->fg));
+			return (checkarbre(arbre->fd, info) + checkarbre(arbre->fg, info));
 		else if (arbre->fg)
-			return (checkarbre(arbre->fg));
+			return (checkarbre(arbre->fg, info));
 		else if (arbre->fd)
-			return (checkarbre(arbre->fd));
+			return (checkarbre(arbre->fd, info));
 		tmp = ft_strtrim(arbre->commande, " ");
 		if (!ft_strcmp(tmp, ""))
 			return (free(tmp), 1);
@@ -253,7 +253,7 @@ int	principale(int ac, char **av, char **envp)
 			else
 			{
 				info.arbre = analyse_syntaxique(ligne, info.arbre, &info);
-				if (!checkarbre(info.arbre))
+				if (!checkarbre(info.arbre, &info))
 				{
 				//	structure(info.arbre, 0);
 					lance_exec(&info, info.arbre);

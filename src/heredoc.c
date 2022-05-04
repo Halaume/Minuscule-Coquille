@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/03 20:24:40 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/04 11:58:06 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,13 @@ char	*addquote(char *path, char *heredoc)
 	return (path);
 }
 
-char	*open_heredoc(char *heredoc)
+char	*expand(char *ligne, t_info *info)
+{
+	(void)info;
+	return (ligne);
+}
+
+char	*open_heredoc(char *heredoc, t_info *info)
 {
 	int		fd;
 	char	*ligne;
@@ -228,6 +234,8 @@ char	*open_heredoc(char *heredoc)
 	ligne = readline(tmp);
 	while (ft_strcmp(ligne, heredoc))
 	{
+		if (!asquote(path))
+			ligne = expand(ligne, info);
 		write(fd, ligne, ft_strlen(ligne));
 		write(fd, "\n", 1);
 		free(ligne);

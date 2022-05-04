@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/04 11:29:16 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/04 12:01:04 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ int	ft_echo(char **arg)
 	first_word = 1;
 	i = 1;
 	is_n_here = 0;
-	if (!ft_strcmp(arg[1], "") && !arg[2])
+	if (arg[1] && !ft_strcmp(arg[1], "") && !arg[2])
 		return (write(1, "\n", 1), 0);
-	if (arg[1] && ft_strncmp(arg[1], "-n", ft_strlen(arg[1])) == 0)
+	if (arg[1] && ft_strcmp(arg[1], "-n") == 0)
 	{
 		while (arg[i] && ft_strncmp(arg[i], "-n", ft_strlen(arg[i])) == 0)
 			i++;
@@ -290,7 +290,7 @@ int	is_built_in(char *commande, t_info *info)
 	no_quote_commande = ft_splitsane(commande, info);
 	if (!no_quote_commande)
 		return (1);
-	if (ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	if (ft_strlen(no_quote_commande[0]) == ft_strlen("echo") && ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_echo(no_quote_commande);
 	else if (ft_strncmp("pwd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_pwd();
@@ -320,7 +320,7 @@ int	check_built_in(char *commande, t_info *info)
 	no_quote_commande = ft_splitsane(commande, info);
 	if (!no_quote_commande)
 		return (1);
-	if (ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
+	if (ft_strlen(no_quote_commande[0]) == ft_strlen("echo") && ft_strncmp("echo", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (free_char_char(no_quote_commande), 0);
 	else if (ft_strncmp("pwd", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		return (free_char_char(no_quote_commande), 0);

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 10:47:02 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/04/27 16:46:27 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/05 15:13:34 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	exit_func(t_info *info)
 
 void	free_toyo(t_toyo *toyo)
 {
-	t_toyo *current;
+	t_toyo	*current;
 
 	current = toyo;
 	while (current)

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/04 17:12:46 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/05 15:14:47 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int	exec(t_toyo *toyo, t_info *info)
 	status = check_built_in(toyo->commande, info);
 	if (status == 0)
 	{
-		info->exit_status = is_built_in(toyo->commande,info);
+		info->exit_status = is_built_in(toyo->commande, info);
 		free_toyo(toyo);
 		return (info->exit_status);
 	}
@@ -137,7 +137,7 @@ int	exec(t_toyo *toyo, t_info *info)
 	if (WIFEXITED(status))
 	{
 		info->exit_status = WEXITSTATUS(status);
-		return(info->exit_status);
+		return (info->exit_status);
 	}
 	return (0);
 }

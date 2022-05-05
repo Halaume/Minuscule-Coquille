@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/04 20:20:34 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/05 12:23:43 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	futuresizeofexpandedheredoc(char *str, t_info *info)
 		j = i;
 		if (str[j] == '$')
 			j++;
-		while (str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] >= 'a' && str[j] <= 'z')))
+		while (str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] >= 'a' && str[j] <= 'z') || (str[j - 1] == '$' && str[j] == '?')))
 			j++;
 		if (i != j)
 		{
@@ -114,7 +114,7 @@ char	*expand(char *str, t_info *info)
 		j = i;
 		if (str[j] == '$')
 			j++;
-		while (str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] >= 'a' && str[j] <= 'z')))
+		while (str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] >= 'a' && str[j] <= 'z') || (str[j - 1] == '$' && str[j] == '?')))
 			j++;
 		if (i != j)
 		{

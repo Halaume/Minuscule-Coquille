@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/04 18:58:20 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/05 15:03:12 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ char	*changedel(char *del, int *i, t_info *info, int ingui)
 	return (free(del), ret);
 }
 
-char	*get_del(char *del, t_info *info)
+char	*get_del(char *del, t_info *info, int *asex)
 {
 	int	i;
 	int	insimplegui;
@@ -174,6 +174,7 @@ char	*get_del(char *del, t_info *info)
 		}
 		if ((!insimplegui && del[i] == '$'))
 		{
+			*asex = 1;
 			del = changedel(del, &i, info, (insimplegui || indoublegui));
 			if (!ft_strlen(del))
 				break;

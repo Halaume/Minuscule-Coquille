@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/04 18:39:22 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/05 14:13:16 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	is_good_word(char *arg, char *str)
 	j = 0;
 	if (!arg || !str)
 		return (1);
-	while (arg[j] && arg[i] && (arg[j] == arg[i] || arg[j] == '*'))
+	while (arg[j] && str[i])
 	{
 		if (arg[j] == '*')
 		{
@@ -40,10 +40,15 @@ int	is_good_word(char *arg, char *str)
 			while (str[i] && ft_strncmp(arg + j + 1, str + i, len_before_star(arg + j + 1)) != 0)
 			{
 				i++;
-				if (str[i] == '\0' && arg[j + len_before_star(arg + j + 1)] != '\0')
+				if (str[i] == '\0' && arg[j + 1 + len_before_star(arg + j + 1)] != '\0')
+					return (0);
+				else if (str[i] == '\0')
 					return (1);
 			}
 		}
+		else if(str[i] != arg[j])
+			return (0);
+		i++;
 		j++;
 	}
 	return (0);
@@ -62,7 +67,7 @@ int	nb_of_good_word(char *arg, t_name *name)
 			i++;
 		tmp = tmp->next;
 	}
-	return (0);
+	return (i);
 }
 
 char	**cartes_sauvages(char *arg)
@@ -85,7 +90,6 @@ char	**cartes_sauvages(char *arg)
 	while ((reading = readdir(my_dir)) != NULL)
 		lst_add(&fichier, new_lst(ft_strdup(reading->d_name)));
 	nb_word = nb_of_good_word(arg, fichier);
-	printf("nb of good_word = %d\n", nb_word);
 	ret = malloc(sizeof(char *) * (nb_word + 1));
 	if (!ret)
 		return (NULL);
@@ -95,36 +99,12 @@ char	**cartes_sauvages(char *arg)
 	{
 		if (is_good_word(arg, tmp->name) == 0)
 		{
-			printf("HERE\n");
 			ret[i] = ft_strdup(tmp->name);
 			i++;
 		}
 		tmp = tmp->next;
 	}
-	if (i < nb_word - 1)
-		printf("Counting error\n");
 	free_name(fichier);
 	closedir(my_dir);
-	i = 0;
-	while (strncmp(ret[i], "\0", 1))
-	{
-		printf("%s\n", ret[i]);
-		i++;
-	}
 	return (ret);
-}
-
-int	main(int argc, char **argv)
-{
-	(void)argc;
-	char **test = cartes_sauvages(argv[1]);
-	int i;
-	i = 0;
-	while (strncmp(test[i], "\0", 1))
-	{
-		printf("%s\n", test[i]);
-		i++;
-	}
-	free(test);
-	return (0);
 }

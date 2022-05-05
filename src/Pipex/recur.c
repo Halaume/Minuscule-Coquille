@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 14:43:46 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/03 12:47:21 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/05 15:06:32 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	recur_pipe(t_toyo *toyo, int pipefd, t_struct *pipex, t_info *info)
 
 void	nb_toyo_cmd(t_struct *pipex, t_toyo *toyo)
 {
-	t_toyo *tmp;
+	t_toyo	*tmp;
 
 	pipex->indexarg = 0;
 	pipex->nb_cmd = 0;
@@ -80,7 +80,7 @@ int	toyotage(t_toyo *toyo, t_info *info)
 	if (WIFEXITED(status))
 	{
 		info->exit_status = WEXITSTATUS(status);
-		return(info->exit_status);
+		return (info->exit_status);
 	}
 	return (0);
 }

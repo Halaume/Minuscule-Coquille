@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/04 17:05:02 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/05 14:41:53 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,9 +124,9 @@ void		free_name(t_name *list);
 
 //				WildCards
 
-void	lst_add(t_name **alst, t_name *list);
-t_name	*new_lst(char *str);
-char	**cartes_sauvages(char *arg);
+void		lst_add(t_name **alst, t_name *list);
+t_name		*new_lst(char *str);
+char		**cartes_sauvages(char *arg);
 
 //				PIPEX
 
@@ -162,7 +162,7 @@ void		spamdup2(int elem1, int elem2);
 void		second_fun(t_struct *pipex, char **argv, char **envp);
 t_struct	init_pipex(char **argv, char **envp);
 void		fun_here_doc(char *argv, t_struct *pipex);
-void		child(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1, t_info *info);
+void		child(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1, t_info *i);
 int			toyotage(t_toyo *toyo, t_info *info);
 
 //			ERROR / FREE / END PROG

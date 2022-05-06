@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/06 11:45:01 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/06 15:26:34 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void		env_add(t_env **alst, t_env *new);
 int			check_built_in(char *commande, t_info *info);
 int			is_built_in(char *arbre, t_info *info);
 int			ft_echo(char **arg);
-int			ft_cd(char **arg, char **envp);
+int			ft_cd(char **arg, t_info *info);
 int			ft_pwd(void);
 int			ft_export(t_info *info, char **commande);
 int			ft_unset(t_info *info, char *commande);

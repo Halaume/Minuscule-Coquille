@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 16:20:23 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/06 11:40:11 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/06 15:13:44 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_env	*new_env(char *str, char *valeur)
 	t_env *new;
 
 	new = NULL;
-	new = malloc(sizeof(t_name));
+	new = malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
 	new->next = NULL;

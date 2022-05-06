@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/04 19:00:29 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/06 17:52:14 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,15 +234,51 @@ char	**ft_getenvp(t_env *env)
 	return (envp);
 }
 
+void	singal(int signal, siginfo_t *sig_info, void *x)
+{
+	t_info	*info;
+	char	c;
+
+	c = EOF;
+	info = (t_info *)x;
+	(void)x;
+	(void)sig_info;
+	if (signal == SIGQUIT)
+	{
+		printf("la dingz (non)\n");
+		return ;
+	}
+	if (signal == SIGINT)
+	{
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+		return ;
+	}
+}
+
 int	principale(int ac, char **av, char **envp)
 {
 	char	*ligne;
 	t_info	info;
 	char	*tmp;
 
+	info.sigint.sa_sigaction = &singal;
+	info.sigquit.sa_sigaction = &singal;
+	sigemptyset(&info.sigquit.sa_mask);
+	sigaddset(&info.sigquit.sa_mask, SIGQUIT);
+	sigemptyset(&info.sigint.sa_mask);
+	sigaddset(&info.sigint.sa_mask, SIGINT);
+	info.sigquit.sa_handler = SIG_IGN;
+	info.sigint.sa_sigaction = &singal;
+	info.sigint.sa_flags = SA_SIGINFO;
+	info.sigquit.sa_flags = SA_NODEFER;
 	info.env = ft_getenv(envp);
 	info.envp = ft_getenvp(info.env);
 	info.exit_status = 0;
+	sigaction(SIGQUIT, &info.sigquit, NULL);
+	sigaction(SIGINT, &info.sigint, NULL);
 	ligne = readline("MinusculeCoquille$>");
 	while (ligne)
 	{
@@ -261,7 +297,6 @@ int	principale(int ac, char **av, char **envp)
 				info.arbre = analyse_syntaxique(ligne, info.arbre, &info);
 				if (!checkarbre(info.arbre, &info))
 				{
-				//	structure(info.arbre, 0);
 					lance_exec(&info, info.arbre);
 				}
 				else
@@ -275,6 +310,7 @@ int	principale(int ac, char **av, char **envp)
 		ligne = readline("MinusculeCoquille$>");
 		free(tmp);
 	}
+	ft_exit(NULL, &info);
 	free(ligne);
 	freeenv(info.env);
 	free_char_char(info.envp);

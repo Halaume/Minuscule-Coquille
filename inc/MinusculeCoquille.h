@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/05 15:03:25 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/06 17:29:46 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ typedef STRUCTURE s_arbre
 
 typedef STRUCTURE s_info
 {
+	struct sigaction	sigint;
+	struct sigaction	sigquit;
 	char	**envp;
 	t_env	*env;
 	t_arbre	*arbre;

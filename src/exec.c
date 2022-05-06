@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/04 17:12:46 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/06 17:45:18 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ int	exec(t_toyo *toyo, t_info *info)
 	int		status;
 	pid_t	forking;
 
+	info->sigquit.sa_handler = SIG_DFL;
+	sigemptyset(&info->sigquit.sa_mask);
 	if (!toyo->commande)
 		return (free_toyo(toyo), 1);
 	if (!ft_strncmp("()", toyo->commande, 2))

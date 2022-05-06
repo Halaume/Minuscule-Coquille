@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/06 17:27:11 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/06 17:46:48 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,7 @@ int	ft_export_this(t_info *info, char *commande)
 
 int	ft_export(t_info *info, char **commande)
 {
-	int		i;
+	int	i;
 
 	i = 1;
 	if (commande[i])
@@ -266,24 +266,32 @@ int	check_identifier_unset(char *commande)
 
 	commande_check = NULL;
 	i = (int)ft_strlen(commande);
-	while (i > 0 && commande[i - 1] != '=')
-		i--;
-	commande_check = malloc(sizeof(char) * i + 1);
-	ft_strlcpy(commande_check, commande, i);
+	commande_check = ft_strdup(commande);
 	i = 0;
 	if (ft_isdigit(commande_check[i]))
 		return (free(commande_check), 0);
 	while (commande_check[i])
 	{
-	if (commande_check[i] < '0' || (commande_check[i] > '9'  && commande_check[i] < 'A') || commande_check[i] >= 'z' || (commande_check[i] > 'Z' && commande_check[i] < '_') || commande_check[i] == '`')
+		if (commande_check[i] < '0' || (commande_check[i] > '9'  && commande_check[i] < 'A') || commande_check[i] >= 'z' || (commande_check[i] > 'Z' && commande_check[i] < '_') || commande_check[i] == '`')
 			return (free(commande_check), 0);
 		i++;
 	}
 	return (free(commande_check), 1);
 }
 
+int	is_this_var_unset(char *env_commande, char *commande)
+{
+	int	i;
 
-int	ft_unset(t_info *info, char *commande)
+	i = ft_strlen(commande);
+	if (i == 0)
+		return (1);
+	if (ft_strncmp(env_commande, commande, i) == 0)
+		return (0);
+	return (1);
+}
+
+int	ft_unset_this(t_info *info, char *commande)
 {
 	t_env	*tmp;
 	t_env	*keep;
@@ -293,7 +301,7 @@ int	ft_unset(t_info *info, char *commande)
 		return (ft_putstr_fd("unset: identifier invalide\n", 2), 1);
 	while (tmp)
 	{
-		if (is_this_var(tmp->variable, commande) == 0)
+		if (is_this_var_unset(tmp->variable, commande) == 0)
 		{
 			if (tmp == info->env)
 			{
@@ -321,6 +329,22 @@ int	ft_unset(t_info *info, char *commande)
 	return (0);
 }
 
+int	ft_unset(t_info *info, char **commande)
+{
+	int	i;
+
+	i = 1;
+	if (commande[i])
+	{
+		while (commande[i])
+		{
+			info->exit_status = ft_unset_this(info, commande[i]);
+			i++;
+		}
+	}
+	return (info->exit_status);
+}
+
 int	is_built_in(char *commande, t_info *info)
 {
 	char	**no_quote_commande;
@@ -342,7 +366,7 @@ int	is_built_in(char *commande, t_info *info)
 	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("export") && ft_strncmp("export", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_export(info, no_quote_commande);
 	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("unset") && ft_strncmp("unset", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
-		ret = ft_unset(info, no_quote_commande[1]);
+		ret = ft_unset(info, no_quote_commande);
 	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("env") && ft_strncmp("env", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_env(info->env);
 	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("exit") && ft_strncmp("exit", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/06 15:26:34 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/06 17:45:37 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int			ft_echo(char **arg);
 int			ft_cd(char **arg, t_info *info);
 int			ft_pwd(void);
 int			ft_export(t_info *info, char **commande);
-int			ft_unset(t_info *info, char *commande);
+int			ft_unset(t_info *info, char **commande);
 int			ft_env(t_env *env);
 int			ft_exit(char **status, t_info *info);
 

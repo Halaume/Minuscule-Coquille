@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/03 12:44:23 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/05 15:05:31 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 char	*vireguillemet(char *str, t_info *info)
 {
 	char	*tmp;
+	int		quote;
 
 	if (!ft_strncmp(str, ">>", 2))
 	{
 		tmp = ft_strtrim(str, " >");
 		free(str);
-		str = get_del(tmp, info);
+		str = get_del(tmp, info, NULL);
 		tmp = ft_strjoin(">>", str);
 		free(str);
 		return (tmp);
@@ -29,7 +30,7 @@ char	*vireguillemet(char *str, t_info *info)
 	{
 		tmp = ft_strtrim(str, " >");
 		free(str);
-		str = get_del(tmp, info);
+		str = get_del(tmp, info, NULL);
 		tmp = ft_strjoin(">", str);
 		free(str);
 		return (tmp);
@@ -37,9 +38,17 @@ char	*vireguillemet(char *str, t_info *info)
 	else if (!ft_strncmp(str, "<<", 2))
 	{
 		tmp = ft_strtrim(str, " <");
+		quote = asquote(tmp);
 		free(str);
-		str = get_del(tmp, info);
+		str = get_del(tmp, info, NULL);
 		tmp = ft_strjoin("<<", str);
+		if (quote)
+		{
+			free(str);
+			str = ft_strjoin("\"", tmp);
+			free(tmp);
+			tmp = ft_strjoin(str, "\"");
+		}
 		free(str);
 		return (tmp);
 	}
@@ -47,7 +56,7 @@ char	*vireguillemet(char *str, t_info *info)
 	{
 		tmp = ft_strtrim(str, " <");
 		free(str);
-		str = get_del(tmp, info);
+		str = get_del(tmp, info, NULL);
 		tmp = ft_strjoin("<", str);
 		free(str);
 		return (tmp);

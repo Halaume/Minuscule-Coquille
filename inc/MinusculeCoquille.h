@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/05 14:41:53 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/06 11:45:01 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <sys/uio.h>
 # include <string.h>
 # include <errno.h>
+# include "../src/gnl/get_next_line.h"
 
 typedef STRUCTURE s_toyo
 {
@@ -77,20 +78,25 @@ char		*no_quote(char *str);
 char		**no_quote_tab(char *str);
 char		**split_empty_line(char *s, char c);
 char		*strjoin_space(char *s1, char *s2);
-char		*open_heredoc(char *heredoc, t_info *info);
-char		*get_del(char *del, t_info *info);
+char		*open_heredoc(char *heredoc);
+char		*get_del(char *del, t_info *info, int *asex);
+char		*checkopen(char *str);
 
 //				STRING MANIP
-
+int			asquote(char *str);
 char		*no_quote(char *str);
 char		**no_quote_tab(char *str);
 char		**split_empty_line(char *s, char c);
 char		*strjoin_space(char *s1, char *s2);
 char		**ft_splitsane(char *str, t_info *info);
+char		**splitagedesesmorts(char **list);
 
 //				ENVIRONNEMENTALE
 
 char		**ft_getenvp(t_env *env);
+t_env		*new_env(char *str, char *valeur);
+t_env		*env_last(t_env *lst);
+void		env_add(t_env **alst, t_env *new);
 
 //				FAIS-DEDANS
 

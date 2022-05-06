@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/04 18:21:30 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/06 14:25:12 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,9 +157,11 @@ int	is_this_var(char *env_commande, char *commande)
 {
 	int	i;
 
-	i = 0;
-	while (commande[i] && commande[i] != '=')
-		i++;
+	i = ft_strlen(commande);
+	while (i > 0 && commande[i] != '=')
+		i--;
+	if (i == 0)
+		return (1);
 	if (ft_strncmp(env_commande, commande, i) == 0)
 		return (0);
 	return (1);
@@ -188,38 +190,17 @@ int	check_identifier(char *commande)
 	return (free(commande_check), 1);
 }
 
-int	ft_export(t_info *info, char **commande)
+int	ft_export_this(t_info *info, char *commande)
 {
-	t_env	*tmp;
-	t_env	*new;
 	int		i;
+	t_env	*tmp;
 
-	i = 0;
-	tmp = info->env;
-	new = NULL;
-	if (!check_identifier(commande[1]))
+	i = ft_strlen(commande);
+	if (!check_identifier(commande))
 		return (ft_putstr_fd("export: identifier invalide\n", 2), 1);
-	new = malloc(sizeof(t_env));
-	if (!new)
-		return (perror("export malloc issue"), -1);
-	new->next = NULL;
-	if (!info->env)
+	if (info->env)
 	{
-		while (commande[1][i])
-		{
-			if (commande[1][i] == '=')
-			{
-				new->variable = ft_substr(commande[1], 0, i);
-				new->valeur = ft_substr(commande[1], i + 1, ft_strlen(commande[1]) - i);
-				freeenv(info->env);
-				info->env = new;
-				return (0);
-			}
-			i++;
-		}
-	}
-	while (tmp && tmp->next && is_this_var(tmp->variable, commande[1]))
-		tmp = tmp->next;
+	tmp = info->env;
 	if (tmp && !is_this_var(tmp->variable, commande[1]))
 	{
 		while (commande[1][i])
@@ -233,15 +214,22 @@ int	ft_export(t_info *info, char **commande)
 			i++;
 		}
 	}
-	while (commande[1][i])
+	}
+	while (i > 0 && commande[i] != '=')
+		i--;
+	env_add(&info->env, new_env(ft_substr(commande, 0, i), ft_substr(commande, i + 1, ft_strlen(commande) - i)));
+	ccvcccxcccvsdfgsdrf
+
+int	ft_export(t_info *info, char **commande)
+{
+	int		i;
+	char	**args;
+
+	args = splitagedesesmorts(commande);
+	i = 1;
+	while (args[i])
 	{
-		if (commande[1][i] == '=')
-		{
-			new->variable = ft_substr(commande[1], 0, i);
-			new->valeur = ft_substr(commande[1], i + 1, ft_strlen(commande[1]) - i);
-			tmp->next = new;
-			return (0);
-		}
+		ft_export_this(info, args[i]);
 		i++;
 	}
 	return (0);

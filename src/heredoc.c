@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/04 11:58:06 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/05 15:03:12 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*getvalfromenv(char *var, t_info *info, int ingui, char next)
 
 	if (!ft_strcmp(var, "$?"))
 		return (free(var), ft_itoa(info->exit_status));
-	if (!ft_strcmp(var, "$") && (ingui || next == ' ' || next == '\0' ))
+	if (!ft_strcmp(var, "$") && (ingui || next == ' ' || next == '\0' || next == '$'))
 		return (free(var), ft_strdup("$"));
 	else if (!ft_strcmp(var, "$"))
 		return (free(var), ft_strdup(""));
@@ -144,7 +144,7 @@ char	*changedel(char *del, int *i, t_info *info, int ingui)
 	return (free(del), ret);
 }
 
-char	*get_del(char *del, t_info *info)
+char	*get_del(char *del, t_info *info, int *asex)
 {
 	int	i;
 	int	insimplegui;
@@ -174,6 +174,7 @@ char	*get_del(char *del, t_info *info)
 		}
 		if ((!insimplegui && del[i] == '$'))
 		{
+			*asex = 1;
 			del = changedel(del, &i, info, (insimplegui || indoublegui));
 			if (!ft_strlen(del))
 				break;
@@ -212,13 +213,7 @@ char	*addquote(char *path, char *heredoc)
 	return (path);
 }
 
-char	*expand(char *ligne, t_info *info)
-{
-	(void)info;
-	return (ligne);
-}
-
-char	*open_heredoc(char *heredoc, t_info *info)
+char	*open_heredoc(char *heredoc)
 {
 	int		fd;
 	char	*ligne;
@@ -226,16 +221,19 @@ char	*open_heredoc(char *heredoc, t_info *info)
 	char	*tmp;
 
 	path = checkopen(ft_itoa(0));
-	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 00644);
 	if (fd < 0)
 		printf("cannot open tmp file\n");
 	path = addquote(path, heredoc);
+	if (asquote(heredoc))
+	{
+		tmp = ft_strtrim(heredoc, "<\"");
+		heredoc = tmp;
+	}
 	tmp = ft_strjoin(heredoc, ">");
 	ligne = readline(tmp);
 	while (ft_strcmp(ligne, heredoc))
 	{
-		if (!asquote(path))
-			ligne = expand(ligne, info);
 		write(fd, ligne, ft_strlen(ligne));
 		write(fd, "\n", 1);
 		free(ligne);

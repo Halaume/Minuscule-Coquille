@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/06 16:23:18 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/06 17:27:11 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,18 +215,19 @@ int	ft_export_this(t_info *info, char *commande)
 	i = ft_strlen(commande);
 	if (!check_identifier(commande))
 		return (ft_putstr_fd("export: identifier invalide\n", 2), 1);
-	if (info->env)
+	tmp = info->env;
+	if (tmp)
 	{
-		tmp = info->env;
 		while (tmp)
 		{
-			if (tmp && !is_this_var(tmp->variable, commande))
+			if (tmp && is_this_var(tmp->variable, commande) == 0)
 			{
-				while (i < 0)
+				while (i > 0)
 				{
 					if (commande[i] && commande[i - 1] == '=')
 					{
-						env_add(&info->env, new_env(ft_substr(commande, 0, i), ft_substr(commande, i + 1, ft_strlen(commande) - i)));
+						free(tmp->valeur);
+						tmp->valeur = ft_substr(commande, i, ft_strlen(commande) - i + 1);
 						return (0);
 					}
 					i--;
@@ -238,26 +239,23 @@ int	ft_export_this(t_info *info, char *commande)
 	i = ft_strlen(commande);
 	while (i > 0 && commande[i - 1] != '=')
 		i--;
-	env_add(&info->env, new_env(ft_substr(commande, 0, i), ft_substr(commande, i + 1, ft_strlen(commande) - i)));
+	env_add(&info->env, new_env(ft_substr(commande, 0, i - 1), ft_substr(commande, i, ft_strlen(commande) - i + 1)));
 	return (0);
 }
 
 int	ft_export(t_info *info, char **commande)
 {
 	int		i;
-	char	**args;
 
-	args = splitagedesesmorts(commande);
 	i = 1;
-	if (args[i])
+	if (commande[i])
 	{
-		while (args[i])
+		while (commande[i])
 		{
-			info->exit_status = ft_export_this(info, args[i]);
+			info->exit_status = ft_export_this(info, commande[i]);
 			i++;
 		}
 	}
-	free_char_char(args);
 	return (info->exit_status);
 }
 

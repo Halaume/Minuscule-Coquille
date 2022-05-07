@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/07 12:11:05 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/07 16:04:48 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,9 +193,10 @@ t_toyo	*getcommande(t_arbre *arbre, t_info *info)
 	toyo->out = 1;
 	toyo->next = NULL;
 	toyo->commande = NULL;
-	toyo->arbre = NULL;
+	toyo->arbre = arbre;
 	while (arbre && isredirect(arbre->commande))
 	{
+		arbre->commande = vireguillemet(arbre->commande, info);
 		if (!ft_strncmp(arbre->commande, ">>", 2))
 		{
 			if (toyo->out != 1)
@@ -224,6 +225,7 @@ t_toyo	*getcommande(t_arbre *arbre, t_info *info)
 		{
 			tmp = ft_strtrim(arbre->commande, "<");
 			perror(tmp);
+			toyo->arbre = NULL;
 			free(tmp);
 			return (toyo);
 		}

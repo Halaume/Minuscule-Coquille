@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/06 17:29:46 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/07 15:23:10 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,20 +91,25 @@ char		**no_quote_tab(char *str);
 char		**split_empty_line(char *s, char c);
 char		*strjoin_space(char *s1, char *s2);
 char		**ft_splitsane(char *str, t_info *info);
+char		**splitagedesesmorts(char **list);
+char	*vireguillemet(char *str, t_info *info);
 
 //				ENVIRONNEMENTALE
 
 char		**ft_getenvp(t_env *env);
+t_env		*new_env(char *str, char *valeur);
+t_env		*env_last(t_env *lst);
+void		env_add(t_env **alst, t_env *new);
 
 //				FAIS-DEDANS
 
 int			check_built_in(char *commande, t_info *info);
 int			is_built_in(char *arbre, t_info *info);
 int			ft_echo(char **arg);
-int			ft_cd(char **arg, char **envp);
+int			ft_cd(char **arg, t_info *info);
 int			ft_pwd(void);
 int			ft_export(t_info *info, char **commande);
-int			ft_unset(t_info *info, char *commande);
+int			ft_unset(t_info *info, char **commande);
 int			ft_env(t_env *env);
 int			ft_exit(char **status, t_info *info);
 
@@ -128,9 +133,9 @@ void		free_name(t_name *list);
 
 //				WildCards
 
-void	lst_add(t_name **alst, t_name *list);
-t_name	*new_lst(char *str);
-char	**cartes_sauvages(char *arg);
+void		lst_add(t_name **alst, t_name *list);
+t_name		*new_lst(char *str);
+char		**cartes_sauvages(char *arg);
 
 //				PIPEX
 
@@ -166,7 +171,7 @@ void		spamdup2(int elem1, int elem2);
 void		second_fun(t_struct *pipex, char **argv, char **envp);
 t_struct	init_pipex(char **argv, char **envp);
 void		fun_here_doc(char *argv, t_struct *pipex);
-void		child(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1, t_info *info);
+void		child(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1, t_info *i);
 int			toyotage(t_toyo *toyo, t_info *info);
 
 //			ERROR / FREE / END PROG

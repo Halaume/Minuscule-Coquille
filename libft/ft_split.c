@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 15:56:06 by tnaton            #+#    #+#             */
-/*   Updated: 2022/03/30 14:52:03 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/05 14:34:36 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,7 @@ char	**ft_split(char *s, char c)
 			end++;
 		dest[i++] = ft_substr(s, start, (end - start));
 		if (!dest[i - 1])
-		{
-			ft_free(dest, (i - 1));
-			return (NULL);
-		}
+			return (ft_free(dest, (i - 1)), NULL);
 	}
 	return (dest);
 }

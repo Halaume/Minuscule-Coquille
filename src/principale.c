@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/06 17:52:14 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/07 15:39:39 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,19 @@ void	freearbre(t_arbre *arbre)
 {
 	char	*tmp;
 
-	if (arbre->fd)
-		freearbre(arbre->fd);
-	if (arbre->fg)
-		freearbre(arbre->fg);
-	tmp = ft_strtrim(arbre->commande, "\"");
-	if (!ft_strncmp(tmp, "/tmp/.", 6))
-		unlink(tmp);
-	free(tmp);
-	free(arbre->commande);
-	free(arbre);
+	if (arbre)
+	{
+		if (arbre->fd)
+			freearbre(arbre->fd);
+		if (arbre->fg)
+			freearbre(arbre->fg);
+		tmp = ft_strtrim(arbre->commande, "\"");
+		if (!ft_strncmp(tmp, "/tmp/.", 6))
+			unlink(tmp);
+		free(tmp);
+		free(arbre->commande);
+		free(arbre);
+	}
 }
 
 int	checkarbre(t_arbre *arbre, t_info *info)
@@ -279,6 +282,7 @@ int	principale(int ac, char **av, char **envp)
 	info.exit_status = 0;
 	sigaction(SIGQUIT, &info.sigquit, NULL);
 	sigaction(SIGINT, &info.sigint, NULL);
+	info.arbre = NULL;
 	ligne = readline("MinusculeCoquille$>");
 	while (ligne)
 	{
@@ -297,10 +301,11 @@ int	principale(int ac, char **av, char **envp)
 				info.arbre = analyse_syntaxique(ligne, info.arbre, &info);
 				if (!checkarbre(info.arbre, &info))
 				{
+//					structure(info.arbre, 0);
 					lance_exec(&info, info.arbre);
 				}
 				else
-					printf("Erreur syntaxique\n");
+					printf("Erreur qui est syntaxique\n");
 			}
 			if (info.arbre)
 				freearbre(info.arbre);

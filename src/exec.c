@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/06 17:45:18 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/07 16:07:43 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,10 @@ int	exec(t_toyo *toyo, t_info *info)
 
 	info->sigquit.sa_handler = SIG_DFL;
 	sigemptyset(&info->sigquit.sa_mask);
-	if (!toyo->commande)
+	if (!toyo->arbre)
 		return (free_toyo(toyo), 1);
+	if (!toyo->commande)
+		return (free_toyo(toyo), 0);
 	if (!ft_strncmp("()", toyo->commande, 2))
 	{
 		forking = fork();
@@ -121,7 +123,7 @@ int	exec(t_toyo *toyo, t_info *info)
 	status = check_built_in(toyo->commande, info);
 	if (status == 0)
 	{
-		info->exit_status = is_built_in(toyo->commande,info);
+		info->exit_status = is_built_in(toyo->commande, info);
 		free_toyo(toyo);
 		return (info->exit_status);
 	}
@@ -139,7 +141,7 @@ int	exec(t_toyo *toyo, t_info *info)
 	if (WIFEXITED(status))
 	{
 		info->exit_status = WEXITSTATUS(status);
-		return(info->exit_status);
+		return (info->exit_status);
 	}
 	return (0);
 }

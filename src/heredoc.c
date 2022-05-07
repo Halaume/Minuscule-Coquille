@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/05 15:03:12 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/07 12:26:26 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	getfuturesizeoftheexpandedshit(char *del, int i, t_info *info, int ingui)
 	char	*var;
 
 	j = i;
-	while (del[j] && del[j] != '"' && del[j] != '\'' && del[j] != ' ')
+	while (del[j] && ((del[j] >= 'A' && del[j] <= 'Z') || (del[j] >= 'a' && del[j] <= 'z') || (del[j] == '$' || del[j] == '?')))
 	{
 		if (j != i && del[j] == '$')
 			break;
@@ -131,7 +131,7 @@ char	*changedel(char *del, int *i, t_info *info, int ingui)
 		ret[j] = del[j];
 		j++;
 	}
-	while (del[*i] && del[*i] != '"' && del[*i] != '\'' && del[*i] != ' ')
+	while (del[*i] && ((del[*i] >= 'A' && del[*i] <= 'Z') || (del[*i] >= 'a' && del[*i] <= 'z') || (del[*i] == '$' || del[*i] == '?')))
 	{
 		if (souvenir != *i && del[*i] == '$')
 			break;

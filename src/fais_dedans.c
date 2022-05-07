@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/06 17:46:48 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/07 09:57:49 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ int	check_identifier(char *commande)
 		return (free(commande_check), 0);
 	while (commande_check[i])
 	{
-	if (commande_check[i] < '0' || (commande_check[i] > '9'  && commande_check[i] < 'A') || commande_check[i] >= 'z' || (commande_check[i] > 'Z' && commande_check[i] < '_') || commande_check[i] == '`')
+		if (commande_check[i] < '0' || (commande_check[i] > '9'  && commande_check[i] < 'A') || commande_check[i] > 'z' || (commande_check[i] > 'Z' && commande_check[i] < '_') || commande_check[i] == '`')
 			return (free(commande_check), 0);
 		i++;
 	}

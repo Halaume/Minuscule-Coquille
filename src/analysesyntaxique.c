@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/07 15:40:29 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/07 19:53:45 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ char	*vireguillemet(char *str, t_info *info)
 		tmp = ft_strtrim(str, " >");
 		free(str);
 		str = get_del(tmp, info, &asex);
+		if (!ft_strlen(str) && asex)
+			return (free(str), NULL);
 		tmp = ft_strjoin(">>", str);
 		free(str);
 		return (tmp);
@@ -32,6 +34,8 @@ char	*vireguillemet(char *str, t_info *info)
 		tmp = ft_strtrim(str, " >");
 		free(str);
 		str = get_del(tmp, info, &asex);
+		if (!ft_strlen(str) && asex)
+			return (free(str), NULL);
 		tmp = ft_strjoin(">", str);
 		free(str);
 		return (tmp);
@@ -42,6 +46,8 @@ char	*vireguillemet(char *str, t_info *info)
 		quote = asquote(tmp);
 		free(str);
 		str = get_del(tmp, info, &asex);
+		if (!ft_strlen(str) && asex)
+			return (free(str), NULL);
 		tmp = ft_strjoin("<<", str);
 		if (quote)
 		{
@@ -53,15 +59,46 @@ char	*vireguillemet(char *str, t_info *info)
 		free(str);
 		return (tmp);
 	}
-	else
+	else if (!ft_strncmp(str, "<", 1))
 	{
 		tmp = ft_strtrim(str, " <");
 		free(str);
 		str = get_del(tmp, info, &asex);
+		if (!ft_strlen(str) && asex)
+			return (free(str), NULL);
 		tmp = ft_strjoin("<", str);
 		free(str);
 		return (tmp);
 	}
+	return (str);
+}
+
+char	*aled(char *str, t_info *info)
+{
+	char	*tmp;
+	int		quote;
+	int		asex;
+
+	if (!ft_strncmp(str, "<<", 2))
+	{
+		tmp = ft_strtrim(str, " <");
+		quote = asquote(tmp);
+		free(str);
+		str = get_del(tmp, info, &asex);
+		if (!ft_strlen(str) && asex)
+			return (free(str), NULL);
+		tmp = ft_strjoin("<<", str);
+		if (quote)
+		{
+			free(str);
+			str = ft_strjoin("\"", tmp);
+			free(tmp);
+			tmp = ft_strjoin(str, "\"");
+		}
+		free(str);
+		return (tmp);
+	}
+	return (str);
 }
 
 t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre, t_info *info)
@@ -188,6 +225,7 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre, t_info *info)
 				return (arbre);
 			}
 			arbre->commande = ft_substr(ligne, i, j - i);
+			arbre->commande = aled(arbre->commande, info);
 //			arbre->commande = vireguillemet(arbre->commande, info);
 			arbre->fd = analyse_syntaxique(ft_strjoin_free(ft_substr(ligne, 0, i), ft_substr(ligne, j, ft_strlen(ligne) - j)), arbre->fd, info);
 			free(ligne);

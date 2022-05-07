@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/07 16:04:48 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/07 19:51:34 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int	get_fd_here(char *path, t_info *info)
 	int		quote;
 
 	quote = asquote(path);
-	tmp = ft_strtrim(path, "\"");
+	tmp = ft_strtrim(path, "\"<");
 	if (!quote)
 	{
 		fd = open(tmp, O_RDWR);
@@ -175,9 +175,11 @@ int	isredirect(char *str)
 		return (1);
 	else if (!ft_strncmp(str, ">", 1))
 		return (1);
+	else if (!ft_strncmp(str, "<<", 2))
+		return (1);
 	else if (!ft_strncmp(str, "<", 1))
 		return (1);
-	tmp = ft_strtrim(str, "\"");
+	tmp = ft_strtrim(str, "\"<");
 	if (!ft_strncmp(tmp, "/tmp/.", 6))
 		return (free(tmp), 1);
 	return (free(tmp), 0);
@@ -197,6 +199,12 @@ t_toyo	*getcommande(t_arbre *arbre, t_info *info)
 	while (arbre && isredirect(arbre->commande))
 	{
 		arbre->commande = vireguillemet(arbre->commande, info);
+		if (!arbre->commande)
+		{
+			toyo->arbre = NULL;
+			ft_putstr_fd("Redirection ambigue\n", 2);
+			return (toyo);
+		}
 		if (!ft_strncmp(arbre->commande, ">>", 2))
 		{
 			if (toyo->out != 1)

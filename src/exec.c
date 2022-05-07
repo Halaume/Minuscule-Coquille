@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/07 16:07:43 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/07 18:30:00 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,14 +94,20 @@ int	executing(t_toyo *toyo, t_info *info)
 	exit(1);
 }
 
+void	cmdsig(int sig)
+{
+	if (sig == SIGQUIT)
+		ft_putstr_fd("Quitte (noyau vidé)\n", 1);
+	if (sig == SIGINT)
+		write(1, "\n", 1);
+}
+
 int	exec(t_toyo *toyo, t_info *info)
 {
 	pid_t	my_pid;
 	int		status;
 	pid_t	forking;
 
-	info->sigquit.sa_handler = SIG_DFL;
-	sigemptyset(&info->sigquit.sa_mask);
 	if (!toyo->arbre)
 		return (free_toyo(toyo), 1);
 	if (!toyo->commande)
@@ -130,13 +136,19 @@ int	exec(t_toyo *toyo, t_info *info)
 	my_pid = fork();
 	if (my_pid < 0)
 		return (write(2, "fork error\n", 12), -1);
+	signal(SIGINT, &cmdsig);
+	signal(SIGQUIT, &cmdsig);
 	if (my_pid == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		dup2(toyo->in, 0);
 		dup2(toyo->out, 1);
 		executing(toyo, info);
 	}
 	waitpid(my_pid, &status, 0);
+	signal(SIGINT, &singal);
+	signal(SIGQUIT, SIG_IGN);
 	free_toyo(toyo);
 	if (WIFEXITED(status))
 	{

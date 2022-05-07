@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/07 15:39:39 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/07 19:52:04 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,22 @@ void	freearbre(t_arbre *arbre)
 	if (arbre)
 	{
 		if (arbre->fd)
+		{
 			freearbre(arbre->fd);
+			arbre->fd = NULL;
+		}
 		if (arbre->fg)
+		{
 			freearbre(arbre->fg);
-		tmp = ft_strtrim(arbre->commande, "\"");
+			arbre->fg = NULL;
+		}
+		tmp = ft_strtrim(arbre->commande, "\"<");
 		if (!ft_strncmp(tmp, "/tmp/.", 6))
 			unlink(tmp);
 		free(tmp);
 		free(arbre->commande);
 		free(arbre);
+		arbre = NULL;
 	}
 }
 
@@ -237,27 +244,14 @@ char	**ft_getenvp(t_env *env)
 	return (envp);
 }
 
-void	singal(int signal, siginfo_t *sig_info, void *x)
+void	singal(int signal)
 {
-	t_info	*info;
-	char	c;
-
-	c = EOF;
-	info = (t_info *)x;
-	(void)x;
-	(void)sig_info;
-	if (signal == SIGQUIT)
-	{
-		printf("la dingz (non)\n");
-		return ;
-	}
 	if (signal == SIGINT)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		return ;
 	}
 }
 
@@ -267,22 +261,13 @@ int	principale(int ac, char **av, char **envp)
 	t_info	info;
 	char	*tmp;
 
-	info.sigint.sa_sigaction = &singal;
-	info.sigquit.sa_sigaction = &singal;
-	sigemptyset(&info.sigquit.sa_mask);
-	sigaddset(&info.sigquit.sa_mask, SIGQUIT);
-	sigemptyset(&info.sigint.sa_mask);
-	sigaddset(&info.sigint.sa_mask, SIGINT);
-	info.sigquit.sa_handler = SIG_IGN;
-	info.sigint.sa_sigaction = &singal;
-	info.sigint.sa_flags = SA_SIGINFO;
-	info.sigquit.sa_flags = SA_NODEFER;
 	info.env = ft_getenv(envp);
 	info.envp = ft_getenvp(info.env);
 	info.exit_status = 0;
-	sigaction(SIGQUIT, &info.sigquit, NULL);
-	sigaction(SIGINT, &info.sigint, NULL);
 	info.arbre = NULL;
+	info.isincmd = 0;
+	signal(SIGINT, &singal);
+	signal(SIGQUIT, SIG_IGN);
 	ligne = readline("MinusculeCoquille$>");
 	while (ligne)
 	{
@@ -308,7 +293,10 @@ int	principale(int ac, char **av, char **envp)
 					printf("Erreur qui est syntaxique\n");
 			}
 			if (info.arbre)
+			{
 				freearbre(info.arbre);
+				info.arbre = NULL;
+			}
 		}
 		else
 			free(ligne);

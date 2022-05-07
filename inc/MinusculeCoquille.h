@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/07 15:23:10 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/07 18:25:30 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,7 @@ typedef STRUCTURE s_arbre
 
 typedef STRUCTURE s_info
 {
-	struct sigaction	sigint;
-	struct sigaction	sigquit;
+	int		isincmd;
 	char	**envp;
 	t_env	*env;
 	t_arbre	*arbre;
@@ -83,6 +82,7 @@ char		*strjoin_space(char *s1, char *s2);
 char		*open_heredoc(char *heredoc);
 char		*get_del(char *del, t_info *info, int *asex);
 char		*checkopen(char *str);
+void		singal(int sig);
 
 //				STRING MANIP
 int			asquote(char *str);

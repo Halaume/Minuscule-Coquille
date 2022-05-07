@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/05 15:14:47 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/07 16:08:05 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,10 @@ int	exec(t_toyo *toyo, t_info *info)
 	int		status;
 	pid_t	forking;
 
-	if (!toyo->commande)
+	if (!toyo->arbre)
 		return (free_toyo(toyo), 1);
+	if (!toyo->commande)
+		return (free_toyo(toyo), 0);
 	if (!ft_strncmp("()", toyo->commande, 2))
 	{
 		forking = fork();
@@ -116,10 +118,10 @@ int	exec(t_toyo *toyo, t_info *info)
 	}
 	if (toyo == NULL)
 		return (info->exit_status);
-	status = check_built_in(toyo->commande, info);
+	status = check_built_in(toyo, info);
 	if (status == 0)
 	{
-		info->exit_status = is_built_in(toyo->commande, info);
+		info->exit_status = is_built_in(toyo, info);
 		free_toyo(toyo);
 		return (info->exit_status);
 	}

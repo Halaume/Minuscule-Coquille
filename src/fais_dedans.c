@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/07 09:57:49 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/07 10:42:26 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,8 @@ int	check_identifier(char *commande)
 	char	*commande_check;
 
 	commande_check = NULL;
+	if (commande[0] == '=')
+		return (0);
 	i = (int)ft_strlen(commande);
 	while (i > 0 && commande[i - 1] != '=')
 		i--;

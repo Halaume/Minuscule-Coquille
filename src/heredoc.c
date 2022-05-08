@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/07 19:51:03 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/08 13:20:44 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,28 +219,43 @@ char	*open_heredoc(char *heredoc)
 	char	*ligne;
 	char	*path;
 	char	*tmp;
+	pid_t	lenfant;
 
 	path = checkopen(ft_itoa(0));
-	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 00644);
-	if (fd < 0)
-		printf("cannot open tmp file\n");
-	path = addquote(path, heredoc);
-	if (asquote(heredoc))
+	lenfant = fork();
+	if (lenfant < 0)
+		return (NULL);
+	signal(SIGINT, SIG_IGN);
+	if (lenfant == 0)
 	{
-		tmp = ft_strtrim(heredoc, "<\"");
-		heredoc = tmp;
-	}
-	tmp = ft_strjoin(heredoc, ">");
-	ligne = readline(tmp);
-	while (ligne && ft_strcmp(ligne, heredoc))
-	{
-		write(fd, ligne, ft_strlen(ligne));
-		write(fd, "\n", 1);
-		free(ligne);
+		signal(SIGINT, SIG_DFL);
+		fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 00644);
+		if (fd < 0)
+			printf("cannot open tmp file\n");
+		path = addquote(path, heredoc);
+		if (asquote(heredoc))
+		{
+			tmp = ft_strtrim(heredoc, "<\"");
+			heredoc = tmp;
+		}
+		tmp = ft_strjoin(heredoc, ">");
 		ligne = readline(tmp);
+		while (ligne && ft_strcmp(ligne, heredoc))
+		{
+			write(fd, ligne, ft_strlen(ligne));
+			write(fd, "\n", 1);
+			free(ligne);
+			ligne = readline(tmp);
+		}
+		if (!ligne)
+			ft_putstr_fd("alors c pas ce que je voulais mais tranquille hein ya R\n", 2);
+		close(fd);
+		free(ligne);
+		free(tmp);
+		free(heredoc);
+		exit(0);
 	}
-	if (!ligne)
-		write(1, "\n", 1);
-	close(fd);
-	return (free(ligne), free(tmp), free(heredoc), path);
+	signal(SIGINT, &singal);
+	waitpid(lenfant, NULL, 0);
+	return (path);
 }

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/07 14:19:35 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/08 11:00:14 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	nb_of_good_word(char *arg, t_name *name)
 	t_name	*tmp;
 
 	tmp = name;
-	i= 0;
+	i = 0;
 	while (tmp)
 	{
 		if (is_good_word(arg, tmp->name) == 0)

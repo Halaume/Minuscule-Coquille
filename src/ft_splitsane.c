@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:03:35 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/09 12:36:53 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/09 14:22:42 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,11 @@ char	**ft_splitsane(char	*str, t_info *info)
 				dest = splitagedesesmorts(dest);
 				j = 0;
 				while (dest[j])
+				{
+					if (info->isexport)
+						dest[j] = get_del(dest[j], info, NULL);
 					j++;
+				}
 			}
 			while (str[i] && str[i] == ' ')
 				i++;
@@ -196,13 +200,14 @@ char	**ft_splitsane(char	*str, t_info *info)
 			dest = splitagedesesmorts(dest);
 			j = 0;
 			while (dest[j])
+			{
+				if (info->isexport)
+					dest[j] = get_del(dest[j], info, NULL);
 				j++;
+			}
 		}
 	}
 	if (dest[j - 1])
 		dest[j] = NULL;
-	j = 0;
-	while (dest[j])
-		printf("%s\n", dest[j++]);
 	return (dest);
 }

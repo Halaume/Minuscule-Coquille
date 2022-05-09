@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/09 12:02:01 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/09 14:16:55 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char		**split_empty_line(char *s, char c);
 char		*strjoin_space(char *s1, char *s2);
 char		**ft_splitsane(char *str, t_info *info);
 char		**splitagedesesmorts(char **list);
-char	*vireguillemet(char *str, t_info *info);
+char		*vireguillemet(char *str, t_info *info);
 
 //				ENVIRONNEMENTALE
 

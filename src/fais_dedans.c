@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/09 17:20:14 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/09 18:51:08 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,31 @@ int	is_exiting(char *numero)
 	return (0);
 }
 
+int	is_too_big(const char *nptr)
+{
+	int			i;
+	long long	nbr;
+
+	i = 0;
+	nbr = 0;
+	if (ft_strlen(nptr) > 20)
+		return (0);
+	while (nptr[i] == '\f' || nptr[i] == '\t' || nptr[i] == '\v'
+		|| nptr[i] == '\n' || nptr[i] == '\r' || nptr[i] == ' ')
+		i++;
+	if (nptr[i] && nptr[i] == '-')
+		i++;
+	else if (nptr[i] && nptr[i] == '+')
+		i++;
+	while (nptr[i] >= '0' && nptr[i] <= '9')
+	{
+		if (nbr > 1844674407370955161 && ft_strlen(nptr) == 20 && nptr[i] - '0' > 5)
+			return (0);
+		nbr = nbr * 10 + (nptr[i] - '0');
+		i++;
+	}
+	return (1);
+}
 int	ft_exit(char **exit, t_info *info)
 {
 	int	i;
@@ -138,7 +163,7 @@ int	ft_exit(char **exit, t_info *info)
 		{
 			while (exit[1][i])
 			{
-				if (is_exiting(exit[1]))
+				if (is_exiting(exit[1]) || is_too_big(exit[1]) == 0)
 				{
 					ft_putstr_fd("exit: Besoin argument numerique\n", 2);
 					info->exit_status = 2;

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/09 17:38:13 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/09 17:42:23 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,14 +151,18 @@ char	**cartes_sauvages(char *arg)
 
 int	count_wildcards(char **arg)
 {
-	int	i;
-	int	ret;
+	int		i;
+	int		ret;
+	char	**test;
 
 	i = 0;
 	ret = 0;
 	while (arg[i])
 	{
-		ret += lencaca(cartes_sauvages(arg[i]));
+		test = cartes_sauvages(arg[i]);
+		ret += lencaca(test);
+		if (test)
+			free_char_char(test);
 		i++;
 	}
 	return (ret);

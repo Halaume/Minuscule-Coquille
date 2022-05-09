@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/09 16:34:16 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/09 17:20:14 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	ft_cd(char **arg, t_info *info)
 	char	*home;
 
 	if (lencaca(arg) > 2)
-		return (write(2, "cd: arguments trop nombreux\n", 24), 1);
+		return (write(2, "cd: arguments trop nombreux\n", 28), 1);
 	if (lencaca(arg) < 2)
 	{
 		home = get_my_home(info->env);
@@ -413,25 +413,6 @@ int	check_built_in(t_toyo *toyo, t_info *info)
 	free(tmp);
 	tmp_cmd = ft_splitsane(toyo->commande, info);
 	cmd = add_wildcard(tmp_cmd);
-	int	i	=	0;
-	char **cmd2;
-	while (cmd[i])
-	{
-		cmd2 = cartes_sauvages(cmd[i]);
-	int	j = 0;
-		while (cmd2[j])
-		{
-			printf("cmd2[j] = >%s<\n", cmd2[j]);
-			j++;
-		}
-		i++;
-	}
-	i	=	0;
-	while (cmd[i])
-	{
-		printf("cmd[i] = >%s<\n", cmd[i]);
-		i++;
-	}
 	free_char_char(tmp_cmd);
 	if (!cmd)
 		return (1);

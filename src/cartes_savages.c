@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/08 11:00:14 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/09 10:58:51 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,29 +72,11 @@ int	nb_of_good_word(char *arg, t_name *name)
 	return (i);
 }
 
-char	**cartes_sauvages(char *arg)
+char	**norme_carte(t_name *tmp, char *arg, char **ret, t_name *fichier)
 {
-	DIR				*my_dir;
-	char			**ret;
-	struct dirent	*reading;
-	t_name			*fichier;
-	t_name			*tmp;
-	int				nb_word;
-	int				i;
+	int	nb_word;
+	int	i;
 
-	reading = NULL;
-	ret = NULL;
-	fichier = NULL;
-	i = 0;
-	my_dir = opendir(".");
-	if (!my_dir)
-		return (perror("Wildcards: "), NULL);
-	while (reading != NULL || i == 0)
-	{
-		i++;
-		reading = readdir(my_dir);
-		lst_add(&fichier, new_lst(ft_strdup(reading->d_name)));
-	}
 	nb_word = nb_of_good_word(arg, fichier);
 	ret = malloc(sizeof(char *) * (nb_word + 1));
 	if (!ret)
@@ -111,6 +93,32 @@ char	**cartes_sauvages(char *arg)
 		}
 		tmp = tmp->next;
 	}
+	return (ret);
+}
+
+char	**cartes_sauvages(char *arg)
+{
+	DIR				*my_dir;
+	char			**ret;
+	struct dirent	*reading;
+	t_name			*fichier;
+	t_name			*tmp;
+	int				i;
+
+	reading = NULL;
+	ret = NULL;
+	fichier = NULL;
+	i = 0;
+	my_dir = opendir(".");
+	if (!my_dir)
+		return (perror("Wildcards: "), NULL);
+	while (reading != NULL || i == 0)
+	{
+		i++;
+		reading = readdir(my_dir);
+		lst_add(&fichier, new_lst(ft_strdup(reading->d_name)));
+	}
+	ret = norme_carte(tmp, arg, ret, fichier);
 	free_name(fichier);
 	closedir(my_dir);
 	return (ret);

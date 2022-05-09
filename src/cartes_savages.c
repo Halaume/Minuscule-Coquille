@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/09 16:24:17 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/09 17:38:13 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,23 @@ int	len_before_star(char *str)
 	while (str[i] && str[i] != '*')
 		i++;
 	return (i);
+}
+
+int	check_wildcard(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str)
+	{
+		while (str[i])
+		{
+			if (str[i] == '*')
+				return (1);
+			i++;
+		}
+	}
+	return (0);
 }
 
 int	is_good_word(char *arg, char *str)
@@ -105,6 +122,13 @@ char	**cartes_sauvages(char *arg)
 	t_name			*fichier;
 	int				i;
 
+	if (!check_wildcard(arg))
+	{
+		ret = malloc(sizeof(char *) * 2);
+		ret[0] = ft_strdup(arg);
+		ret[1] = NULL;
+		return (ret);
+	}
 	reading = NULL;
 	ret = NULL;
 	fichier = NULL;

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/09 14:31:39 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/09 17:38:45 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,11 @@ void	norme_executing(t_toyo *toyo, t_info *info, char **arg)
 int	executing(t_toyo *toyo, t_info *info)
 {
 	char	**arg;
+	char	**tmp_arg;
 
-	arg = NULL;
-	arg = ft_splitsane(toyo->commande, info);
+	tmp_arg = ft_splitsane(toyo->commande, info);
+	arg = add_wildcard(tmp_arg);
+	free_char_char(tmp_arg);
 	if (check_abs_path(arg[0]))
 	{
 		if (access(arg[0], X_OK) == 0)

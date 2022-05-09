@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/09 15:31:38 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/09 17:07:46 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,9 @@ void		env_add(t_env **alst, t_env *new);
 
 //				FAIS-DEDANS
 
-int			check_built_in(char *commande, t_info *info);
-int			is_built_in(char *arbre, t_info *info);
-int			ft_echo(char **arg);
+int			check_built_in(t_toyo *commande, t_info *info);
+int			is_built_in(t_toyo *arbre, t_info *info);
+int			ft_echo(char **arg, t_toyo *toyo);
 int			ft_cd(char **arg, t_info *info);
 int			ft_pwd(void);
 int			ft_export(t_info *info, char **commande);
@@ -136,6 +136,7 @@ void		free_name(t_name *list);
 void		lst_add(t_name **alst, t_name *list);
 t_name		*new_lst(char *str);
 char		**cartes_sauvages(char *arg);
+char		**add_wildcard(char **cmd);
 
 //				PIPEX
 
@@ -153,6 +154,7 @@ typedef struct s_struct
 	char	*cmd;
 	char	**argv;
 	char	**envp;
+	int		fd1;
 }	t_struct;
 
 //			STRING MANIP
@@ -163,6 +165,7 @@ char		*ft_join(char *s1, char *s2);
 void		ft_putstr(char *str);
 void		get_outfile(char *argv, t_struct *pipex);
 int			args_min(char *arg, t_struct *pipex);
+int			lencaca(char **prout);
 
 //			PIPEX FUN
 
@@ -171,7 +174,7 @@ void		spamdup2(int elem1, int elem2);
 void		second_fun(t_struct *pipex, char **argv, char **envp);
 t_struct	init_pipex(char **argv, char **envp);
 void		fun_here_doc(char *argv, t_struct *pipex);
-void		child(t_toyo *toyo, t_struct *pipex, int fd[2], int fd1, t_info *i);
+void		child(t_toyo *toyo, t_struct *pipex, int fd[2], t_info *i);
 int			toyotage(t_toyo *toyo, t_info *info);
 
 //			ERROR / FREE / END PROG

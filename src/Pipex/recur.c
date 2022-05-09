@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 14:43:46 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/05 15:06:32 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/07 15:31:37 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	recur_pipe(t_toyo *toyo, int pipefd, t_struct *pipex, t_info *info)
 		if (pipe(fd) < 0)
 			return (perror("Error on pipe"), exit(1));
 	}
-	child(toyo, pipex, fd, pipefd, info);
+	pipex->fd1 = pipefd;
+	child(toyo, pipex, fd, info);
 	if (toyo->in != 0)
 		close(toyo->in);
 	if (toyo->out != 1)
@@ -29,7 +30,7 @@ void	recur_pipe(t_toyo *toyo, int pipefd, t_struct *pipex, t_info *info)
 	if (pipex->indexarg != (pipex->nb_cmd - 1))
 		close(fd[1]);
 	if (pipex->indexarg != 0)
-		close(pipefd);
+		close(pipex->fd1);
 	pipex->indexarg++;
 	toyo = toyo->next;
 	if (pipex->indexarg < pipex->nb_cmd)
@@ -69,12 +70,9 @@ int	toyotage(t_toyo *toyo, t_info *info)
 	pipex.indexarg = 0;
 	tmp = toyo;
 	recur_pipe(tmp, 0, &pipex, info);
-	i = 0;
-	while (i < pipex.nb_cmd)
-	{
+	i = -1;
+	while (++i < pipex.nb_cmd)
 		waitpid(pipex.pid_tab[i], &status, 0);
-		i++;
-	}
 	free_toyo(toyo);
 	free_func(&pipex);
 	if (WIFEXITED(status))

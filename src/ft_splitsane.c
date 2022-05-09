@@ -62,10 +62,7 @@ char	**ft_splitdesesmorts(char	*str)
 	last = i;
 	while (str[i])
 	{
-		if (!indoublegui && str[i] == '\'')
-			insimplegui = !insimplegui;
-		if (!insimplegui && str[i] == '"')
-			indoublegui = !indoublegui;
+		gui(str[i], &indoublegui, &insimplegui, NULL);
 		if (!insimplegui && !indoublegui && str[i] == ' ')
 		{
 			dest[j++] = ft_substr(str, last, i - last);
@@ -163,10 +160,7 @@ char	**ft_splitsane(char	*str, t_info *info)
 	last = i;
 	while (str[i])
 	{
-		if (!indoublegui && str[i] == '\'')
-			insimplegui = !insimplegui;
-		if (!insimplegui && str[i] == '"')
-			indoublegui = !indoublegui;
+		gui(str[i], &indoublegui, &insimplegui, NULL);
 		if (!insimplegui && !indoublegui && str[i] == ' ')
 		{
 			asexpanded = 0;

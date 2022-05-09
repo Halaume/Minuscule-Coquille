@@ -25,14 +25,7 @@ int	verifieligne(char *ligne)
 	simpleguillemet = 0;
 	while (ligne[i])
 	{
-		if (ligne[i] == '"' && !simpleguillemet)
-			doubleguillemet = !doubleguillemet;
-		else if (ligne[i] == '\'' && !doubleguillemet)
-			simpleguillemet = !simpleguillemet;
-		else if (ligne[i] == '(' && !simpleguillemet && !doubleguillemet)
-			parenthese++;
-		else if (ligne[i] == ')' && !simpleguillemet && !doubleguillemet)
-			parenthese--;
+		gui(ligne[i], &doubleguillemet, &simpleguillemet, &parenthese);
 		if (parenthese < 0)
 			return (1);
 		i++;

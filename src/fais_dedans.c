@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/07 12:37:57 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/09 12:14:19 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -373,6 +373,7 @@ int	is_built_in(char *commande, t_info *info)
 		ret = ft_env(info->env);
 	else if (ft_strlen(no_quote_commande[0]) == ft_strlen("exit") && ft_strncmp("exit", no_quote_commande[0], ft_strlen(no_quote_commande[0])) == 0)
 		ret = ft_exit(no_quote_commande, info);
+	info->isexport = 0;
 	free_char_char(info->envp);
 	info->envp = ft_getenvp(info->env);
 	free_char_char(no_quote_commande);
@@ -382,10 +383,15 @@ int	is_built_in(char *commande, t_info *info)
 int	check_built_in(char *commande, t_info *info)
 {
 	char	**no_quote_commande;
+	char	*tmp;
 
 	if (!commande || !*commande)
 		return (1);
 	no_quote_commande = NULL;
+	tmp = ft_strtrim(commande, " ");
+	if (!ft_strncmp(tmp, "export", 6))
+		info->isexport = 1;
+	free(tmp);
 	no_quote_commande = ft_splitsane(commande, info);
 	if (!no_quote_commande)
 		return (1);

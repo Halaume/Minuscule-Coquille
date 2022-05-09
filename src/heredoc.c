@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/08 13:20:44 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/09 12:33:39 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,23 +78,53 @@ char	*rmquote(char *del, int *list)
 	return (tmp);
 }
 
+char	*quoteit(char	*str)
+{
+	char	*tmp;
+
+	tmp = ft_strjoin("\"", str);
+	free(str);
+	str = ft_strjoin(tmp, "\"");
+	free(tmp);
+	return (str);
+}
+
 char	*getvalfromenv(char *var, t_info *info, int ingui, char next)
 {
 	t_env	*current;
 
-	if (!ft_strcmp(var, "$?"))
-		return (free(var), ft_itoa(info->exit_status));
-	if (!ft_strcmp(var, "$") && (ingui || next == ' ' || next == '\0' || next == '$'))
-		return (free(var), ft_strdup("$"));
-	else if (!ft_strcmp(var, "$"))
-		return (free(var), ft_strdup(""));
-	current = info->env;
-	while (current && ft_strcmp(var + 1, current->variable))
-		current = current->next;
-	free(var);
-	if (!current)
-		return (ft_strdup(""));
-	return (ft_strdup(current->valeur));
+	if (info->isexport)
+	{
+		if (!ft_strcmp(var, "$?"))
+			return (free(var), quoteit(ft_itoa(info->exit_status)));
+		if (!ft_strcmp(var, "$") && (ingui || next == ' ' || next == '\0' || next == '$'))
+			return (free(var), ft_strdup("$"));
+		else if (!ft_strcmp(var, "$"))
+			return (free(var), ft_strdup(""));
+		current = info->env;
+		while (current && ft_strcmp(var + 1, current->variable))
+			current = current->next;
+		free(var);
+		if (!current)
+			return (ft_strdup(""));
+		return (quoteit(ft_strdup(current->valeur)));
+	}
+	else
+	{
+		if (!ft_strcmp(var, "$?"))
+			return (free(var), ft_itoa(info->exit_status));
+		if (!ft_strcmp(var, "$") && (ingui || next == ' ' || next == '\0' || next == '$'))
+			return (free(var), ft_strdup("$"));
+		else if (!ft_strcmp(var, "$"))
+			return (free(var), ft_strdup(""));
+		current = info->env;
+		while (current && ft_strcmp(var + 1, current->variable))
+			current = current->next;
+		free(var);
+		if (!current)
+			return (ft_strdup(""));
+		return (ft_strdup(current->valeur));
+	}
 }
 
 int	getfuturesizeoftheexpandedshit(char *del, int i, t_info *info, int ingui)

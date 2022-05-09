@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/07 19:52:04 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/09 12:09:16 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,7 +265,7 @@ int	principale(int ac, char **av, char **envp)
 	info.envp = ft_getenvp(info.env);
 	info.exit_status = 0;
 	info.arbre = NULL;
-	info.isincmd = 0;
+	info.isexport = 0;
 	signal(SIGINT, &singal);
 	signal(SIGQUIT, SIG_IGN);
 	ligne = readline("MinusculeCoquille$>");

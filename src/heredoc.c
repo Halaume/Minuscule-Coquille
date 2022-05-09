@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/09 16:20:14 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/09 19:42:56 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,5 +295,6 @@ char	*open_heredoc(char *heredoc)
 	path = addquote(path, heredoc);
 	signal(SIGINT, &singal);
 	waitpid(lenfant, NULL, 0);
+	free(heredoc);
 	return (path);
 }

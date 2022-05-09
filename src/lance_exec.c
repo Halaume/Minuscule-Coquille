@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/09 16:27:45 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/09 19:04:58 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,6 +243,7 @@ t_toyo	*getcommande(t_arbre *arbre, t_info *info)
 			free(tmp);
 			return (toyo);
 		}
+		arbre = arbre->fd;
 	}
 	if (arbre && arbre->commande && !ft_strncmp("()", arbre->commande, 2))
 		toyo->arbre = arbre->fd;

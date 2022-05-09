@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/09 12:09:16 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/09 16:29:47 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	verifieligne(char *ligne)
 	return (0);
 }
 
+/*
 void	padding(char ch, int n)
 {
 	int	i;
@@ -62,6 +63,7 @@ void	structure(t_arbre *root, int level)
 		structure (root->fg, level + 1);
 	}
 }
+*/
 
 void	freearbre(t_arbre *arbre)
 {
@@ -119,8 +121,8 @@ int	checkarbre(t_arbre *arbre, t_info *info)
 					return (free(tmp), 1);
 				free(tmp);
 			}
-			if ((!arbre->fg || !arbre->fd) && (!ft_strcmp(arbre->commande, "|")\
-					   	|| !ft_strcmp(arbre->commande, "&&") \
+			if ((!arbre->fg || !arbre->fd) && (!ft_strcmp(arbre->commande, "|") \
+					|| !ft_strcmp(arbre->commande, "&&") \
 						|| !ft_strcmp(arbre->commande, "||")))
 				return (1);
 			if (!arbre->fg && !arbre->fd)
@@ -128,7 +130,7 @@ int	checkarbre(t_arbre *arbre, t_info *info)
 		}
 		else
 		{
-			tmp	= ft_strtrim(arbre->commande, " ");
+			tmp = ft_strtrim(arbre->commande, " ");
 			if (!ft_strcmp(tmp, ">") || !ft_strcmp(tmp, ">>") || \
 					!ft_strcmp(tmp, "<") || !ft_strcmp(tmp, "<<"))
 				return (free(tmp), 1);
@@ -139,7 +141,8 @@ int	checkarbre(t_arbre *arbre, t_info *info)
 				if (asquote(tmp))
 					arbre->commande = open_heredoc(tmp);
 				else
-					arbre->commande = open_heredoc(ft_substr(tmp, 2, ft_strlen(tmp) - 2));
+					arbre->commande = open_heredoc(ft_substr(tmp, 2, \
+								ft_strlen(tmp) - 2));
 			}
 			free(tmp2);
 			free(tmp);
@@ -163,9 +166,9 @@ t_env	*ft_getenv(char **envp)
 	t_env	*first;
 	t_env	*tmp;
 	t_env	*current;
-	int	i;
-	int	j;
-	
+	int		i;
+	int		j;
+
 	first = NULL;
 	i = 0;
 	while (envp[i])
@@ -179,7 +182,7 @@ t_env	*ft_getenv(char **envp)
 				tmp->variable = ft_substr(envp[i], 0, j);
 				tmp->valeur = ft_substr(envp[i], j + 1, ft_strlen(envp[i]) - j);
 				if (i == 0)
-				{ 
+				{
 					current = tmp;
 					first = current;
 				}
@@ -189,7 +192,7 @@ t_env	*ft_getenv(char **envp)
 					current = current->next;
 					current->next = NULL;
 				}
-				break;
+				break ;
 			}
 			j++;
 		}
@@ -214,8 +217,8 @@ void	freeenv(t_env *current)
 
 int	getsize(t_env *env)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	while (env)
 	{
@@ -286,7 +289,6 @@ int	principale(int ac, char **av, char **envp)
 				info.arbre = analyse_syntaxique(ligne, info.arbre, &info);
 				if (!checkarbre(info.arbre, &info))
 				{
-//					structure(info.arbre, 0);
 					lance_exec(&info, info.arbre);
 				}
 				else

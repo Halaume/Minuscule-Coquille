@@ -6,11 +6,23 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/07 19:53:45 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/09 17:06:27 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
+
+char	*vireout(char *str, t_info *info)
+{
+		tmp = ft_strtrim(str, " >");
+		free(str);
+		str = get_del(tmp, info, &asex);
+		if (!ft_strlen(str) && asex)
+			return (free(str), NULL);
+		tmp = ft_strjoin(">>", str);
+		free(str);
+		return (tmp);
+}
 
 char	*vireguillemet(char *str, t_info *info)
 {
@@ -20,14 +32,6 @@ char	*vireguillemet(char *str, t_info *info)
 
 	if (!ft_strncmp(str, ">>", 2))
 	{
-		tmp = ft_strtrim(str, " >");
-		free(str);
-		str = get_del(tmp, info, &asex);
-		if (!ft_strlen(str) && asex)
-			return (free(str), NULL);
-		tmp = ft_strjoin(">>", str);
-		free(str);
-		return (tmp);
 	}
 	else if (!ft_strncmp(str, ">", 1))
 	{
@@ -103,13 +107,13 @@ char	*aled(char *str, t_info *info)
 
 t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre, t_info *info)
 {
-	int	i;
-	int	inpar;
-	int	insimplegui;
-	int	indoublegui;
-	int	first_par;
-	int	j;
-	char *tmp;
+	int		i;
+	int		inpar;
+	int		insimplegui;
+	int		indoublegui;
+	int		first_par;
+	int		j;
+	char	*tmp;
 
 	insimplegui = 0;
 	indoublegui = 0;
@@ -123,7 +127,7 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre, t_info *info)
 		arbre->fd = NULL;
 		arbre->fg = NULL;
 	}
-	tmp =  ft_strtrim(ligne, " ");
+	tmp = ft_strtrim(ligne, " ");
 	if (!ft_strcmp(tmp, ""))
 		return (free(ligne), free(tmp), free(arbre), NULL);
 	free(tmp);
@@ -138,13 +142,16 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre, t_info *info)
 		if (!insimplegui && !indoublegui && ligne[i] == '(')
 			inpar++;
 		if (i && !insimplegui && !indoublegui && !inpar && ((ligne[i] == '&'\
-			&& ligne[i - 1] == '&') || (ligne[i] == '|' && ligne[i - 1] == '|')))
+			&& ligne[i - 1] == '&') || (ligne[i] == '|' \
+				&& ligne[i - 1] == '|')))
 		{
-			arbre->fd = analyse_syntaxique(ft_substr(ligne, 0, i - 1), arbre->fd, info);
+			arbre->fd = analyse_syntaxique(ft_substr(ligne, 0, i - 1), \
+					arbre->fd, info);
 			j = i;
 			while (ligne[j])
 				j++;
-			arbre->fg = analyse_syntaxique(ft_substr(ligne, i + 1, j), arbre->fg, info);
+			arbre->fg = analyse_syntaxique(ft_substr(ligne, i + 1, j), \
+					arbre->fg, info);
 			if (ligne[i] == '|')
 				arbre->commande = ft_strdup("||");
 			if (ligne[i] == '&')
@@ -172,11 +179,13 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre, t_info *info)
 				&& !inpar && (ligne[i] == '|' && ligne[i + 1] != '|' \
 					&& (!i || ligne[i - 1] != '|')))
 		{
-			arbre->fd = analyse_syntaxique(ft_substr(ligne, 0, i), arbre->fd, info);
+			arbre->fd = analyse_syntaxique(ft_substr(ligne, 0, i), arbre->fd, \
+					info);
 			j = i;
 			while (ligne[j])
 				j++;
-			arbre->fg = analyse_syntaxique(ft_substr(ligne, i + 1, j), arbre->fg, info);
+			arbre->fg = analyse_syntaxique(ft_substr(ligne, i + 1, j), \
+					arbre->fg, info);
 			arbre->commande = ft_strdup("|");
 			free(ligne);
 			return (arbre);
@@ -197,7 +206,8 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre, t_info *info)
 			inpar--;
 		if (!insimplegui && !indoublegui && ligne[i] == '(')
 			inpar++;
-		if (!insimplegui && !indoublegui && !inpar && (ligne[i] == '<' || ligne[i] == '>'))
+		if (!insimplegui && !indoublegui && !inpar && (ligne[i] == '<' || \
+					ligne[i] == '>'))
 		{
 			j = i + 1;
 			if (ligne[i + 1] == ligne[i])
@@ -212,8 +222,11 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre, t_info *info)
 					insimplegui = !insimplegui;
 				if (!insimplegui && ligne[j] == '"')
 					indoublegui = !indoublegui;
-				if	((!insimplegui && !indoublegui) && (ligne[j] == ' ' || ligne[j] == '>' || ligne[j] == '<' || ligne[j] == '&' || ligne[j] == '|' || ligne[j] == '('))
-					break;
+				if ((!insimplegui && !indoublegui) && (ligne[j] == ' ' \
+							|| ligne[j] == '>' || ligne[j] == '<' \
+							|| ligne[j] == '&' || ligne[j] == '|' \
+							|| ligne[j] == '('))
+					break ;
 				j++;
 			}
 			while (ligne[j] && ligne[j + 1] && ligne[j + 1] == ' ')
@@ -226,8 +239,9 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre, t_info *info)
 			}
 			arbre->commande = ft_substr(ligne, i, j - i);
 			arbre->commande = aled(arbre->commande, info);
-//			arbre->commande = vireguillemet(arbre->commande, info);
-			arbre->fd = analyse_syntaxique(ft_strjoin_free(ft_substr(ligne, 0, i), ft_substr(ligne, j, ft_strlen(ligne) - j)), arbre->fd, info);
+			arbre->fd = analyse_syntaxique(ft_strjoin_free(ft_substr(ligne, 0, \
+							i), ft_substr(ligne, j, ft_strlen(ligne) - j)), \
+					arbre->fd, info);
 			free(ligne);
 			return (arbre);
 		}
@@ -265,7 +279,8 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre, t_info *info)
 				}
 				j++;
 			}
-			arbre->fd = analyse_syntaxique(ft_substr(ligne, first_par + 1, i - first_par - 1), arbre->fd, info);
+			arbre->fd = analyse_syntaxique(ft_substr(ligne, first_par + 1, i - \
+						first_par - 1), arbre->fd, info);
 			arbre->commande = ft_strdup("()");
 			free(ligne);
 			return (arbre);

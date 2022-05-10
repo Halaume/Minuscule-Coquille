@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 12:59:11 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 19:46:39 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	get_fd_in(char *path)
 	return (fd);
 }
 
-char	*getvalfromenvheredoc(char *var, t_info *info, int ingui, char next)
+char	*getvalfromenvhd(char *var, t_info *info, int ingui, char next)
 {
 	t_env	*current;
 
@@ -65,76 +65,100 @@ char	*getvalfromenvheredoc(char *var, t_info *info, int ingui, char next)
 	return (ft_strdup(current->valeur));
 }
 
-int	futuresizeofexpandedheredoc(char *str, t_info *info)
+int	isadel(char *str, int j)
 {
-	int		futuresize;
-	int		i;
-	int		j;
+	return (str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] >= 'a' \
+						&& str[j] <= 'z') || (str[j - 1] == '$' && \
+							str[j] == '?')));
+}
+
+void	crever(t_exp *e, t_info *info, char *str)
+{
 	char	*tmp;
 
-	i = 0;
-	futuresize = 0;
-	while (str[i])
+	tmp = getvalfromenvhd(ft_substr(str, e->i, e->j - e->i), info, 1, 0);
+	e->k += ft_strlen(tmp);
+	free(tmp);
+	e->i = e->j;
+}
+
+int	fsizeofexheredoc(char *str, t_info *info)
+{
+	t_exp	e;
+
+	e.i = 0;
+	e.k = 0;
+	while (str[e.i])
 	{
-		while (str[i] && str[i] != '$')
+		while (str[e.i] && str[e.i] != '$')
 		{
-			i++;
-			futuresize += 1;
+			e.i++;
+			e.k++;
 		}
-		j = i;
-		if (str[j] == '$')
-			j++;
-		while (str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] >= 'a' \
-						&& str[j] <= 'z') || (str[j - 1] == '$' && \
-							str[j] == '?')))
-			j++;
-		if (i != j)
-		{
-			tmp = getvalfromenvheredoc(ft_substr(str, i, j - i), info, 1, 0);
-			futuresize += ft_strlen(tmp);
-			free(tmp);
-			i = j;
-		}
+		e.j = e.i;
+		if (str[e.j] == '$')
+			e.j++;
+		while (isadel(str, e.j))
+			e.j++;
+		if (e.i != e.j)
+			crever(&e, info, str);
 	}
-	return (futuresize);
+	return (e.k);
+}
+
+void	smalex(char *str, int *j, int *i)
+{
+	*j = *i;
+	if (str[*j] == '$')
+		(*j)++;
+	while (isadel(str, *j))
+		(*j)++;
 }
 
 char	*expand(char *str, t_info *info)
 {
 	char	*newstr;
-	int		i;
-	int		j;
-	int		k;
+	t_exp	e;
 	char	*tmp;
 
-	i = 0;
-	k = 0;
-	newstr = (char *)malloc(sizeof(char) * (futuresizeofexpandedheredoc(str, \
-					info) + 1));
-	while (str[i])
+	e.i = 0;
+	e.k = 0;
+	newstr = (char *)malloc(sizeof(char) * (fsizeofexheredoc(str, info) + 2));
+	while (str[e.i])
 	{
-		while (str[i] && str[i] != '$')
-			newstr[k++] = str[i++];
-		j = i;
-		if (str[j] == '$')
-			j++;
-		while (str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] >= 'a' \
-						&& str[j] <= 'z') || (str[j - 1] == '$' \
-							&& str[j] == '?')))
-			j++;
-		if (i != j)
+		while (str[e.i] && str[e.i] != '$')
+			newstr[e.k++] = str[e.i++];
+		smalex(str, &e.j, &e.i);
+		if (e.i != e.j)
 		{
-			tmp = getvalfromenvheredoc(ft_substr(str, i, j - i), info, 1, 0);
-			i = j;
-			j = 0;
-			while (tmp[j])
-				newstr[k++] = tmp[j++];
+			tmp = getvalfromenvhd(ft_substr(str, e.i, e.j - e.i), info, 1, 0);
+			e.i = e.j;
+			e.j = 0;
+			while (tmp[e.j])
+				newstr[e.k++] = tmp[e.j++];
 			free(tmp);
 		}
 	}
 	free(str);
-	newstr[k] = '\0';
+	newstr[e.k] = '\0';
 	return (newstr);
+}
+
+void	ecrit(int fd, int fd2, t_info *info)
+{
+	char	*tmp;
+
+	tmp = ft_strdup("ah");
+	while (tmp)
+	{
+		free(tmp);
+		tmp = get_next_line(fd);
+		if (tmp)
+		{
+			tmp = expand(tmp, info);
+			write (fd2, tmp, ft_strlen(tmp));
+		}
+	}
 }
 
 int	get_fd_here(char *path, t_info *info)
@@ -151,26 +175,14 @@ int	get_fd_here(char *path, t_info *info)
 		fd = open(tmp, O_RDWR);
 		path = checkopen(ft_itoa(0));
 		fd2 = open(path, O_CREAT | O_RDWR, 00644);
-		while (tmp)
-		{
-			free(tmp);
-			tmp = get_next_line(fd);
-			if (tmp)
-			{
-				tmp = expand(tmp, info);
-				write (fd2, tmp, ft_strlen(tmp));
-			}
-		}
+		ecrit(fd, fd2, info);
 		close(fd2);
 		fd2 = open(path, O_RDONLY);
-		free(tmp);
-		free(path);
-		return (fd2);
+		return (free(tmp), free(path), fd2);
 	}
 	else
 		fd = open(tmp, O_RDONLY);
-	free(tmp);
-	return (fd);
+	return (free(tmp), fd);
 }
 
 int	isredirect(char *str)
@@ -191,10 +203,37 @@ int	isredirect(char *str)
 	return (free(tmp), 0);
 }
 
-t_toyo	*getcommande(t_arbre *arbre, t_info *info)
+void	leprout(t_arbre *arbre, t_toyo *toyo, t_info *info)
+{
+	if (!ft_strncmp(arbre->commande, ">>", 2))
+	{
+		if (toyo->out != 1)
+			close(toyo->out);
+		toyo->out = get_fd_concat(arbre->commande);
+	}
+	else if (!ft_strncmp(arbre->commande, ">", 1))
+	{
+		if (toyo->out != 1)
+			close(toyo->out);
+		toyo->out = get_fd_out(arbre->commande);
+	}
+	else if (!ft_strncmp(arbre->commande, "<", 1))
+	{
+		if (toyo->in != 0)
+			close(toyo->in);
+		toyo->in = get_fd_in(arbre->commande);
+	}
+	else
+	{
+		if (toyo->in != 0)
+			close(toyo->in);
+		toyo->in = get_fd_here(arbre->commande, info);
+	}
+}
+
+t_toyo	*init_toyo(t_arbre *arbre)
 {
 	t_toyo	*toyo;
-	char	*tmp;
 
 	toyo = (t_toyo *)malloc(sizeof(t_toyo));
 	toyo->in = 0;
@@ -202,39 +241,28 @@ t_toyo	*getcommande(t_arbre *arbre, t_info *info)
 	toyo->next = NULL;
 	toyo->commande = NULL;
 	toyo->arbre = arbre;
+	return (toyo);
+}
+
+t_toyo	*haha(t_toyo *toyo)
+{
+	toyo->arbre = NULL;
+	ft_putstr_fd("Redirection ambigue\n", 2);
+	return (toyo);
+}
+
+t_toyo	*getcommande(t_arbre *arbre, t_info *info)
+{
+	t_toyo	*toyo;
+	char	*tmp;
+
+	toyo = init_toyo(arbre);
 	while (arbre && isredirect(arbre->commande))
 	{
 		arbre->commande = vireguillemet(arbre->commande, info);
 		if (!arbre->commande)
-		{
-			toyo->arbre = NULL;
-			ft_putstr_fd("Redirection ambigue\n", 2);
-			return (toyo);
-		}
-		if (!ft_strncmp(arbre->commande, ">>", 2))
-		{
-			if (toyo->out != 1)
-				close(toyo->out);
-			toyo->out = get_fd_concat(arbre->commande);
-		}
-		else if (!ft_strncmp(arbre->commande, ">", 1))
-		{
-			if (toyo->out != 1)
-				close(toyo->out);
-			toyo->out = get_fd_out(arbre->commande);
-		}
-		else if (!ft_strncmp(arbre->commande, "<", 1))
-		{
-			if (toyo->in != 0)
-				close(toyo->in);
-			toyo->in = get_fd_in(arbre->commande);
-		}
-		else
-		{
-			if (toyo->in != 0)
-				close(toyo->in);
-			toyo->in = get_fd_here(arbre->commande, info);
-		}
+			return (haha(toyo));
+		leprout(arbre, toyo, info);
 		if (toyo->in < 0 || toyo->out < 0)
 		{
 			tmp = ft_strtrim(arbre->commande, "<");
@@ -299,34 +327,41 @@ int	badou(t_info *info, t_arbre *arbre)
 	return (0);
 }
 
+int	lancet(t_arbre *arbre, t_info *info)
+{
+	if (!lance_exec(info, arbre->fd))
+	{
+		if (info->arbre)
+			return (lance_exec(info, arbre->fg));
+		return (0);
+	}
+	else
+	{
+		if (info->arbre)
+			return (badet(info, arbre->fg));
+		return (0);
+	}
+}
+
 int	lance_exec(t_info *info, t_arbre *arbre)
 {
 	if (arbre && !info->caner)
 	{
 		if (!ft_strcmp(arbre->commande, "&&"))
-		{
-			if (!lance_exec(info, arbre->fd))
-			{
-				if (info->arbre)
-					return (lance_exec(info, arbre->fg));
-			}
-			else
-			{
-				if (info->arbre)
-					return (badet(info, arbre->fg));
-			}
-		}
+			lancet(arbre, info);
 		else if (!ft_strcmp(arbre->commande, "||"))
 		{
 			if (lance_exec(info, arbre->fd))
 			{
 				if (info->arbre)
 					return (lance_exec(info, arbre->fg));
+				return (0);
 			}
 			else
 			{
 				if (info->arbre)
 					return (badou(info, arbre->fg));
+				return (0);
 			}
 		}
 		else if (!ft_strcmp(arbre->commande, "|"))

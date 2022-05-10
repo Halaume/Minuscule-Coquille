@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 18:42:50 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 20:00:08 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,28 @@
 # include <string.h>
 # include <errno.h>
 # include "../src/gnl/get_next_line.h"
+
+typedef struct s_splitsane
+{
+	char	**dest;
+	int		nbword;
+	int		i;
+	int		j;
+	int		insimplegui;
+	int		indoublegui;
+	int		last;
+	int		asexpanded;
+}	t_splitsane;
+
+typedef struct s_sdsm
+{
+	int	nbword;
+	int	i;
+	int	j;
+	int	insimplegui;
+	int	indoublegui;
+	int	last;
+}	t_sdsm;
 
 typedef struct s_exp
 {

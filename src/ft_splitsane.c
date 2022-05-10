@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:03:35 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 15:28:52 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 20:12:34 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,41 +41,41 @@ int	countword(char *str)
 	return (nbword);
 }
 
+void	init_sdsm(t_sdsm *s, char *str)
+{
+	s->j = 0;
+	s->i = 0;
+	s->insimplegui = 0;
+	s->indoublegui = 0;
+	s->nbword = countword(str);
+}
+
 char	**ft_splitdesesmorts(char	*str)
 {
 	char	**dest;
-	int		nbword;
-	int		i;
-	int		j;
-	int		insimplegui;
-	int		indoublegui;
-	int		last;
+	t_sdsm	s;
 
-	j = 0;
-	i = 0;
-	insimplegui = 0;
-	indoublegui = 0;
-	nbword = countword(str);
-	dest = (char **)malloc(sizeof(char *) * (nbword + 1));
-	while (str[i] && str[i] == ' ')
-		i++;
-	last = i;
-	while (str[i])
+	init_sdsm(&s, str);
+	dest = (char **)malloc(sizeof(char *) * (s.nbword + 1));
+	while (str[s.i] && str[s.i] == ' ')
+		s.i++;
+	s.last = s.i;
+	while (str[s.i])
 	{
-		gui(str[i], &indoublegui, &insimplegui, NULL);
-		if (!insimplegui && !indoublegui && str[i] == ' ')
+		gui(str[s.i], &s.indoublegui, &s.insimplegui, NULL);
+		if (!s.insimplegui && !s.indoublegui && str[s.i] == ' ')
 		{
-			dest[j++] = ft_substr(str, last, i - last);
-			while (str[i] && str[i] == ' ')
-				i++;
-			last = i;
+			dest[s.j++] = ft_substr(str, s.last, s.i - s.last);
+			while (str[s.i] && str[s.i] == ' ')
+				s.i++;
+			s.last = s.i;
 		}
 		else
-			i++;
+			s.i++;
 	}
-	if (last != i)
-		dest[j++] = ft_substr(str, last, i - last);
-	dest[j] = NULL;
+	if (s.last != s.i)
+		dest[s.j++] = ft_substr(str, s.last, s.i - s.last);
+	dest[s.j] = NULL;
 	return (dest);
 }
 
@@ -105,104 +105,113 @@ int	asspace(char *str)
 	return (0);
 }
 
+void	initsplit(t_del *d, char **list, int size)
+{
+	d->i = 0;
+	d->sg = 0;
+	d->dg = countall(list) + size;
+}
+
 char	**splitagedesesmorts(char **list, int size)
 {
-	int		totalword;
+	t_del	d;
 	char	**ret;
 	char	**tmp;
-	int		i;
-	int		j;
-	int		k;
 
-	i = 0;
-	k = 0;
-	totalword = countall(list) + size;
-	ret = (char **)malloc(sizeof(char *) * (totalword + 2));
-	while (list[i])
+	initsplit(&d, list, size);
+	ret = (char **)malloc(sizeof(char *) * (d.dg + 2));
+	while (list[d.i])
 	{
-		if (asspace(list[i]))
+		if (asspace(list[d.i]))
 		{
-			tmp = ft_splitdesesmorts(list[i]);
-			j = 0;
-			while (tmp[j])
-				ret[k++] = tmp[j++];
+			tmp = ft_splitdesesmorts(list[d.i]);
+			d.j = 0;
+			while (tmp[d.j])
+				ret[d.sg++] = tmp[d.j++];
 			free(tmp);
-			free(list[i]);
-			i++;
+			free(list[d.i]);
+			d.i++;
 		}
 		else
-			ret[k++] = list[i++];
+			ret[d.sg++] = list[d.i++];
 	}
-	ret[k] = NULL;
+	ret[d.sg] = NULL;
 	free(list);
 	return (ret);
 }
 
-char	**ft_splitsane(char	*str, t_info *info)
+void	initsplitsane(t_splitsane *s, char *str)
 {
-	char	**dest;
-	int		nbword;
-	int		i;
-	int		j;
-	int		insimplegui;
-	int		indoublegui;
-	int		last;
-	int		asexpanded;
+	s->j = 0;
+	s->i = 0;
+	s->insimplegui = 0;
+	s->indoublegui = 0;
+	s->nbword = countword(str);
+	s->dest = (char **)malloc(sizeof(char *) * (s->nbword + 1));
+}
 
-	j = 0;
-	i = 0;
-	insimplegui = 0;
-	indoublegui = 0;
-	nbword = countword(str);
-	dest = (char **)malloc(sizeof(char *) * (nbword + 1));
-	while (str[i] && str[i] == ' ')
-		i++;
-	last = i;
-	while (str[i])
+char	**reft_splitsane(t_splitsane *s, char *str, t_info *info)
+{
+	if (s->last != s->i)
 	{
-		gui(str[i], &indoublegui, &insimplegui, NULL);
-		if (!insimplegui && !indoublegui && str[i] == ' ')
-		{
-			asexpanded = 0;
-			dest[j++] = get_del(ft_substr(str, last, i - last), info, \
-					&asexpanded, 1);
-			if (asexpanded)
-			{
-				dest[j] = NULL;
-				dest = splitagedesesmorts(dest, nbword);
-				j = 0;
-				while (dest[j])
-				{
-					if (info->isexport)
-						dest[j] = get_del(dest[j], info, NULL, 1);
-					j++;
-				}
-			}
-			while (str[i] && str[i] == ' ')
-				i++;
-			last = i;
-		}
-		else
-			i++;
-	}
-	if (last != i)
-	{
-		asexpanded = 0;
-		dest[j++] = get_del(ft_substr(str, last, i - last), info, &asexpanded, 1);
-		if (asexpanded)
+		s->asexpanded = 0;
+		s->dest[s->j++] = get_del(ft_substr(str, s->last, s->i - s->last), \
+				info, &s->asexpanded, 1);
+		if (s->asexpanded)
 		{		
-			dest[j] = NULL;
-			dest = splitagedesesmorts(dest, nbword);
-			j = 0;
-			while (dest[j])
+			s->dest[s->j] = NULL;
+			s->dest = splitagedesesmorts(s->dest, s->nbword);
+			s->j = 0;
+			while (s->dest[s->j])
 			{
 				if (info->isexport)
-					dest[j] = get_del(dest[j], info, NULL, 1);
-				j++;
+					s->dest[s->j] = get_del(s->dest[s->j], info, NULL, 1);
+				s->j++;
 			}
 		}
 	}
-	if (dest[j - 1])
-		dest[j] = NULL;
-	return (dest);
+	if (s->dest[s->j - 1])
+		s->dest[s->j] = NULL;
+	return (s->dest);
+}
+
+void	mid_splitsane(t_splitsane *s, char *str, t_info *info)
+{
+	s->asexpanded = 0;
+	s->dest[s->j++] = get_del(ft_substr(str, s->last, s->i - s->last), info, \
+			&s->asexpanded, 1);
+	if (s->asexpanded)
+	{
+		s->dest[s->j] = NULL;
+		s->dest = splitagedesesmorts(s->dest, s->nbword);
+		s->j = 0;
+		while (s->dest[s->j])
+		{
+			if (info->isexport)
+				s->dest[s->j] = get_del(s->dest[s->j], info, NULL, 1);
+			s->j++;
+		}
+	}
+	while (str[s->i] && str[s->i] == ' ')
+		s->i++;
+	s->last = s->i;
+}
+
+char	**ft_splitsane(char	*str, t_info *info)
+{
+	t_splitsane	s;
+
+	initsplitsane(&s, str);
+	while (str[s.i] && str[s.i] == ' ')
+		s.i++;
+	s.last = s.i;
+	while (str[s.i])
+	{
+		gui(str[s.i], &s.indoublegui, &s.insimplegui, NULL);
+		if (!s.insimplegui && !s.indoublegui && str[s.i] == ' ')
+			mid_splitsane(&s, str, info);
+		else
+			s.i++;
+	}
+	return (reft_splitsane(&s, str, info));
 }

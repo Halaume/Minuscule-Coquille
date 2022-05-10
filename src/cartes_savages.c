@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/10 15:41:42 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/10 17:58:48 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,12 +154,15 @@ int	opening(char *dirname, t_name **fichier, int profondeur, int prof_max)
 	while (reading != NULL)
 	{
 		i++;
-		if (reading->d_type == DT_DIR && ft_strncmp(reading->d_name, ".", 2) != 0 && ft_strncmp(reading->d_name, "..", 3) != 0 && profondeur < prof_max)
+		if (reading->d_type == DT_DIR && ft_strncmp(reading->d_name, ".", 2) \
+				!= 0 && ft_strncmp(reading->d_name, "..", 3) != 0 && \
+				profondeur < prof_max)
 		{
 			if (opening(reading->d_name, fichier, 1, profondeur + 1) == 1)
 				return (free(dirpath), 1);
 		}
-		else if (ft_strncmp(reading->d_name, ".", 1) != 0 && ft_strncmp(reading->d_name, "..", 2) != 0)
+		else if (ft_strncmp(reading->d_name, ".", 1) != 0 && \
+				ft_strncmp(reading->d_name, "..", 2) != 0)
 		{
 			tmp = ft_strjoin(dirpath, reading->d_name);
 			lst_add(fichier, new_lst(ft_strtrim(tmp, "./")));
@@ -225,15 +228,12 @@ char	**add_wildcard(char **cmd)
 	char	**tmp;
 	char	**tmp2;
 	int		j;
-	int		k;
 	int		index;
 	int		i;
 
-	k = count_wildcards(cmd);
 	j = 0;
-	i = 0;
 	index = 0;
-	tmp = malloc(sizeof(char *) * (k + 1));
+	tmp = malloc(sizeof(char *) * (count_wildcards(cmd) + 1));
 	while (cmd[index])
 	{
 		tmp2 = cartes_sauvages(cmd[index]);

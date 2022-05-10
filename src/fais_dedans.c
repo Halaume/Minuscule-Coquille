@@ -6,29 +6,17 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/10 14:18:18 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/10 17:50:03 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
 
-int	ft_echo(char **arg, t_toyo *toyo)
+void	write_it(char **arg, int is_n_here, t_toyo *toyo, int i)
 {
-	int	i;
-	int	is_n_here;
 	int	first_word;
 
 	first_word = 1;
-	i = 1;
-	is_n_here = 0;
-	if (arg[1] && !ft_strcmp(arg[1], "") && !arg[2])
-		return (write(1, "\n", toyo->out), 0);
-	if (arg[1] && ft_strcmp(arg[1], "-n") == 0)
-	{
-		while (arg[i] && ft_strncmp(arg[i], "-n", ft_strlen(arg[i])) == 0)
-			i++;
-		is_n_here = 1;
-	}
 	if (arg[i])
 	{
 		while (arg[i])
@@ -43,6 +31,24 @@ int	ft_echo(char **arg, t_toyo *toyo)
 	}
 	if (is_n_here == 0)
 		write (1, "\n", toyo->out);
+}
+
+int	ft_echo(char **arg, t_toyo *toyo)
+{
+	int	i;
+	int	is_n_here;
+
+	i = 1;
+	is_n_here = 0;
+	if (arg[1] && !ft_strcmp(arg[1], "") && !arg[2])
+		return (write(1, "\n", toyo->out), 0);
+	if (arg[1] && ft_strcmp(arg[1], "-n") == 0)
+	{
+		while (arg[i] && ft_strncmp(arg[i], "-n", ft_strlen(arg[i])) == 0)
+			i++;
+		is_n_here = 1;
+	}
+	write_it(arg, is_n_here, toyo, i);
 	return (0);
 }
 
@@ -89,10 +95,12 @@ int	ft_cd(char **arg, t_info *info)
 		if (home == NULL)
 			return (write(2, "coquille: cd: HOME non set\n", 27), 1);
 		else
+		{
 			if (chdir(home) == -1)
 				return (perror("cd"), 1);
 			else
 				return (0);
+		}
 	}
 	if (chdir(arg[1]) == -1)
 		return (perror("cd"), 1);
@@ -147,13 +155,15 @@ int	is_too_big(const char *nptr)
 		i++;
 	while (nptr[i] >= '0' && nptr[i] <= '9')
 	{
-		if (nbr > 1844674407370955161 && ft_strlen(nptr) == 20 && nptr[i] - '0' > 5)
+		if (nbr > 1844674407370955161 && ft_strlen(nptr) == 20 && \
+				nptr[i] - '0' > 5)
 			return (0);
 		nbr = nbr * 10 + (nptr[i] - '0');
 		i++;
 	}
 	return (1);
 }
+
 int	ft_exit(char **exit, t_info *info)
 {
 	int	i;
@@ -207,7 +217,8 @@ int	is_this_var(char *env_commande, char *commande)
 		i--;
 	if (i == 0)
 		return (1);
-	if ((size_t)i == ft_strlen(env_commande) && ft_strncmp(env_commande, commande, i) == 0)
+	if ((size_t)i == ft_strlen(env_commande) && \
+			ft_strncmp(env_commande, commande, i) == 0)
 		return (0);
 	return (1);
 }
@@ -227,29 +238,24 @@ int	check_identifier(char *commande)
 		return (0);
 	commande_check = malloc(sizeof(char) * i + 1);
 	ft_strlcpy(commande_check, commande, i);
-	i = 0;
-	if (ft_isdigit(commande_check[i]))
+	i = -1;
+	if (ft_isdigit(commande_check[i + 1]))
 		return (free(commande_check), 0);
-	while (commande_check[i])
+	while (commande_check[++i])
 	{
 		if (commande_check[i] < '0' || (commande_check[i] > '9' && \
 					commande_check[i] < 'A') || commande_check[i] > 'z' || \
 				(commande_check[i] > 'Z' && commande_check[i] < '_') || \
 				commande_check[i] == '`')
 			return (free(commande_check), 0);
-		i++;
 	}
 	return (free(commande_check), 1);
 }
 
-int	ft_export_this(t_info *info, char *cmd)
+int	norme_export(char *cmd, t_info *info, int i)
 {
-	int		i;
 	t_env	*tmp;
 
-	i = ft_strlen(cmd);
-	if (!check_identifier(cmd))
-		return (ft_putstr_fd("export: identifier invalide\n", 2), 1);
 	tmp = info->env;
 	if (tmp)
 	{
@@ -271,6 +277,18 @@ int	ft_export_this(t_info *info, char *cmd)
 			tmp = tmp->next;
 		}
 	}
+	return (1);
+}
+
+int	ft_export_this(t_info *info, char *cmd)
+{
+	int		i;
+
+	i = ft_strlen(cmd);
+	if (!check_identifier(cmd))
+		return (ft_putstr_fd("export: identifier invalide\n", 2), 1);
+	if (norme_export(cmd, info, i) == 0)
+		return (0);
 	i = ft_strlen(cmd);
 	while (i > 0 && cmd[i - 1] != '=')
 		i--;
@@ -325,9 +343,32 @@ int	is_this_var_unset(char *env_commande, char *commande)
 	i = ft_strlen(commande);
 	if (i == 0)
 		return (1);
-	if ((size_t)i == ft_strlen(env_commande) && ft_strncmp(env_commande, commande, i) == 0)
+	if ((size_t)i == ft_strlen(env_commande) && \
+			ft_strncmp(env_commande, commande, i) == 0)
 		return (0);
 	return (1);
+}
+
+void	norme_unset_this(t_env *tmp, t_info *info, t_env *keep)
+{
+	if (tmp == info->env)
+	{
+		info->env = info->env->next;
+		free(tmp->variable);
+		free(tmp->valeur);
+		tmp->variable = NULL;
+		tmp->valeur = NULL;
+		free(tmp);
+	}
+	else
+	{
+		keep->next = tmp->next;
+		free(tmp->variable);
+		free(tmp->valeur);
+		tmp->variable = NULL;
+		tmp->valeur = NULL;
+		free(tmp);
+	}
 }
 
 int	ft_unset_this(t_info *info, char *commande)
@@ -341,27 +382,7 @@ int	ft_unset_this(t_info *info, char *commande)
 	while (tmp)
 	{
 		if (is_this_var_unset(tmp->variable, commande) == 0)
-		{
-			if (tmp == info->env)
-			{
-				info->env = info->env->next;
-				free(tmp->variable);
-				free(tmp->valeur);
-				tmp->variable = NULL;
-				tmp->valeur = NULL;
-				free(tmp);
-			}
-			else
-			{
-				keep->next = tmp->next;
-				free(tmp->variable);
-				free(tmp->valeur);
-				tmp->variable = NULL;
-				tmp->valeur = NULL;
-				free(tmp);
-			}
-			return (0);
-		}
+			return (norme_unset_this(tmp, info, keep), 0);
 		keep = tmp;
 		tmp = tmp->next;
 	}
@@ -384,6 +405,32 @@ int	ft_unset(t_info *info, char **commande)
 	return (info->exit_status);
 }
 
+int	faire(char **cmd, t_info *info, t_toyo *toyo)
+{
+	if (ft_strlen(cmd[0]) == ft_strlen("echo") && \
+			ft_strncmp("echo", cmd[0], ft_strlen(cmd[0])) == 0)
+		return (ft_echo(cmd, toyo));
+	else if (ft_strlen(cmd[0]) == ft_strlen("pwd") && \
+			ft_strncmp("pwd", cmd[0], ft_strlen(cmd[0])) == 0)
+		return (ft_pwd());
+	else if (ft_strlen(cmd[0]) == ft_strlen("cd") && \
+			ft_strncmp("cd", cmd[0], ft_strlen(cmd[0])) == 0)
+		return (ft_cd(cmd, info));
+	else if (ft_strlen(cmd[0]) == ft_strlen("export") && \
+			ft_strncmp("export", cmd[0], ft_strlen(cmd[0])) == 0)
+		return (ft_export(info, cmd));
+	else if (ft_strlen(cmd[0]) == ft_strlen("unset") && \
+			ft_strncmp("unset", cmd[0], ft_strlen(cmd[0])) == 0)
+		return (ft_unset(info, cmd));
+	else if (ft_strlen(cmd[0]) == ft_strlen("env") && \
+			ft_strncmp("env", cmd[0], ft_strlen(cmd[0])) == 0)
+		return (ft_env(info->env));
+	else if (ft_strlen(cmd[0]) == ft_strlen("exit") && \
+			ft_strncmp("exit", cmd[0], ft_strlen(cmd[0])) == 0)
+		return (ft_exit(cmd, info));
+	return (1);
+}
+
 int	is_built_in(t_toyo *toyo, t_info *info)
 {
 	char	**cmd;
@@ -392,33 +439,12 @@ int	is_built_in(t_toyo *toyo, t_info *info)
 
 	if (!toyo->commande || !*toyo->commande)
 		return (1);
-	ret = 1;
 	tmp_cmd = ft_splitsane(toyo->commande, info);
 	cmd = add_wildcard(tmp_cmd);
 	free_char_char(tmp_cmd);
 	if (!cmd)
 		return (1);
-	if (ft_strlen(cmd[0]) == ft_strlen("echo") && \
-			ft_strncmp("echo", cmd[0], ft_strlen(cmd[0])) == 0)
-		ret = ft_echo(cmd, toyo);
-	else if (ft_strlen(cmd[0]) == ft_strlen("pwd") && \
-			ft_strncmp("pwd", cmd[0], ft_strlen(cmd[0])) == 0)
-		ret = ft_pwd();
-	else if (ft_strlen(cmd[0]) == ft_strlen("cd") && \
-			ft_strncmp("cd", cmd[0], ft_strlen(cmd[0])) == 0)
-		ret = ft_cd(cmd, info);
-	else if (ft_strlen(cmd[0]) == ft_strlen("export") && \
-			ft_strncmp("export", cmd[0], ft_strlen(cmd[0])) == 0)
-		ret = ft_export(info, cmd);
-	else if (ft_strlen(cmd[0]) == ft_strlen("unset") && \
-			ft_strncmp("unset", cmd[0], ft_strlen(cmd[0])) == 0)
-		ret = ft_unset(info, cmd);
-	else if (ft_strlen(cmd[0]) == ft_strlen("env") && \
-			ft_strncmp("env", cmd[0], ft_strlen(cmd[0])) == 0)
-		ret = ft_env(info->env);
-	else if (ft_strlen(cmd[0]) == ft_strlen("exit") && \
-			ft_strncmp("exit", cmd[0], ft_strlen(cmd[0])) == 0)
-		ret = ft_exit(cmd, info);
+	ret = faire(cmd, info, toyo);
 	info->isexport = 0;
 	free_char_char(info->envp);
 	info->envp = ft_getenvp(info->env);
@@ -426,21 +452,8 @@ int	is_built_in(t_toyo *toyo, t_info *info)
 	return (ret);
 }
 
-int	check_built_in(t_toyo *toyo, t_info *info)
+int	fun_check(char **cmd)
 {
-	char	*tmp;
-	char	**cmd;
-	char	**tmp_cmd;
-
-	if (!toyo->commande || !*toyo->commande)
-		return (1);
-	tmp = ft_strtrim(toyo->commande, " ");
-	if (!ft_strncmp(tmp, "export", 6))
-		info->isexport = 1;
-	free(tmp);
-	tmp_cmd = ft_splitsane(toyo->commande, info);
-	cmd = add_wildcard(tmp_cmd);
-	free_char_char(tmp_cmd);
 	if (!cmd)
 		return (1);
 	if (ft_strlen(cmd[0]) == ft_strlen("echo") && \
@@ -465,4 +478,22 @@ int	check_built_in(t_toyo *toyo, t_info *info)
 			ft_strncmp("exit", cmd[0], ft_strlen(cmd[0])) == 0)
 		return (free_char_char(cmd), 0);
 	return (free_char_char(cmd), 1);
+}
+
+int	check_built_in(t_toyo *toyo, t_info *info)
+{
+	char	*tmp;
+	char	**cmd;
+	char	**tmp_cmd;
+
+	if (!toyo->commande || !*toyo->commande)
+		return (1);
+	tmp = ft_strtrim(toyo->commande, " ");
+	if (!ft_strncmp(tmp, "export", 6))
+		info->isexport = 1;
+	free(tmp);
+	tmp_cmd = ft_splitsane(toyo->commande, info);
+	cmd = add_wildcard(tmp_cmd);
+	free_char_char(tmp_cmd);
+	return (fun_check(cmd));
 }

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/10 12:53:35 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/10 14:41:18 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ int	is_good_word(char *arg, char *str)
 	}
 	if (!arg[j] && str[i])
 		return (1);
-	printf("return final on >%s<\n", str);
 	return (0);
 }
 
@@ -118,7 +117,27 @@ char	**norme_carte(char *arg, char **ret, t_name *fichier)
 	return (ret);
 }
 
-int	opening(char *dirname, t_name *fichier, int test)
+int	count_prof(char *str)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	if (str)
+	{
+		while (str[i])
+		{
+			if (str[i] == '/')
+				count++;
+			i++;
+		}
+	}
+	return (count);
+
+}
+
+int	opening(char *dirname, t_name **fichier, int profondeur, int prof_max)
 {
 	DIR				*my_dir;
 	struct dirent	*reading;
@@ -135,17 +154,13 @@ int	opening(char *dirname, t_name *fichier, int test)
 	while (reading != NULL)
 	{
 		i++;
-		if (reading->d_type == DT_DIR && ft_strncmp(reading->d_name, ".", 2) != 0 && ft_strncmp(reading->d_name, "..", 3) != 0 && test == 0)
+		if (reading->d_type == DT_DIR && ft_strncmp(reading->d_name, ".", 2) != 0 && ft_strncmp(reading->d_name, "..", 3) != 0 && profondeur < prof_max)
 		{
-			printf("reading->d_name = >%s<\n", reading->d_name);
-			if (opening(reading->d_name, fichier, 1) == 1)
+			if (opening(reading->d_name, fichier, 1, profondeur + 1) == 1)
 				return (free(dirpath), 1);
 		}
 		else
-		{
-			printf("reading->d_name = >%s<\n", reading->d_name);
-			lst_add(&fichier, new_lst(ft_strjoin(dirpath, reading->d_name)));
-		}
+			lst_add(fichier, new_lst(ft_strjoin(dirpath, reading->d_name)));
 		reading = readdir(my_dir);
 	}
 	free(dirpath);
@@ -162,20 +177,11 @@ char	**cartes_sauvages(char *arg)
 	{
 		ret = malloc(sizeof(char *) * 2);
 		ret[0] = ft_strdup(arg);
-
 		ret[1] = NULL;
 		return (ret);
 	}
 	ret = NULL;
 	fichier = NULL;
-	if (opening(".", fichier, 0) == 1)
-		return (NULL);
-	t_name *tmp = fichier;
-	while (tmp)
-	{
-		printf("tmp = >%s<", tmp->name);
-		tmp = tmp->next;
-	}
 	if (nb_of_good_word(arg, fichier) == 0)
 	{
 		ret = malloc(sizeof(char *) * 2);
@@ -183,6 +189,8 @@ char	**cartes_sauvages(char *arg)
 		ret[1] = NULL;
 		return (ret);
 	}
+	if (opening(".", &fichier, 0, count_prof(arg)) == 1)
+		return (NULL);
 	ret = norme_carte(arg, ret, fichier);
 	free_name(fichier);
 	return (ret);

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 16:20:23 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/08 10:57:16 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/10 12:47:40 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ t_name	*lst_last(t_name *lst)
 	current = lst;
 	if (!current)
 		return (NULL);
-	if (!current -> next)
+	if (!current->next)
 		return (current);
-	while (current -> next)
-		current = current -> next;
+	while (current->next)
+		current = current->next;
 	return (current);
 }
 

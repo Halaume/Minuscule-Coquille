@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/09 18:51:08 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/10 14:18:18 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ int	ft_cd(char **arg, t_info *info)
 		else
 			if (chdir(home) == -1)
 				return (perror("cd"), 1);
+			else
+				return (0);
 	}
 	if (chdir(arg[1]) == -1)
 		return (perror("cd"), 1);

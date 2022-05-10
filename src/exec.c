@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/10 14:45:08 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 20:18:36 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,22 @@ void	do_my_fork(t_toyo *toyo, t_info *info, int *status)
 	free_toyo(toyo);
 }
 
+void	oof(int *status, t_info *info, t_toyo *toyo)
+{
+	signal(SIGINT, &singal);
+	signal(SIGQUIT, SIG_IGN);
+	free_toyo(toyo);
+	if (*status == 2 || *status == 131)
+	{
+		if (*status == 2)
+			info->exit_status = 130;
+		else
+			info->exit_status = 131;
+		freearbre(info->arbre);
+		info->arbre = NULL;
+	}
+}
+
 int	norme_exec(t_toyo *toyo, t_info *info, int *status)
 {
 	pid_t	my_pid;
@@ -105,19 +121,7 @@ int	norme_exec(t_toyo *toyo, t_info *info, int *status)
 		executing(toyo, info);
 	}
 	waitpid(my_pid, status, 0);
-	signal(SIGINT, &singal);
-	signal(SIGQUIT, SIG_IGN);
-	free_toyo(toyo);
-	if (*status == 2 || *status == 131)
-	{
-		if (*status == 2)
-			info->exit_status = 130;
-		else
-			info->exit_status = 131;
-		freearbre(info->arbre);
-		info->arbre = NULL;
-	}
-	return (0);
+	return (oof(status, info, toyo), 0);
 }
 
 int	exec(t_toyo *toyo, t_info *info)

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/10 14:41:18 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/10 15:17:51 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,6 @@ int	count_prof(char *str)
 		}
 	}
 	return (count);
-
 }
 
 int	opening(char *dirname, t_name **fichier, int profondeur, int prof_max)
@@ -160,7 +159,7 @@ int	opening(char *dirname, t_name **fichier, int profondeur, int prof_max)
 				return (free(dirpath), 1);
 		}
 		else
-			lst_add(fichier, new_lst(ft_strjoin(dirpath, reading->d_name)));
+			lst_add(fichier, new_lst(ft_strtrim(ft_strjoin(dirpath, reading->d_name), "./")));
 		reading = readdir(my_dir);
 	}
 	free(dirpath);
@@ -182,15 +181,16 @@ char	**cartes_sauvages(char *arg)
 	}
 	ret = NULL;
 	fichier = NULL;
+	if (opening(".", &fichier, 0, count_prof(arg)) == 1)
+		return (NULL);
 	if (nb_of_good_word(arg, fichier) == 0)
 	{
 		ret = malloc(sizeof(char *) * 2);
+		free_name(fichier);
 		ret[0] = ft_strdup(arg);
 		ret[1] = NULL;
 		return (ret);
 	}
-	if (opening(".", &fichier, 0, count_prof(arg)) == 1)
-		return (NULL);
 	ret = norme_carte(arg, ret, fichier);
 	free_name(fichier);
 	return (ret);

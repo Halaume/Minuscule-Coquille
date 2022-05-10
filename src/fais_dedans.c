@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/10 14:18:18 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/10 20:21:15 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,13 +147,15 @@ int	is_too_big(const char *nptr)
 		i++;
 	while (nptr[i] >= '0' && nptr[i] <= '9')
 	{
-		if (nbr > 1844674407370955161 && ft_strlen(nptr) == 20 && nptr[i] - '0' > 5)
+		if (nbr > 1844674407370955161 && ft_strlen(nptr) == 20 \
+				&& nptr[i] - '0' > 5)
 			return (0);
 		nbr = nbr * 10 + (nptr[i] - '0');
 		i++;
 	}
 	return (1);
 }
+
 int	ft_exit(char **exit, t_info *info)
 {
 	int	i;
@@ -207,7 +209,8 @@ int	is_this_var(char *env_commande, char *commande)
 		i--;
 	if (i == 0)
 		return (1);
-	if ((size_t)i == ft_strlen(env_commande) && ft_strncmp(env_commande, commande, i) == 0)
+	if ((size_t)i == ft_strlen(env_commande) && \
+			ft_strncmp(env_commande, commande, i) == 0)
 		return (0);
 	return (1);
 }
@@ -325,7 +328,8 @@ int	is_this_var_unset(char *env_commande, char *commande)
 	i = ft_strlen(commande);
 	if (i == 0)
 		return (1);
-	if ((size_t)i == ft_strlen(env_commande) && ft_strncmp(env_commande, commande, i) == 0)
+	if ((size_t)i == ft_strlen(env_commande) \
+			&& ft_strncmp(env_commande, commande, i) == 0)
 		return (0);
 	return (1);
 }

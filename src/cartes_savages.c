@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/10 15:17:51 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/10 15:41:42 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ int	opening(char *dirname, t_name **fichier, int profondeur, int prof_max)
 	DIR				*my_dir;
 	struct dirent	*reading;
 	char			*dirpath;
+	char			*tmp;
 	int				i;
 
 	i = 0;
@@ -158,8 +159,12 @@ int	opening(char *dirname, t_name **fichier, int profondeur, int prof_max)
 			if (opening(reading->d_name, fichier, 1, profondeur + 1) == 1)
 				return (free(dirpath), 1);
 		}
-		else
-			lst_add(fichier, new_lst(ft_strtrim(ft_strjoin(dirpath, reading->d_name), "./")));
+		else if (ft_strncmp(reading->d_name, ".", 1) != 0 && ft_strncmp(reading->d_name, "..", 2) != 0)
+		{
+			tmp = ft_strjoin(dirpath, reading->d_name);
+			lst_add(fichier, new_lst(ft_strtrim(tmp, "./")));
+			free(tmp);
+		}
 		reading = readdir(my_dir);
 	}
 	free(dirpath);

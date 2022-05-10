@@ -83,6 +83,7 @@ char		*open_heredoc(char *heredoc);
 char		*get_del(char *del, t_info *info, int *asex);
 char		*checkopen(char *str);
 void		singal(int sig);
+void		gui(char c, int *db, int *sb, int *p);
 
 //				STRING MANIP
 int			asquote(char *str);

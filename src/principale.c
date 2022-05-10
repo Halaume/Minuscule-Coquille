@@ -6,9 +6,11 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 13:00:32 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 15:04:28 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+int	g_exit_status;
 
 #include "../inc/MinusculeCoquille.h"
 
@@ -257,6 +259,7 @@ void	singal(int signal)
 {
 	if (signal == SIGINT)
 	{
+		g_exit_status = 130;
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -272,15 +275,18 @@ int	principale(int ac, char **av, char **envp)
 
 	info.env = ft_getenv(envp);
 	info.envp = ft_getenvp(info.env);
-	info.exit_status = 0;
 	info.arbre = NULL;
 	info.isexport = 0;
 	info.caner = 0;
+	info.exit_status = 0;
+	g_exit_status = 0;
 	signal(SIGINT, &singal);
 	signal(SIGQUIT, SIG_IGN);
 	ligne = readline("MinusculeCoquille$>");
 	while (ligne)
 	{
+		if (g_exit_status)
+			info.exit_status = g_exit_status;
 		tmp = ft_strtrim(ligne, " ");
 		if (ft_strlen(tmp))
 		{
@@ -295,9 +301,7 @@ int	principale(int ac, char **av, char **envp)
 			{
 				info.arbre = analyse_syntaxique(ligne, info.arbre, &info);
 				if (!checkarbre(info.arbre, &info))
-				{
 					lance_exec(&info, info.arbre);
-				}
 				else
 					printf("Erreur qui est syntaxique\n");
 				info.caner = 0;
@@ -310,6 +314,7 @@ int	principale(int ac, char **av, char **envp)
 		}
 		else
 			free(ligne);
+		g_exit_status = 0;
 		ligne = readline("MinusculeCoquille$>");
 		free(tmp);
 	}
@@ -321,7 +326,7 @@ int	principale(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	(void)envp;
-	return (0);
+	return (info.exit_status);
 }
 
 int	main(int ac, char **av, char **envp)

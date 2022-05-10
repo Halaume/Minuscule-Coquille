@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 14:43:46 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/10 12:22:29 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 14:25:13 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,10 @@ int	toyotage(t_toyo *toyo, t_info *info)
 	i = -1;
 	while (++i < pipex.nb_cmd)
 		waitpid(pipex.pid_tab[i], &status, 0);
+	if (status == 131)
+		info->exit_status = 131;
+	else if (status == 2)
+		info->exit_status = 130;
 	signal(SIGINT, &singal);
 	signal(SIGQUIT, SIG_IGN);
 	free_toyo(toyo);

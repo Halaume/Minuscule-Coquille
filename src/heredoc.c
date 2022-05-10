@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 13:18:16 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 14:22:13 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,7 +314,10 @@ char	*open_heredoc(char *heredoc, t_info *info)
 	signal(SIGINT, &singal);
 	waitpid(lenfant, &status, 0);
 	if (status == 2)
+	{
+		info->exit_status = 130;
 		info->caner = 1;
+	}
 	free(heredoc);
 	return (path);
 }

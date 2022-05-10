@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 14:43:46 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/07 15:31:37 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/10 14:25:13 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,18 @@ int	toyotage(t_toyo *toyo, t_info *info)
 		pipex.envpathcut = ft_split(pipex.envpath, ':');
 	pipex.indexarg = 0;
 	tmp = toyo;
+	signal(SIGINT, &cmdsig);
+	signal(SIGQUIT, &cmdsig);
 	recur_pipe(tmp, 0, &pipex, info);
 	i = -1;
 	while (++i < pipex.nb_cmd)
 		waitpid(pipex.pid_tab[i], &status, 0);
+	if (status == 131)
+		info->exit_status = 131;
+	else if (status == 2)
+		info->exit_status = 130;
+	signal(SIGINT, &singal);
+	signal(SIGQUIT, SIG_IGN);
 	free_toyo(toyo);
 	free_func(&pipex);
 	if (WIFEXITED(status))

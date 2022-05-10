@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/07 19:51:34 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 12:59:11 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ char	*getvalfromenvheredoc(char *var, t_info *info, int ingui, char next)
 
 	if (!ft_strcmp(var, "$?"))
 		return (free(var), ft_itoa(info->exit_status));
-	if (!ft_strcmp(var, "$") && (ingui || next == ' ' || next == '\0' || next == '$'))
+	if (!ft_strcmp(var, "$") && (ingui || next == ' ' || next == '\0' \
+				|| next == '$'))
 		return (free(var), ft_strdup("$"));
 	else if (!ft_strcmp(var, "$"))
 		return (free(var), ft_strdup(""));
@@ -83,7 +84,9 @@ int	futuresizeofexpandedheredoc(char *str, t_info *info)
 		j = i;
 		if (str[j] == '$')
 			j++;
-		while (str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] >= 'a' && str[j] <= 'z') || (str[j - 1] == '$' && str[j] == '?')))
+		while (str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] >= 'a' \
+						&& str[j] <= 'z') || (str[j - 1] == '$' && \
+							str[j] == '?')))
 			j++;
 		if (i != j)
 		{
@@ -106,7 +109,8 @@ char	*expand(char *str, t_info *info)
 
 	i = 0;
 	k = 0;
-	newstr = (char *)malloc(sizeof(char) * (futuresizeofexpandedheredoc(str, info) + 1));
+	newstr = (char *)malloc(sizeof(char) * (futuresizeofexpandedheredoc(str, \
+					info) + 1));
 	while (str[i])
 	{
 		while (str[i] && str[i] != '$')
@@ -114,7 +118,9 @@ char	*expand(char *str, t_info *info)
 		j = i;
 		if (str[j] == '$')
 			j++;
-		while (str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] >= 'a' && str[j] <= 'z') || (str[j - 1] == '$' && str[j] == '?')))
+		while (str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] >= 'a' \
+						&& str[j] <= 'z') || (str[j - 1] == '$' \
+							&& str[j] == '?')))
 			j++;
 		if (i != j)
 		{
@@ -261,9 +267,9 @@ t_toyo	*rec_toyo(t_arbre *arbre, t_info *info)
 	return (toyo);
 }
 
-void freetoyo(t_toyo *toyo)
+void	freetoyo(t_toyo *toyo)
 {
-	t_toyo *current;
+	t_toyo	*current;
 
 	current = toyo;
 	while (current)
@@ -295,21 +301,38 @@ int	badou(t_info *info, t_arbre *arbre)
 
 int	lance_exec(t_info *info, t_arbre *arbre)
 {
-	if (!ft_strcmp(arbre->commande, "&&"))
+	if (arbre && !info->caner)
 	{
-		if (!lance_exec(info, arbre->fd))
-			return (lance_exec(info, arbre->fg));
-		else
-			return (badet(info, arbre->fg));
+		if (!ft_strcmp(arbre->commande, "&&"))
+		{
+			if (!lance_exec(info, arbre->fd))
+			{
+				if (info->arbre)
+					return (lance_exec(info, arbre->fg));
+			}
+			else
+			{
+				if (info->arbre)
+					return (badet(info, arbre->fg));
+			}
+		}
+		else if (!ft_strcmp(arbre->commande, "||"))
+		{
+			if (lance_exec(info, arbre->fd))
+			{
+				if (info->arbre)
+					return (lance_exec(info, arbre->fg));
+			}
+			else
+			{
+				if (info->arbre)
+					return (badou(info, arbre->fg));
+			}
+		}
+		else if (!ft_strcmp(arbre->commande, "|"))
+			return (toyotage(rec_toyo(arbre, info), info));
+		if (info->arbre)
+			return (exec(getcommande(arbre, info), info));
 	}
-	else if (!ft_strcmp(arbre->commande, "||"))
-	{
-		if (lance_exec(info, arbre->fd))
-			return (lance_exec(info, arbre->fg));
-		else
-			return (badou(info, arbre->fg));
-	}
-	else if (!ft_strcmp(arbre->commande, "|"))
-		return (toyotage(rec_toyo(arbre, info), info));
-	return (exec(getcommande(arbre, info), info));
+	return (info->exit_status);
 }

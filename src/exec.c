@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:19:57 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/09 17:38:45 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/10 14:45:08 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,15 @@ int	norme_exec(t_toyo *toyo, t_info *info, int *status)
 	signal(SIGINT, &singal);
 	signal(SIGQUIT, SIG_IGN);
 	free_toyo(toyo);
+	if (*status == 2 || *status == 131)
+	{
+		if (*status == 2)
+			info->exit_status = 130;
+		else
+			info->exit_status = 131;
+		freearbre(info->arbre);
+		info->arbre = NULL;
+	}
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 10:47:02 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/05 15:13:34 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/10 12:02:30 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	exit_func(t_info *info)
 {
 	freearbre(info->arbre);
+	info->arbre = NULL;
 	freeenv(info->env);
 	free_char_char(info->envp);
 	rl_clear_history();
@@ -25,14 +26,17 @@ void	free_toyo(t_toyo *toyo)
 {
 	t_toyo	*current;
 
-	current = toyo;
-	while (current)
+	if (toyo)
 	{
-		toyo = current;
-		current = current->next;
-		free(toyo);
+		current = toyo;
+		while (current)
+		{
+			toyo = current;
+			current = current->next;
+			free(toyo);
+		}
+		free(current);
 	}
-	free(current);
 }
 
 void	free_char_char(char **str)

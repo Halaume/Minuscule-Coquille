@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:03:35 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/09 14:22:42 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/09 16:23:00 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	countword(char *str)
 	int	insimplegui;
 	int	indoublegui;
 	int	nbword;
-	int i;
+	int	i;
 
 	nbword = 1;
 	i = 0;
@@ -62,10 +62,7 @@ char	**ft_splitdesesmorts(char	*str)
 	last = i;
 	while (str[i])
 	{
-		if (!indoublegui && str[i] == '\'')
-			insimplegui = !insimplegui;
-		if (!insimplegui && str[i] == '"')
-			indoublegui = !indoublegui;
+		gui(str[i], &indoublegui, &insimplegui, NULL);
 		if (!insimplegui && !indoublegui && str[i] == ' ')
 		{
 			dest[j++] = ft_substr(str, last, i - last);
@@ -108,7 +105,7 @@ int	asspace(char *str)
 	return (0);
 }
 
-char	**splitagedesesmorts(char **list)
+char	**splitagedesesmorts(char **list, int size)
 {
 	int		totalword;
 	char	**ret;
@@ -119,8 +116,8 @@ char	**splitagedesesmorts(char **list)
 
 	i = 0;
 	k = 0;
-	totalword = countall(list);
-	ret	= (char **)malloc(sizeof(char *) * (totalword + 2));
+	totalword = countall(list) + size;
+	ret = (char **)malloc(sizeof(char *) * (totalword + 2));
 	while (list[i])
 	{
 		if (asspace(list[i]))
@@ -163,18 +160,16 @@ char	**ft_splitsane(char	*str, t_info *info)
 	last = i;
 	while (str[i])
 	{
-		if (!indoublegui && str[i] == '\'')
-			insimplegui = !insimplegui;
-		if (!insimplegui && str[i] == '"')
-			indoublegui = !indoublegui;
+		gui(str[i], &indoublegui, &insimplegui, NULL);
 		if (!insimplegui && !indoublegui && str[i] == ' ')
 		{
 			asexpanded = 0;
-			dest[j++] = get_del(ft_substr(str, last, i - last), info, &asexpanded);
+			dest[j++] = get_del(ft_substr(str, last, i - last), info, \
+					&asexpanded);
 			if (asexpanded)
 			{
 				dest[j] = NULL;
-				dest = splitagedesesmorts(dest);
+				dest = splitagedesesmorts(dest, nbword);
 				j = 0;
 				while (dest[j])
 				{
@@ -197,7 +192,7 @@ char	**ft_splitsane(char	*str, t_info *info)
 		if (asexpanded)
 		{		
 			dest[j] = NULL;
-			dest = splitagedesesmorts(dest);
+			dest = splitagedesesmorts(dest, nbword);
 			j = 0;
 			while (dest[j])
 			{

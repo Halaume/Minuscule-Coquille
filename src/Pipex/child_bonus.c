@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 14:34:01 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/07 15:51:02 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/10 12:23:07 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	child(t_toyo *toyo, t_struct *pipex, int fd[2], t_info *info)
 	pipex->pid_tab[pipex->indexarg] = fork();
 	if (pipex->pid_tab[pipex->indexarg] == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		if (toyo->commande == NULL)
 			exit (1);
 		duping_closing(toyo, pipex, fd, info);

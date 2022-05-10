@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 12:03:28 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 13:00:32 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,14 @@ int	checkarbre(t_arbre *arbre, t_info *info)
 	char	*tmp;
 	char	*tmp2;
 
-	if (arbre)
+	if (info->arbre && arbre)
 	{
 		if (!ft_strcmp(arbre->commande, "()") || \
 				!ft_strcmp(arbre->commande, "|") || \
 				!ft_strcmp(arbre->commande, "&&") || \
 				!ft_strcmp(arbre->commande, "||"))
 		{
-			if (arbre->fd)
+			if (info->arbre && arbre->fd)
 			{
 				tmp = ft_strtrim(arbre->fd->commande, " ");
 				if (!ft_strcmp(tmp, "") || !ft_strcmp(tmp, ">") || \
@@ -113,7 +113,7 @@ int	checkarbre(t_arbre *arbre, t_info *info)
 					return (free(tmp), 1);
 				free(tmp);
 			}
-			if (arbre->fg)
+			if (info->arbre && arbre->fg)
 			{
 				tmp = ft_strtrim(arbre->fg->commande, " ");
 				if (!ft_strcmp(tmp, "") || !ft_strcmp(tmp, ">") || \
@@ -129,35 +129,38 @@ int	checkarbre(t_arbre *arbre, t_info *info)
 			if (!arbre->fg && !arbre->fd)
 				return (1);
 		}
-		else
+		else if (info->arbre)
 		{
 			tmp = ft_strtrim(arbre->commande, " ");
 			if (!ft_strcmp(tmp, ">") || !ft_strcmp(tmp, ">>") || \
 					!ft_strcmp(tmp, "<") || !ft_strcmp(tmp, "<<"))
 				return (free(tmp), 1);
 			tmp2 = ft_strtrim(tmp, "\"");
-			if (!ft_strncmp(tmp2, "<<", 2))
+			if (info->arbre && !ft_strncmp(tmp2, "<<", 2))
 			{
 				free(arbre->commande);
-				if (asquote(tmp))
-					arbre->commande = open_heredoc(tmp);
-				else
+				if (info->arbre && asquote(tmp))
+					arbre->commande = open_heredoc(tmp, info);
+				else if (info->arbre)
 					arbre->commande = open_heredoc(ft_substr(tmp, 2, \
-								ft_strlen(tmp) - 2));
+								ft_strlen(tmp) - 2), info);
 			}
 			free(tmp2);
 			free(tmp);
 		}
-		if (arbre->fd && arbre->fg)
+		if (info->arbre && arbre->fd && arbre->fg)
 			return (checkarbre(arbre->fd, info) + checkarbre(arbre->fg, info));
-		else if (arbre->fg)
+		else if (info->arbre && arbre->fg)
 			return (checkarbre(arbre->fg, info));
-		else if (arbre->fd)
+		else if (info->arbre && arbre->fd)
 			return (checkarbre(arbre->fd, info));
-		tmp = ft_strtrim(arbre->commande, " ");
-		if (!ft_strcmp(tmp, ""))
-			return (free(tmp), 1);
-		return (free(tmp), 0);
+		if (info->arbre)
+		{
+			tmp = ft_strtrim(arbre->commande, " ");
+			if (!ft_strcmp(tmp, ""))
+				return (free(tmp), 1);
+			return (free(tmp), 0);
+		}
 	}
 	return (0);
 }
@@ -272,6 +275,7 @@ int	principale(int ac, char **av, char **envp)
 	info.exit_status = 0;
 	info.arbre = NULL;
 	info.isexport = 0;
+	info.caner = 0;
 	signal(SIGINT, &singal);
 	signal(SIGQUIT, SIG_IGN);
 	ligne = readline("MinusculeCoquille$>");
@@ -296,6 +300,7 @@ int	principale(int ac, char **av, char **envp)
 				}
 				else
 					printf("Erreur qui est syntaxique\n");
+				info.caner = 0;
 			}
 			if (info.arbre)
 			{

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 12:09:14 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 12:59:11 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,7 @@ int	badou(t_info *info, t_arbre *arbre)
 
 int	lance_exec(t_info *info, t_arbre *arbre)
 {
-	if (arbre)
+	if (arbre && !info->caner)
 	{
 		if (!ft_strcmp(arbre->commande, "&&"))
 		{

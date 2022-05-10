@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/09 17:07:46 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 12:52:51 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef STRUCTURE s_arbre
 
 typedef STRUCTURE s_info
 {
+	int		caner;
 	int		isexport;
 	char	**envp;
 	t_env	*env;
@@ -79,11 +80,12 @@ char		*no_quote(char *str);
 char		**no_quote_tab(char *str);
 char		**split_empty_line(char *s, char c);
 char		*strjoin_space(char *s1, char *s2);
-char		*open_heredoc(char *heredoc);
+char		*open_heredoc(char *heredoc, t_info *info);
 char		*get_del(char *del, t_info *info, int *asex);
 char		*checkopen(char *str);
 void		singal(int sig);
 void		gui(char c, int *db, int *sb, int *p);
+void		cmdsig(int sig);
 
 //				STRING MANIP
 int			asquote(char *str);

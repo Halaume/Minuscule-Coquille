@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/09 19:42:56 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 12:53:19 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,14 +250,16 @@ char	*addquote(char *path, char *heredoc)
 	return (path);
 }
 
-char	*open_heredoc(char *heredoc)
+char	*open_heredoc(char *heredoc, t_info *info)
 {
 	int		fd;
 	char	*ligne;
 	char	*path;
 	char	*tmp;
 	pid_t	lenfant;
+	int		status;
 
+	status = 0;
 	path = checkopen(ft_itoa(0));
 	lenfant = fork();
 	if (lenfant < 0)
@@ -294,7 +296,9 @@ char	*open_heredoc(char *heredoc)
 	}
 	path = addquote(path, heredoc);
 	signal(SIGINT, &singal);
-	waitpid(lenfant, NULL, 0);
+	waitpid(lenfant, &status, 0);
+	if (status == 2)
+		info->caner = 1;
 	free(heredoc);
 	return (path);
 }

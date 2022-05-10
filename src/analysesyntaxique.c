@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/09 20:52:36 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 12:57:24 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,7 +339,7 @@ t_arbre	*initarbre(t_arbre *arbre, char *ligne)
 	}
 	tmp = ft_strtrim(ligne, " ");
 	if (!ft_strcmp(tmp, ""))
-		return (free(ligne), free(tmp), free(arbre), free(tmp), NULL);
+		return (free(ligne), free(tmp), free(arbre), NULL);
 	free(tmp);
 	return (arbre);
 }
@@ -377,5 +377,7 @@ t_arbre	*analyse_syntaxique(char *ligne, t_arbre *arbre, t_info *info)
 	lst[1] = 0;
 	inpar = 0;
 	arbre = initarbre(arbre, ligne);
-	return (lanceanal(arbre, ligne, info, lst));
+	if (arbre)
+		return (lanceanal(arbre, ligne, info, lst));
+	return (NULL);
 }

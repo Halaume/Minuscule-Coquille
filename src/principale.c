@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 15:29:50 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 16:55:44 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ int	checkarbre(t_arbre *arbre, t_info *info)
 			{
 				free(arbre->commande);
 				if (info->arbre && asquote(tmp))
-					arbre->commande = open_heredoc(tmp, info);
+					arbre->commande = open_heredoc(ft_strdup(tmp), info);
 				else if (info->arbre)
 					arbre->commande = open_heredoc(ft_substr(tmp, 2, \
 								ft_strlen(tmp) - 2), info);

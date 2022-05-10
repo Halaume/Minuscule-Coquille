@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 15:27:57 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 16:52:27 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	*aled(char *str, t_info *info)
 		tmp = ft_strtrim(str, " <");
 		quote = asquote(tmp);
 		free(str);
-		str = get_del(tmp, info, &asex, 0);
+		str = get_del(tmp, info, &asex, 1);
 		if (!ft_strlen(str) && asex)
 			return (free(str), NULL);
 		tmp = ft_strjoin("<<", str);

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 15:32:14 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 16:54:43 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,15 @@ int	isdelgood(char c)
 					|| c == '?')));
 }
 
+void	pf(char *ret, char *del, int *j, int *i)
+{
+	while (*j < *i)
+	{
+		ret[*j] = del[*j];
+		(*j)++;
+	}
+}
+
 char	*changedel(char *del, int *i, t_info *info, int ingui)
 {
 	char	*ret;
@@ -174,11 +183,7 @@ char	*changedel(char *del, int *i, t_info *info, int ingui)
 	j = 0;
 	lenexpanded = getfuturesizeoftheexpandedshit(del, *i, info, ingui);
 	ret = (char *)malloc(sizeof(char *) * (ft_strlen(del) + lenexpanded));
-	while (j < *i)
-	{
-		ret[j] = del[j];
-		j++;
-	}
+	pf(ret, del, &j, i);
 	while (isdelgood(del[*i]))
 	{
 		if (souvenir != *i && del[*i] == '$')
@@ -191,6 +196,14 @@ char	*changedel(char *del, int *i, t_info *info, int ingui)
 	ret = ft_strjoin_free(ret, ft_substr(del, *i, ft_strlen(del) - *i));
 	*i = souvenir + lenexpanded - 1;
 	return (free(del), ret);
+}
+
+void	initshit(int *i, int *j, int *insimplegui, int *indoublegui)
+{
+	*i = 0;
+	*j = 1;
+	*insimplegui = 0;
+	*indoublegui = 0;
 }
 
 char	*get_del(char *del, t_info *info, int *asex, int caca)
@@ -206,10 +219,7 @@ char	*get_del(char *del, t_info *info, int *asex, int caca)
 	free(del);
 	del = tmp;
 	list = (int *)malloc(sizeof(int) * (ft_strlen(del) + 1));
-	i = 0;
-	j = 1;
-	insimplegui = 0;
-	indoublegui = 0;
+	initshit(&i, &j, &insimplegui, &indoublegui);
 	while (del[i])
 	{
 		gui(del[i], &indoublegui, &insimplegui, NULL);
@@ -259,18 +269,6 @@ char	*addquote(char *path, char *heredoc)
 	return (path);
 }
 
-char	*getthecoolsidechar(char *heredoc)
-{
-	char	*tmp;
-
-	if (asquote(heredoc))
-	{
-		tmp = ft_strtrim(heredoc, "<\"");
-		heredoc = tmp;
-	}
-	return (ft_strjoin(heredoc, ">"));
-}
-
 void	ft_lenfant(char *heredoc, char *path)
 {
 	int		fd;
@@ -280,8 +278,12 @@ void	ft_lenfant(char *heredoc, char *path)
 	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 00644);
 	if (fd < 0)
 		printf("cannot open tmp file\n");
-	path = addquote(path, heredoc);
-	tmp = getthecoolsidechar(heredoc);
+	if (asquote(heredoc))
+	{
+		tmp = ft_strtrim(heredoc, "<\"");
+		heredoc = tmp;
+	}
+	tmp = ft_strjoin(heredoc, ">");
 	ligne = readline(tmp);
 	while (ligne && ft_strcmp(ligne, heredoc))
 	{
@@ -296,6 +298,13 @@ void	ft_lenfant(char *heredoc, char *path)
 	return (free(ligne), free(tmp), free(heredoc));
 }
 
+void	lancefant(char *heredoc, char *path)
+{
+	signal(SIGINT, SIG_DFL);
+	ft_lenfant(heredoc, path);
+	exit(0);
+}
+
 char	*open_heredoc(char *heredoc, t_info *info)
 {
 	char	*path;
@@ -304,16 +313,12 @@ char	*open_heredoc(char *heredoc, t_info *info)
 
 	status = 0;
 	path = checkopen(ft_itoa(0));
+	signal(SIGINT, SIG_IGN);
 	lenfant = fork();
 	if (lenfant < 0)
 		return (NULL);
-	signal(SIGINT, SIG_IGN);
 	if (lenfant == 0)
-	{
-		signal(SIGINT, SIG_DFL);
-		ft_lenfant(heredoc, path);
-		exit(0);
-	}
+		lancefant(heredoc, path);
 	path = addquote(path, heredoc);
 	signal(SIGINT, &singal);
 	waitpid(lenfant, &status, 0);

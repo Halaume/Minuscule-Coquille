@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 15:27:00 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 15:54:50 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,15 @@
 # include <string.h>
 # include <errno.h>
 # include "../src/gnl/get_next_line.h"
+
+typedef struct s_del
+{
+	int	i;
+	int	j;
+	int	insimplegui;
+	int	indoublegui;
+	int	*list;
+}	t_del;
 
 typedef STRUCTURE s_toyo
 {

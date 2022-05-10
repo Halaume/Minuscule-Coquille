@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 12:53:19 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 13:18:16 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,44 +89,52 @@ char	*quoteit(char	*str)
 	return (str);
 }
 
-char	*getvalfromenv(char *var, t_info *info, int ingui, char next)
+char	*getisexp(char *var, t_info *info, int ingui, char next)
 {
 	t_env	*current;
 
+	if (!ft_strcmp(var, "$?"))
+		return (free(var), quoteit(ft_itoa(info->exit_status)));
+	if (!ft_strcmp(var, "$") && (ingui || next == ' ' || next == '\0' \
+			|| next == '$'))
+		return (free(var), ft_strdup("$"));
+	else if (!ft_strcmp(var, "$"))
+		return (free(var), ft_strdup(""));
+	current = info->env;
+	while (current && ft_strcmp(var + 1, current->variable))
+		current = current->next;
+	free(var);
+	if (!current)
+		return (ft_strdup(""));
+	return (quoteit(ft_strdup(current->valeur)));
+}
+
+char	*getisnotexp(char *var, t_info *info, int ingui, char next)
+{
+	t_env	*current;
+
+	if (!ft_strcmp(var, "$?"))
+		return (free(var), ft_itoa(info->exit_status));
+	if (!ft_strcmp(var, "$") && (ingui || next == ' ' || next == '\0' \
+				|| next == '$'))
+		return (free(var), ft_strdup("$"));
+	else if (!ft_strcmp(var, "$"))
+		return (free(var), ft_strdup(""));
+	current = info->env;
+	while (current && ft_strcmp(var + 1, current->variable))
+		current = current->next;
+	free(var);
+	if (!current)
+		return (ft_strdup(""));
+	return (ft_strdup(current->valeur));
+}	
+
+char	*getvalfromenv(char *var, t_info *info, int ingui, char next)
+{
 	if (info->isexport)
-	{
-		if (!ft_strcmp(var, "$?"))
-			return (free(var), quoteit(ft_itoa(info->exit_status)));
-		if (!ft_strcmp(var, "$") && (ingui || next == ' ' || next == '\0' \
-					|| next == '$'))
-			return (free(var), ft_strdup("$"));
-		else if (!ft_strcmp(var, "$"))
-			return (free(var), ft_strdup(""));
-		current = info->env;
-		while (current && ft_strcmp(var + 1, current->variable))
-			current = current->next;
-		free(var);
-		if (!current)
-			return (ft_strdup(""));
-		return (quoteit(ft_strdup(current->valeur)));
-	}
+		return (getisexp(var, info, ingui, next));
 	else
-	{
-		if (!ft_strcmp(var, "$?"))
-			return (free(var), ft_itoa(info->exit_status));
-		if (!ft_strcmp(var, "$") && (ingui || next == ' ' || next == '\0' \
-					|| next == '$'))
-			return (free(var), ft_strdup("$"));
-		else if (!ft_strcmp(var, "$"))
-			return (free(var), ft_strdup(""));
-		current = info->env;
-		while (current && ft_strcmp(var + 1, current->variable))
-			current = current->next;
-		free(var);
-		if (!current)
-			return (ft_strdup(""));
-		return (ft_strdup(current->valeur));
-	}
+		return (getisnotexp(var, info, ingui, next));
 }
 
 int	getfuturesizeoftheexpandedshit(char *del, int i, t_info *info, int ingui)
@@ -200,10 +208,7 @@ char	*get_del(char *del, t_info *info, int *asex)
 	indoublegui = 0;
 	while (del[i])
 	{
-		if (!indoublegui && del[i] == '\'')
-			insimplegui = !insimplegui;
-		if (!insimplegui && del[i] == '"')
-			indoublegui = !indoublegui;
+		gui(del[i], &indoublegui, &insimplegui, NULL);
 		if ((!insimplegui && del[i] == '"') || (!indoublegui && del[i] == '\''))
 		{
 			list[j] = i;
@@ -250,12 +255,46 @@ char	*addquote(char *path, char *heredoc)
 	return (path);
 }
 
-char	*open_heredoc(char *heredoc, t_info *info)
+char	*getthecoolsidechar(char *heredoc)
+{
+	char	*tmp;
+
+	if (asquote(heredoc))
+	{
+		tmp = ft_strtrim(heredoc, "<\"");
+		heredoc = tmp;
+	}
+	return (ft_strjoin(heredoc, ">"));
+}
+
+void	ft_lenfant(char *heredoc, char *path)
 {
 	int		fd;
-	char	*ligne;
-	char	*path;
 	char	*tmp;
+	char	*ligne;
+
+	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 00644);
+	if (fd < 0)
+		printf("cannot open tmp file\n");
+	path = addquote(path, heredoc);
+	tmp = getthecoolsidechar(heredoc);
+	ligne = readline(tmp);
+	while (ligne && ft_strcmp(ligne, heredoc))
+	{
+		write(fd, ligne, ft_strlen(ligne));
+		write(fd, "\n", 1);
+		free(ligne);
+		ligne = readline(tmp);
+	}
+	if (!ligne)
+		ft_putstr_fd("alors c pas ce que je voulais mais ya R\n", 2);
+	close(fd);
+	return (free(ligne), free(tmp), free(heredoc));
+}
+
+char	*open_heredoc(char *heredoc, t_info *info)
+{
+	char	*path;
 	pid_t	lenfant;
 	int		status;
 
@@ -268,30 +307,7 @@ char	*open_heredoc(char *heredoc, t_info *info)
 	if (lenfant == 0)
 	{
 		signal(SIGINT, SIG_DFL);
-		fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 00644);
-		if (fd < 0)
-			printf("cannot open tmp file\n");
-		path = addquote(path, heredoc);
-		if (asquote(heredoc))
-		{
-			tmp = ft_strtrim(heredoc, "<\"");
-			heredoc = tmp;
-		}
-		tmp = ft_strjoin(heredoc, ">");
-		ligne = readline(tmp);
-		while (ligne && ft_strcmp(ligne, heredoc))
-		{
-			write(fd, ligne, ft_strlen(ligne));
-			write(fd, "\n", 1);
-			free(ligne);
-			ligne = readline(tmp);
-		}
-		if (!ligne)
-			ft_putstr_fd("alors c pas ce que je voulais mais ya R\n", 2);
-		close(fd);
-		free(ligne);
-		free(tmp);
-		free(heredoc);
+		ft_lenfant(heredoc, path);
 		exit(0);
 	}
 	path = addquote(path, heredoc);

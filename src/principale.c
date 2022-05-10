@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 15:04:28 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 15:29:50 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,10 @@ int	principale(int ac, char **av, char **envp)
 			{
 				info.arbre = analyse_syntaxique(ligne, info.arbre, &info);
 				if (!checkarbre(info.arbre, &info))
+				{
+//					structure(info.arbre, 0);
 					lance_exec(&info, info.arbre);
+				}
 				else
 					printf("Erreur qui est syntaxique\n");
 				info.caner = 0;

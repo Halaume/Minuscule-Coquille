@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 12:57:24 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 15:27:57 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*vireconcat(char *str, t_info *info)
 
 	tmp = ft_strtrim(str, " >");
 	free(str);
-	str = get_del(tmp, info, &asex);
+	str = get_del(tmp, info, &asex, 1);
 	if (!ft_strlen(str) && asex)
 		return (free(str), NULL);
 	tmp = ft_strjoin(">>", str);
@@ -34,7 +34,7 @@ char	*vireout(char *str, t_info *info)
 
 	tmp = ft_strtrim(str, " >");
 	free(str);
-	str = get_del(tmp, info, &asex);
+	str = get_del(tmp, info, &asex, 1);
 	if (!ft_strlen(str) && asex)
 		return (free(str), NULL);
 	tmp = ft_strjoin(">", str);
@@ -51,7 +51,7 @@ char	*virehere(char *str, t_info *info)
 	tmp = ft_strtrim(str, " <");
 	quote = asquote(tmp);
 	free(str);
-	str = get_del(tmp, info, &asex);
+	str = get_del(tmp, info, &asex, 0);
 	if (!ft_strlen(str) && asex)
 		return (free(str), NULL);
 	tmp = ft_strjoin("<<", str);
@@ -73,7 +73,7 @@ char	*virein(char *str, t_info *info)
 
 	tmp = ft_strtrim(str, " <");
 	free(str);
-	str = get_del(tmp, info, &asex);
+	str = get_del(tmp, info, &asex, 1);
 	if (!ft_strlen(str) && asex)
 		return (free(str), NULL);
 	tmp = ft_strjoin("<", str);
@@ -105,7 +105,7 @@ char	*aled(char *str, t_info *info)
 		tmp = ft_strtrim(str, " <");
 		quote = asquote(tmp);
 		free(str);
-		str = get_del(tmp, info, &asex);
+		str = get_del(tmp, info, &asex, 0);
 		if (!ft_strlen(str) && asex)
 			return (free(str), NULL);
 		tmp = ft_strjoin("<<", str);

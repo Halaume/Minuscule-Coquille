@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:03:35 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/09 16:23:00 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 15:28:52 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ char	**ft_splitsane(char	*str, t_info *info)
 		{
 			asexpanded = 0;
 			dest[j++] = get_del(ft_substr(str, last, i - last), info, \
-					&asexpanded);
+					&asexpanded, 1);
 			if (asexpanded)
 			{
 				dest[j] = NULL;
@@ -174,7 +174,7 @@ char	**ft_splitsane(char	*str, t_info *info)
 				while (dest[j])
 				{
 					if (info->isexport)
-						dest[j] = get_del(dest[j], info, NULL);
+						dest[j] = get_del(dest[j], info, NULL, 1);
 					j++;
 				}
 			}
@@ -188,7 +188,7 @@ char	**ft_splitsane(char	*str, t_info *info)
 	if (last != i)
 	{
 		asexpanded = 0;
-		dest[j++] = get_del(ft_substr(str, last, i - last), info, &asexpanded);
+		dest[j++] = get_del(ft_substr(str, last, i - last), info, &asexpanded, 1);
 		if (asexpanded)
 		{		
 			dest[j] = NULL;
@@ -197,7 +197,7 @@ char	**ft_splitsane(char	*str, t_info *info)
 			while (dest[j])
 			{
 				if (info->isexport)
-					dest[j] = get_del(dest[j], info, NULL);
+					dest[j] = get_del(dest[j], info, NULL, 1);
 				j++;
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 14:22:13 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 15:32:14 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,12 @@ int	getfuturesizeoftheexpandedshit(char *del, int i, t_info *info, int ingui)
 	return (free(var), j);
 }
 
+int	isdelgood(char c)
+{
+	return (c && ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == '$' \
+					|| c == '?')));
+}
+
 char	*changedel(char *del, int *i, t_info *info, int ingui)
 {
 	char	*ret;
@@ -173,9 +179,7 @@ char	*changedel(char *del, int *i, t_info *info, int ingui)
 		ret[j] = del[j];
 		j++;
 	}
-	while (del[*i] && ((del[*i] >= 'A' && del[*i] <= 'Z') || \
-				(del[*i] >= 'a' && del[*i] <= 'z') || (del[*i] == '$' \
-					|| del[*i] == '?')))
+	while (isdelgood(del[*i]))
 	{
 		if (souvenir != *i && del[*i] == '$')
 			break ;
@@ -189,7 +193,7 @@ char	*changedel(char *del, int *i, t_info *info, int ingui)
 	return (free(del), ret);
 }
 
-char	*get_del(char *del, t_info *info, int *asex)
+char	*get_del(char *del, t_info *info, int *asex, int caca)
 {
 	int		i;
 	int		insimplegui;
@@ -214,7 +218,7 @@ char	*get_del(char *del, t_info *info, int *asex)
 			list[j] = i;
 			j++;
 		}
-		if ((!insimplegui && del[i] == '$'))
+		if (caca && (!insimplegui && del[i] == '$'))
 		{
 			*asex = 1;
 			del = changedel(del, &i, info, (insimplegui || indoublegui));

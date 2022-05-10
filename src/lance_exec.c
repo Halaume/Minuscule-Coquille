@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/09 19:04:58 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 12:09:14 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,21 +301,38 @@ int	badou(t_info *info, t_arbre *arbre)
 
 int	lance_exec(t_info *info, t_arbre *arbre)
 {
-	if (!ft_strcmp(arbre->commande, "&&"))
+	if (arbre)
 	{
-		if (!lance_exec(info, arbre->fd))
-			return (lance_exec(info, arbre->fg));
-		else
-			return (badet(info, arbre->fg));
+		if (!ft_strcmp(arbre->commande, "&&"))
+		{
+			if (!lance_exec(info, arbre->fd))
+			{
+				if (info->arbre)
+					return (lance_exec(info, arbre->fg));
+			}
+			else
+			{
+				if (info->arbre)
+					return (badet(info, arbre->fg));
+			}
+		}
+		else if (!ft_strcmp(arbre->commande, "||"))
+		{
+			if (lance_exec(info, arbre->fd))
+			{
+				if (info->arbre)
+					return (lance_exec(info, arbre->fg));
+			}
+			else
+			{
+				if (info->arbre)
+					return (badou(info, arbre->fg));
+			}
+		}
+		else if (!ft_strcmp(arbre->commande, "|"))
+			return (toyotage(rec_toyo(arbre, info), info));
+		if (info->arbre)
+			return (exec(getcommande(arbre, info), info));
 	}
-	else if (!ft_strcmp(arbre->commande, "||"))
-	{
-		if (lance_exec(info, arbre->fd))
-			return (lance_exec(info, arbre->fg));
-		else
-			return (badou(info, arbre->fg));
-	}
-	else if (!ft_strcmp(arbre->commande, "|"))
-		return (toyotage(rec_toyo(arbre, info), info));
-	return (exec(getcommande(arbre, info), info));
+	return (info->exit_status);
 }

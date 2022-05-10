@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/09 16:29:47 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 12:03:28 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,21 @@ void	freearbre(t_arbre *arbre)
 			freearbre(arbre->fg);
 			arbre->fg = NULL;
 		}
-		tmp = ft_strtrim(arbre->commande, "\"<");
-		if (!ft_strncmp(tmp, "/tmp/.", 6))
-			unlink(tmp);
-		free(tmp);
-		free(arbre->commande);
-		free(arbre);
-		arbre = NULL;
+		if (arbre->commande)
+		{
+			tmp = ft_strtrim(arbre->commande, "\"<");
+			if (!ft_strncmp(tmp, "/tmp/.", 6))
+				unlink(tmp);
+			free(tmp);
+			tmp = NULL;
+			free(arbre->commande);
+			arbre->commande = NULL;
+		}
+		if (arbre)
+		{
+			free(arbre);
+			arbre = NULL;
+		}
 	}
 }
 
@@ -208,7 +216,9 @@ void	freeenv(t_env *current)
 	while (current)
 	{
 		free(current->variable);
+		current->variable = NULL;
 		free(current->valeur);
+		current->valeur = NULL;
 		tmp = current;
 		current = current->next;
 		free(tmp);

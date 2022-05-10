@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 16:54:43 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 17:15:24 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,37 +208,30 @@ void	initshit(int *i, int *j, int *insimplegui, int *indoublegui)
 
 char	*get_del(char *del, t_info *info, int *asex, int caca)
 {
-	int		i;
-	int		insimplegui;
-	int		indoublegui;
-	int		*list;
-	int		j;
+	t_del	d;
 	char	*tmp;
 
 	tmp = ft_strtrim(del, " ");
 	free(del);
 	del = tmp;
-	list = (int *)malloc(sizeof(int) * (ft_strlen(del) + 1));
-	initshit(&i, &j, &insimplegui, &indoublegui);
-	while (del[i])
+	d.list = (int *)malloc(sizeof(int) * (ft_strlen(del) + 1));
+	initshit(&d.i, &d.j, &d.sg, &d.dg);
+	while (del[d.i])
 	{
-		gui(del[i], &indoublegui, &insimplegui, NULL);
-		if ((!insimplegui && del[i] == '"') || (!indoublegui && del[i] == '\''))
-		{
-			list[j] = i;
-			j++;
-		}
-		if (caca && (!insimplegui && del[i] == '$'))
+		gui(del[d.i], &d.dg, &d.sg, NULL);
+		if ((!d.sg && del[d.i] == '"') || (!d.dg && del[d.i] == '\''))
+			d.list[d.j++] = d.i;
+		if (caca && (!d.sg && del[d.i] == '$'))
 		{
 			*asex = 1;
-			del = changedel(del, &i, info, (insimplegui || indoublegui));
+			del = changedel(del, &d.i, info, (d.sg || d.dg));
 			if (!ft_strlen(del))
 				break ;
 		}
-		i++;
+		d.i++;
 	}
-	list[0] = j - 1;
-	return (rmquote(del, list));
+	d.list[0] = d.j - 1;
+	return (rmquote(del, d.list));
 }
 
 int	asquote(char *str)
@@ -277,7 +270,7 @@ void	ft_lenfant(char *heredoc, char *path)
 
 	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 00644);
 	if (fd < 0)
-		printf("cannot open tmp file\n");
+		ft_putstr_fd("ne peut pas ouvrir le fichier temporaire\n", 2);
 	if (asquote(heredoc))
 	{
 		tmp = ft_strtrim(heredoc, "<\"");
@@ -293,7 +286,7 @@ void	ft_lenfant(char *heredoc, char *path)
 		ligne = readline(tmp);
 	}
 	if (!ligne)
-		ft_putstr_fd("alors c pas ce que je voulais mais ya R\n", 2);
+		ft_putstr_fd("fin inattendue mais fin quand meme\n", 2);
 	close(fd);
 	return (free(ligne), free(tmp), free(heredoc));
 }

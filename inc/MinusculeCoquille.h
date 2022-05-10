@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 15:54:50 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 18:16:17 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ typedef struct s_del
 {
 	int	i;
 	int	j;
-	int	insimplegui;
-	int	indoublegui;
+	int	sg;
+	int	dg;
 	int	*list;
 }	t_del;
 
@@ -55,6 +55,15 @@ typedef STRUCTURE s_env
 	CARACTERE		*valeur;
 	STRUCTURE s_env	*next;
 }	t_env;
+
+typedef struct s_getenv
+{
+	t_env	*first;
+	t_env	*tmp;
+	t_env	*current;
+	int		i;
+	int		j;
+}	t_getenv;
 
 typedef STRUCTURE s_name
 {

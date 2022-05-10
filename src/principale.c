@@ -6,13 +6,13 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 16:55:44 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 18:23:19 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	g_exit_status;
-
 #include "../inc/MinusculeCoquille.h"
+
+int	g_exit_status;
 
 int	verifieligne(char *ligne)
 {
@@ -60,10 +60,21 @@ void	structure(t_arbre *root, int level)
 }
 */
 
-void	freearbre(t_arbre *arbre)
+void	freearbrecmd(t_arbre *arbre)
 {
 	char	*tmp;
 
+	tmp = ft_strtrim(arbre->commande, "\"<");
+	if (!ft_strncmp(tmp, "/tmp/.", 6))
+		unlink(tmp);
+	free(tmp);
+	tmp = NULL;
+	free(arbre->commande);
+	arbre->commande = NULL;
+}
+
+void	freearbre(t_arbre *arbre)
+{
 	if (arbre)
 	{
 		if (arbre->fd)
@@ -77,15 +88,7 @@ void	freearbre(t_arbre *arbre)
 			arbre->fg = NULL;
 		}
 		if (arbre->commande)
-		{
-			tmp = ft_strtrim(arbre->commande, "\"<");
-			if (!ft_strncmp(tmp, "/tmp/.", 6))
-				unlink(tmp);
-			free(tmp);
-			tmp = NULL;
-			free(arbre->commande);
-			arbre->commande = NULL;
-		}
+			freearbrecmd(arbre);
 		if (arbre)
 		{
 			free(arbre);
@@ -94,61 +97,94 @@ void	freearbre(t_arbre *arbre)
 	}
 }
 
-int	checkarbre(t_arbre *arbre, t_info *info)
+int	ischiant(t_arbre *arbre)
+{
+	return (!ft_strcmp(arbre->commande, "()") || \
+			!ft_strcmp(arbre->commande, "|") \
+		|| !ft_strcmp(arbre->commande, "&&") || \
+		!ft_strcmp(arbre->commande, "||"));
+}
+
+int	istropchiant(char *tmp)
+{
+	return (!ft_strcmp(tmp, "") || !ft_strcmp(tmp, ">") || \
+			!ft_strcmp(tmp, ">>") || !ft_strcmp(tmp, "<") || \
+			!ft_strcmp(tmp, "<<"));
+}
+
+int	ft_ischiant(t_arbre *arbre, t_info *info)
+{
+	char	*tmp;
+
+	if (info->arbre && arbre->fd)
+	{
+		tmp = ft_strtrim(arbre->fd->commande, " ");
+		if (istropchiant(tmp))
+			return (free(tmp), 1);
+		free(tmp);
+	}
+	if (info->arbre && arbre->fg)
+	{
+		tmp = ft_strtrim(arbre->fg->commande, " ");
+		if (istropchiant(tmp))
+			return (free(tmp), 1);
+		free(tmp);
+	}
+	if ((!arbre->fg || !arbre->fd) && (!ft_strcmp(arbre->commande, "|") \
+			|| !ft_strcmp(arbre->commande, "&&") \
+				|| !ft_strcmp(arbre->commande, "||")))
+		return (1);
+	if (!arbre->fg && !arbre->fd)
+		return (1);
+	return (0);
+}
+
+int	ft_istropchiant(t_arbre *arbre, t_info *info)
 {
 	char	*tmp;
 	char	*tmp2;
 
+	tmp = ft_strtrim(arbre->commande, " ");
+	if (istropchiant(tmp))
+		return (free(tmp), 1);
+	tmp2 = ft_strtrim(tmp, "\"");
+	if (info->arbre && !ft_strncmp(tmp2, "<<", 2))
+	{
+		free(arbre->commande);
+		if (info->arbre && asquote(tmp))
+			arbre->commande = open_heredoc(ft_strdup(tmp), info);
+		else if (info->arbre)
+			arbre->commande = open_heredoc(ft_substr(tmp, 2, \
+						ft_strlen(tmp) - 2), info);
+	}
+	free(tmp2);
+	free(tmp);
+	return (0);
+}
+
+int	casseburne(t_arbre *arbre)
+{
+	char	*tmp;
+
+	tmp = ft_strtrim(arbre->commande, " ");
+	if (!ft_strcmp(tmp, ""))
+		return (free(tmp), 1);
+	return (free(tmp), 0);
+}
+
+int	checkarbre(t_arbre *arbre, t_info *info)
+{
 	if (info->arbre && arbre)
 	{
-		if (!ft_strcmp(arbre->commande, "()") || \
-				!ft_strcmp(arbre->commande, "|") || \
-				!ft_strcmp(arbre->commande, "&&") || \
-				!ft_strcmp(arbre->commande, "||"))
+		if (ischiant(arbre))
 		{
-			if (info->arbre && arbre->fd)
-			{
-				tmp = ft_strtrim(arbre->fd->commande, " ");
-				if (!ft_strcmp(tmp, "") || !ft_strcmp(tmp, ">") || \
-						!ft_strcmp(tmp, ">>") || !ft_strcmp(tmp, "<") \
-						|| !ft_strcmp(tmp, "<<"))
-					return (free(tmp), 1);
-				free(tmp);
-			}
-			if (info->arbre && arbre->fg)
-			{
-				tmp = ft_strtrim(arbre->fg->commande, " ");
-				if (!ft_strcmp(tmp, "") || !ft_strcmp(tmp, ">") || \
-						!ft_strcmp(tmp, ">>") || !ft_strcmp(tmp, "<") || \
-						!ft_strcmp(tmp, "<<"))
-					return (free(tmp), 1);
-				free(tmp);
-			}
-			if ((!arbre->fg || !arbre->fd) && (!ft_strcmp(arbre->commande, "|") \
-					|| !ft_strcmp(arbre->commande, "&&") \
-						|| !ft_strcmp(arbre->commande, "||")))
-				return (1);
-			if (!arbre->fg && !arbre->fd)
+			if (ft_ischiant(arbre, info))
 				return (1);
 		}
 		else if (info->arbre)
 		{
-			tmp = ft_strtrim(arbre->commande, " ");
-			if (!ft_strcmp(tmp, ">") || !ft_strcmp(tmp, ">>") || \
-					!ft_strcmp(tmp, "<") || !ft_strcmp(tmp, "<<"))
-				return (free(tmp), 1);
-			tmp2 = ft_strtrim(tmp, "\"");
-			if (info->arbre && !ft_strncmp(tmp2, "<<", 2))
-			{
-				free(arbre->commande);
-				if (info->arbre && asquote(tmp))
-					arbre->commande = open_heredoc(ft_strdup(tmp), info);
-				else if (info->arbre)
-					arbre->commande = open_heredoc(ft_substr(tmp, 2, \
-								ft_strlen(tmp) - 2), info);
-			}
-			free(tmp2);
-			free(tmp);
+			if (ft_istropchiant(arbre, info))
+				return (1);
 		}
 		if (info->arbre && arbre->fd && arbre->fg)
 			return (checkarbre(arbre->fd, info) + checkarbre(arbre->fg, info));
@@ -157,54 +193,51 @@ int	checkarbre(t_arbre *arbre, t_info *info)
 		else if (info->arbre && arbre->fd)
 			return (checkarbre(arbre->fd, info));
 		if (info->arbre)
-		{
-			tmp = ft_strtrim(arbre->commande, " ");
-			if (!ft_strcmp(tmp, ""))
-				return (free(tmp), 1);
-			return (free(tmp), 0);
-		}
+			return (casseburne(arbre));
 	}
 	return (0);
 }
 
+void	movea(t_getenv	*a)
+{
+	if (a->i == 0)
+	{
+		a->current = a->tmp;
+		a->first = a->current;
+	}
+	else
+	{
+		a->current->next = a->tmp;
+		a->current = a->current->next;
+		a->current->next = NULL;
+	}
+}
+
 t_env	*ft_getenv(char **envp)
 {
-	t_env	*first;
-	t_env	*tmp;
-	t_env	*current;
-	int		i;
-	int		j;
+	t_getenv	a;
 
-	first = NULL;
-	i = 0;
-	while (envp[i])
+	a.first = NULL;
+	a.i = 0;
+	while (envp[a.i])
 	{
-		tmp = (t_env *)malloc(sizeof(t_env));
-		j = 0;
-		while (envp[i][j])
+		a.tmp = (t_env *)malloc(sizeof(t_env));
+		a.j = 0;
+		while (envp[a.i][a.j])
 		{
-			if (envp[i][j] == '=')
+			if (envp[a.i][a.j] == '=')
 			{
-				tmp->variable = ft_substr(envp[i], 0, j);
-				tmp->valeur = ft_substr(envp[i], j + 1, ft_strlen(envp[i]) - j);
-				if (i == 0)
-				{
-					current = tmp;
-					first = current;
-				}
-				else
-				{
-					current->next = tmp;
-					current = current->next;
-					current->next = NULL;
-				}
+				a.tmp->variable = ft_substr(envp[a.i], 0, a.j);
+				a.tmp->valeur = ft_substr(envp[a.i], a.j + 1, \
+						ft_strlen(envp[a.i]) - a.j);
+				movea(&a);
 				break ;
 			}
-			j++;
+			a.j++;
 		}
-		i++;
+		a.i++;
 	}
-	return (first);
+	return (a.first);
 }
 
 void	freeenv(t_env *current)
@@ -267,21 +300,62 @@ void	singal(int signal)
 	}
 }
 
+void	initinfo(t_info *info, char **envp)
+{
+	info->env = ft_getenv(envp);
+	info->envp = ft_getenvp(info->env);
+	info->arbre = NULL;
+	info->isexport = 0;
+	info->caner = 0;
+	info->exit_status = 0;
+	g_exit_status = 0;
+	signal(SIGINT, &singal);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	freeprincip(t_info *info, char *ligne, int ac, char **av)
+{
+	ft_exit(NULL, info);
+	free(ligne);
+	freeenv(info->env);
+	free_char_char(info->envp);
+	rl_clear_history();
+	(void)ac;
+	(void)av;
+}
+
+void	lanceprin(char *ligne, t_info *info)
+{
+	add_history(ligne);
+	info->arbre = NULL;
+	if (verifieligne(ligne))
+	{
+		ft_putstr_fd("Erreur syntaxique\n", 2);
+		free(ligne);
+	}
+	else
+	{
+		info->arbre = analyse_syntaxique(ligne, info->arbre, info);
+		if (!checkarbre(info->arbre, info))
+			lance_exec(info, info->arbre);
+		else
+			ft_putstr_fd("Erreur syntaxique\n", 2);
+		info->caner = 0;
+	}
+	if (info->arbre)
+	{
+		freearbre(info->arbre);
+		info->arbre = NULL;
+	}
+}
+
 int	principale(int ac, char **av, char **envp)
 {
 	char	*ligne;
 	t_info	info;
 	char	*tmp;
 
-	info.env = ft_getenv(envp);
-	info.envp = ft_getenvp(info.env);
-	info.arbre = NULL;
-	info.isexport = 0;
-	info.caner = 0;
-	info.exit_status = 0;
-	g_exit_status = 0;
-	signal(SIGINT, &singal);
-	signal(SIGQUIT, SIG_IGN);
+	initinfo(&info, envp);
 	ligne = readline("MinusculeCoquille$>");
 	while (ligne)
 	{
@@ -289,46 +363,14 @@ int	principale(int ac, char **av, char **envp)
 			info.exit_status = g_exit_status;
 		tmp = ft_strtrim(ligne, " ");
 		if (ft_strlen(tmp))
-		{
-			add_history(ligne);
-			info.arbre = NULL;
-			if (verifieligne(ligne))
-			{
-				printf("Erreur syntaxique\n");
-				free(ligne);
-			}
-			else
-			{
-				info.arbre = analyse_syntaxique(ligne, info.arbre, &info);
-				if (!checkarbre(info.arbre, &info))
-				{
-//					structure(info.arbre, 0);
-					lance_exec(&info, info.arbre);
-				}
-				else
-					printf("Erreur qui est syntaxique\n");
-				info.caner = 0;
-			}
-			if (info.arbre)
-			{
-				freearbre(info.arbre);
-				info.arbre = NULL;
-			}
-		}
+			lanceprin(ligne, &info);
 		else
 			free(ligne);
 		g_exit_status = 0;
 		ligne = readline("MinusculeCoquille$>");
 		free(tmp);
 	}
-	ft_exit(NULL, &info);
-	free(ligne);
-	freeenv(info.env);
-	free_char_char(info.envp);
-	rl_clear_history();
-	(void)ac;
-	(void)av;
-	(void)envp;
+	freeprincip(&info, ligne, ac, av);
 	return (info.exit_status);
 }
 

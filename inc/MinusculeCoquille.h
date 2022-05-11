@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/11 12:29:12 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/11 14:36:07 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,12 @@ char		**no_quote_tab(char *str);
 char		**split_empty_line(char *s, char c);
 char		*strjoin_space(char *s1, char *s2);
 char		**ft_splitsane(char *str, t_info *info);
+void		init_sdsm(t_sdsm *s, char *str);
+int			countword(char *str);
+char		**ft_splitdesesmorts(char	*str);
+int			countall(char **list);
+void		initsplit(t_del *d, char **list, int size);
+int			asspace(char *str);
 char		**splitagedesesmorts(char **list, int size);
 char		*vireguillemet(char *str, t_info *info);
 

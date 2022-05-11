@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 16:12:37 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/11 16:14:19 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/11 17:59:28 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ t_env	*ft_getenv(char **envp)
 	while (envp[a.i])
 	{
 		a.tmp = (t_env *)malloc(sizeof(t_env));
+		if (!a.tmp)
+			return (NULL);
 		a.j = 0;
 		while (envp[a.i][a.j])
 		{
@@ -76,10 +78,16 @@ char	**ft_getenvp(t_env *env)
 
 	i = 0;
 	envp = (char **)malloc(sizeof(char *) * (getsize(env) + 1));
-	while (env)
+	if (!envp)
+		return (NULL);
+	while (env && env->variable && env->valeur)
 	{
 		tmp = ft_strjoin(env->variable, "=");
+		if (!tmp)
+			return (NULL);
 		envp[i++] = ft_strjoin(tmp, env->valeur);
+		if (!envp[i - 1])
+			return (NULL);
 		free(tmp);
 		env = env->next;
 	}

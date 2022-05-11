@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/11 16:10:24 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/11 17:17:33 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ typedef STRUCTURE s_arbre
 
 typedef STRUCTURE s_info
 {
+	int		**lst;
 	int		caner;
 	int		isexport;
 	char	**envp;

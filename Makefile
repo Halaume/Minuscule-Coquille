@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/23 11:46:46 by tnaton            #+#    #+#              #
-#    Updated: 2022/05/11 16:13:57 by tnaton           ###   ########.fr        #
+#    Updated: 2022/05/11 17:35:26 by tnaton           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,9 @@ $(object) : inc/MinusculeCoquille.h libft/libft.h
 
 debug : $(object)
 	$(CC) $(CFLAGS) -g3 -fsanitize=address $(object) $(LIBFT) -o $@ -lreadline
+
+malloc_test: $(object) $(LIBFT)
+	$(CC) $(CFLAGS) -fsanitize=undefined -rdynamic -o $@ $(object) $(LIBFT) -lreadline -L. -lmallocator
 
 .PHONY: all
 all : $(NAME)

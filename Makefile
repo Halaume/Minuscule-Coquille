@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/23 11:46:46 by tnaton            #+#    #+#              #
-#    Updated: 2022/05/10 17:05:29 by tnaton           ###   ########.fr        #
+#    Updated: 2022/05/11 12:30:26 by ghanquer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ SRC = principale.c analysesyntaxique.c liberation.c fais_dedans.c exec.c \
 	  heredoc.c lance_exec.c Pipex/child_bonus.c \
 	  Pipex/free_fun_bonus.c Pipex/recur.c ft_splitsane.c gnl/get_next_line.c \
 	  gnl/get_next_line_utils.c cartes_savages.c lst_name_utils.c \
-	  env_list_utils.c exec_utils.c
+	  env_list_utils.c exec_utils.c cartes_utils.c cartes_tools.c ft_echo.c \
+	  fais_dedans_utils.c fais_dedans_tools.c fais_dedans_last.c
 
 source = $(addprefix src/,$(SRC))
 

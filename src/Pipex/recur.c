@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 14:43:46 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/10 14:25:13 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/10 17:00:23 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,17 @@ void	nb_toyo_cmd(t_struct *pipex, t_toyo *toyo)
 	pipex->pid_tab = malloc(sizeof(pid_t) * pipex->nb_cmd);
 }
 
+void	initing_pipex(t_struct *pipex, t_toyo *toyo, t_info *info)
+{
+	nb_toyo_cmd(pipex, toyo);
+	pipex->envp = info->envp;
+	pipex->info = info;
+	pipex->envpath = get_my_path(info->envp);
+	if (pipex->envpath)
+		pipex->envpathcut = ft_split(pipex->envpath, ':');
+	pipex->indexarg = 0;
+}
+
 int	toyotage(t_toyo *toyo, t_info *info)
 {
 	int			i;
@@ -61,13 +72,7 @@ int	toyotage(t_toyo *toyo, t_info *info)
 	int			status;
 	t_toyo		*tmp;
 
-	nb_toyo_cmd(&pipex, toyo);
-	pipex.envp = info->envp;
-	pipex.info = info;
-	pipex.envpath = get_my_path(info->envp);
-	if (pipex.envpath)
-		pipex.envpathcut = ft_split(pipex.envpath, ':');
-	pipex.indexarg = 0;
+	initing_pipex(&pipex, toyo, info);
 	tmp = toyo;
 	signal(SIGINT, &cmdsig);
 	signal(SIGQUIT, &cmdsig);
@@ -81,12 +86,10 @@ int	toyotage(t_toyo *toyo, t_info *info)
 		info->exit_status = 130;
 	signal(SIGINT, &singal);
 	signal(SIGQUIT, SIG_IGN);
-	free_toyo(toyo);
-	free_func(&pipex);
 	if (WIFEXITED(status))
 	{
 		info->exit_status = WEXITSTATUS(status);
-		return (info->exit_status);
+		return (free_func(&pipex), free_toyo(toyo), info->exit_status);
 	}
-	return (0);
+	return (free_func(&pipex), free_toyo(toyo), 0);
 }

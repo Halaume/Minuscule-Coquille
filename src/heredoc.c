@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 17:15:24 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/11 12:54:21 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ char	*changedel(char *del, int *i, t_info *info, int ingui)
 	pf(ret, del, &j, i);
 	while (isdelgood(del[*i]))
 	{
-		if (souvenir != *i && del[*i] == '$')
+		if ((souvenir != *i && del[*i] == '$') || (*i && del[*i - 1] == '?'))
 			break ;
 		*i += 1;
 	}

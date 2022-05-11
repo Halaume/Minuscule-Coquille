@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 19:46:39 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/11 12:59:18 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,11 @@ int	fsizeofexheredoc(char *str, t_info *info)
 		if (str[e.j] == '$')
 			e.j++;
 		while (isadel(str, e.j))
+		{
+			if (e.j && str[e.j - 1] == '?')
+				break ;
 			e.j++;
+		}
 		if (e.i != e.j)
 			crever(&e, info, str);
 	}
@@ -112,7 +116,11 @@ void	smalex(char *str, int *j, int *i)
 	if (str[*j] == '$')
 		(*j)++;
 	while (isadel(str, *j))
+	{
+		if (*j && str[*j - 1] == '?')
+			break ;
 		(*j)++;
+	}
 }
 
 char	*expand(char *str, t_info *info)

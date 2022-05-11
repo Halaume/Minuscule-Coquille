@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:30:44 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 18:49:45 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/11 15:03:08 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,9 @@ t_arbre	*redir(t_arbre *arbre, char *ligne, t_info *info, int i)
 	int	insimplegui;
 	int	indoublegui;
 	int	lst[2];
+	int	par;
 
+	par = 0;
 	j = i + 1;
 	if (ligne[i + 1] == ligne[i])
 		j++;
@@ -202,7 +204,7 @@ t_arbre	*redir(t_arbre *arbre, char *ligne, t_info *info, int i)
 	indoublegui = 0;
 	while (ligne[j])
 	{
-		gui(ligne[j], &indoublegui, &insimplegui, NULL);
+		gui(ligne[j], &indoublegui, &insimplegui, &par);
 		if ((!insimplegui && !indoublegui) && (ligne[j] == ' ' || ligne[j] == \
 			'>' || ligne[j] == '<' || ligne[j] == '&' || ligne[j] == '|' || \
 			ligne[j] == '('))

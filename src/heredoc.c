@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 17:15:24 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/11 15:01:40 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,15 +210,16 @@ char	*get_del(char *del, t_info *info, int *asex, int caca)
 {
 	t_del	d;
 	char	*tmp;
+	int		par;
 
-	tmp = ft_strtrim(del, " ");
-	free(del);
+	par = 0;
+	tmp = trim_free(del, " ");
 	del = tmp;
 	d.list = (int *)malloc(sizeof(int) * (ft_strlen(del) + 1));
 	initshit(&d.i, &d.j, &d.sg, &d.dg);
 	while (del[d.i])
 	{
-		gui(del[d.i], &d.dg, &d.sg, NULL);
+		gui(del[d.i], &d.dg, &d.sg, &par);
 		if ((!d.sg && del[d.i] == '"') || (!d.dg && del[d.i] == '\''))
 			d.list[d.j++] = d.i;
 		if (caca && (!d.sg && del[d.i] == '$'))

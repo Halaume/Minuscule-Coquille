@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:03:35 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/11 14:35:30 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/11 15:00:19 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,14 +100,16 @@ void	mid_splitsane(t_splitsane *s, char *str, t_info *info)
 char	**ft_splitsane(char	*str, t_info *info)
 {
 	t_splitsane	s;
+	int			par;
 
+	par = 0;
 	initsplitsane(&s, str);
 	while (str[s.i] && str[s.i] == ' ')
 		s.i++;
 	s.last = s.i;
 	while (str[s.i])
 	{
-		gui(str[s.i], &s.indoublegui, &s.insimplegui, NULL);
+		gui(str[s.i], &s.indoublegui, &s.insimplegui, &par);
 		if (!s.insimplegui && !s.indoublegui && str[s.i] == ' ')
 			mid_splitsane(&s, str, info);
 		else

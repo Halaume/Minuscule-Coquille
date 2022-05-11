@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:34:42 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/11 14:35:27 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/11 15:04:05 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,9 @@ char	**ft_splitdesesmorts(char	*str)
 {
 	char	**dest;
 	t_sdsm	s;
+	int		par;
 
+	par = 0;
 	init_sdsm(&s, str);
 	dest = (char **)malloc(sizeof(char *) * (s.nbword + 1));
 	while (str[s.i] && str[s.i] == ' ')
@@ -53,7 +55,7 @@ char	**ft_splitdesesmorts(char	*str)
 	s.last = s.i;
 	while (str[s.i])
 	{
-		gui(str[s.i], &s.indoublegui, &s.insimplegui, NULL);
+		gui(str[s.i], &s.indoublegui, &s.insimplegui, &par);
 		if (!s.insimplegui && !s.indoublegui && str[s.i] == ' ')
 		{
 			dest[s.j++] = ft_substr(str, s.last, s.i - s.last);

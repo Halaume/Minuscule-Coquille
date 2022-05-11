@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 12:19:15 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/11 12:26:37 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/11 15:09:28 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,14 @@ int	lencaca(char **prout)
 		wiwi++;
 	}
 	return (wiwi);
+}
+
+void	init_sdsm(t_sdsm *s, char *str)
+{
+	s->j = 0;
+	s->i = 0;
+	s->insimplegui = 0;
+	s->indoublegui = 0;
+	s->nbword = countword(str);
+	s->par = 0;
 }

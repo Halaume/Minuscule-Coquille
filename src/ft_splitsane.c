@@ -6,111 +6,11 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:03:35 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 20:12:34 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/11 15:00:19 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
-
-int	countword(char *str)
-{
-	int	insimplegui;
-	int	indoublegui;
-	int	nbword;
-	int	i;
-
-	nbword = 1;
-	i = 0;
-	insimplegui = 0;
-	indoublegui = 0;
-	while (str[i])
-	{
-		if (!indoublegui && str[i] == '\'')
-			insimplegui = !insimplegui;
-		if (!insimplegui && str[i] == '"')
-			indoublegui = !indoublegui;
-		if (!insimplegui && !indoublegui && str[i] == ' ')
-		{
-			nbword++;
-			while (str[i] && str[i] == ' ')
-				i++;
-		}
-		else
-			i++;
-	}
-	return (nbword);
-}
-
-void	init_sdsm(t_sdsm *s, char *str)
-{
-	s->j = 0;
-	s->i = 0;
-	s->insimplegui = 0;
-	s->indoublegui = 0;
-	s->nbword = countword(str);
-}
-
-char	**ft_splitdesesmorts(char	*str)
-{
-	char	**dest;
-	t_sdsm	s;
-
-	init_sdsm(&s, str);
-	dest = (char **)malloc(sizeof(char *) * (s.nbword + 1));
-	while (str[s.i] && str[s.i] == ' ')
-		s.i++;
-	s.last = s.i;
-	while (str[s.i])
-	{
-		gui(str[s.i], &s.indoublegui, &s.insimplegui, NULL);
-		if (!s.insimplegui && !s.indoublegui && str[s.i] == ' ')
-		{
-			dest[s.j++] = ft_substr(str, s.last, s.i - s.last);
-			while (str[s.i] && str[s.i] == ' ')
-				s.i++;
-			s.last = s.i;
-		}
-		else
-			s.i++;
-	}
-	if (s.last != s.i)
-		dest[s.j++] = ft_substr(str, s.last, s.i - s.last);
-	dest[s.j] = NULL;
-	return (dest);
-}
-
-int	countall(char **list)
-{
-	int	total;
-	int	i;
-
-	i = 0;
-	total = 0;
-	while (list[i])
-		total += countword(list[i++]);
-	return (total);
-}
-
-int	asspace(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == ' ')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-void	initsplit(t_del *d, char **list, int size)
-{
-	d->i = 0;
-	d->sg = 0;
-	d->dg = countall(list) + size;
-}
 
 char	**splitagedesesmorts(char **list, int size)
 {
@@ -200,14 +100,16 @@ void	mid_splitsane(t_splitsane *s, char *str, t_info *info)
 char	**ft_splitsane(char	*str, t_info *info)
 {
 	t_splitsane	s;
+	int			par;
 
+	par = 0;
 	initsplitsane(&s, str);
 	while (str[s.i] && str[s.i] == ' ')
 		s.i++;
 	s.last = s.i;
 	while (str[s.i])
 	{
-		gui(str[s.i], &s.indoublegui, &s.insimplegui, NULL);
+		gui(str[s.i], &s.indoublegui, &s.insimplegui, &par);
 		if (!s.insimplegui && !s.indoublegui && str[s.i] == ' ')
 			mid_splitsane(&s, str, info);
 		else

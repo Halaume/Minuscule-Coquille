@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/23 11:46:46 by tnaton            #+#    #+#              #
-#    Updated: 2022/05/11 12:30:26 by ghanquer         ###   ########.fr        #
+#    Updated: 2022/05/11 16:13:57 by tnaton           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,11 +22,14 @@ LIBFT = libft/libft.a
 #	ls -l | awk '{print $9}' | grep -E ".c$"| sed "s/\.c/ \\\/g" | sed '$s/\\$//g'
 #
 SRC = principale.c analysesyntaxique.c liberation.c fais_dedans.c exec.c \
-	  heredoc.c lance_exec.c Pipex/child_bonus.c \
+	  heredoc.c lance_exec.c Pipex/child_bonus.c ft_splitsane_tools.c\
 	  Pipex/free_fun_bonus.c Pipex/recur.c ft_splitsane.c gnl/get_next_line.c \
 	  gnl/get_next_line_utils.c cartes_savages.c lst_name_utils.c \
 	  env_list_utils.c exec_utils.c cartes_utils.c cartes_tools.c ft_echo.c \
-	  fais_dedans_utils.c fais_dedans_tools.c fais_dedans_last.c
+	  fais_dedans_utils.c fais_dedans_tools.c fais_dedans_last.c heredoc2.c\
+	  heredoc3.c heredoc4.c analysesyntaxique2.c analysesyntaxique3.c \
+	  analysesyntaxique4.c lance_exec2.c lance_exec3.c lance_exec4.c \
+	  lance_exec5.c principale2.c principale3.c principale4.c
 
 source = $(addprefix src/,$(SRC))
 

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/11 12:29:12 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/11 16:10:24 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@
 # include <errno.h>
 # include "../src/gnl/get_next_line.h"
 
+typedef struct s_inspi
+{
+	int	simplegui;
+	int	doublegui;
+	int	par;
+}	t_inspi;
+
 typedef struct s_splitsane
 {
 	char	**dest;
@@ -51,6 +58,7 @@ typedef struct s_sdsm
 	int	insimplegui;
 	int	indoublegui;
 	int	last;
+	int	par;
 }	t_sdsm;
 
 typedef struct s_exp
@@ -149,6 +157,12 @@ char		**no_quote_tab(char *str);
 char		**split_empty_line(char *s, char c);
 char		*strjoin_space(char *s1, char *s2);
 char		**ft_splitsane(char *str, t_info *info);
+void		init_sdsm(t_sdsm *s, char *str);
+int			countword(char *str);
+char		**ft_splitdesesmorts(char	*str);
+int			countall(char **list);
+void		initsplit(t_del *d, char **list, int size);
+int			asspace(char *str);
 char		**splitagedesesmorts(char **list, int size);
 char		*vireguillemet(char *str, t_info *info);
 
@@ -255,4 +269,52 @@ void		error_func(t_struct *pipex, char *msg, char *cmd);
 void		free_func(t_struct *pipex);
 void		close_pipe(t_struct *pipex);
 
+//			NORME / CHIANT / RELOU
+
+int			getfuturesizeoftheexpandedshit(char *del, int i, \
+		t_info *info, int ingui);
+char		*getvalfromenv(char	*prout, t_info *info, int ig, char l);
+char		*rmquote(char *del, int *chiant);
+t_arbre		*redir(t_arbre *a, char *c, t_info *i, int l);
+t_arbre		*par(t_arbre *a, char *c, t_info *i, int *l);
+t_arbre		*ft_etou(t_arbre *a, char *c, t_info *i, int *l);
+t_arbre		*ft_pipou(t_arbre *a, char *c, t_info *i, int *l);
+char		*aled(char *c, t_info *i);
+t_arbre		*etou(t_arbre *a, char *c, t_info *i, int l);
+t_arbre		*pipou(t_arbre *a, char *c, t_info *i, int l);
+char		*vireconcat(char *c, t_info *i);
+char		*vireout(char *c, t_info *i);
+char		*virehere(char *c, t_info *i);
+char		*virein(char *c, t_info *i);
+int			badet(t_info *i, t_arbre *a);
+int			badou(t_info *i, t_arbre *a);
+t_toyo		*rec_toyo(t_arbre *a, t_info *i);
+t_toyo		*getcommande(t_arbre *a, t_info *i);
+char		*getvalfromenvhd(char *c, t_info *i, int k, char j);
+int			isadel(char *s, int i);
+void		ecrit(int f, int fd, t_info *i);
+int			get_fd_concat(char *c);
+int			get_fd_out(char *c);
+int			get_fd_in(char *c);
+t_toyo		*init_toyo(t_arbre *a);
+int			isredirect(char *c);
+t_toyo		*haha(t_toyo *toyo);
+void		leprout(t_arbre *a, t_toyo *t, t_info *i);
+int			verifieligne(char *ligne);
+void		freearbrecmd(t_arbre *arbre);
+void		freearbre(t_arbre *arbre);
+int			ischiant(t_arbre *arbre);
+int			istropchiant(char *tmp);
+int			ft_ischiant(t_arbre *arbre, t_info *info);
+int			ft_istropchiant(t_arbre *a, t_info *info);
+int			casseburne(t_arbre *arbre);
+int			checkarbre(t_arbre *arbre, t_info *info);
+void		movea(t_getenv	*a);
+t_env		*ft_getenv(char **envp);
+void		freeenv(t_env *current);
+int			getsize(t_env *env);
+char		**ft_getenvp(t_env *env);
+void		singal(int signal);
+void		initinfo(t_info *info, char **envp);
+void		freeprincip(t_info *info, char *ligne, int ac, char **av);
 #endif

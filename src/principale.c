@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:44:07 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 18:23:19 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/11 14:40:07 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ int	verifieligne(char *ligne)
 	return (0);
 }
 
-/*
-void	padding(char ch, int n)
+/*void	padding(char ch, int n)
 {
 	int	i;
 
@@ -57,8 +56,7 @@ void	structure(t_arbre *root, int level)
 		printf(">%s<\n", root->commande);
 		structure (root->fg, level + 1);
 	}
-}
-*/
+}*/
 
 void	freearbrecmd(t_arbre *arbre)
 {

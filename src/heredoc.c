@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 19:58:20 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/11 12:54:21 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/11 14:31:10 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,10 +157,11 @@ int	getfuturesizeoftheexpandedshit(char *del, int i, t_info *info, int ingui)
 	return (free(var), j);
 }
 
-int	isdelgood(char c)
+int	isdelgood(char *str, int i)
 {
-	return (c && ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == '$' \
-					|| c == '?')));
+	return (str[i] && (((str[i] >= 'A' && str[i] <= 'Z') \
+					|| (str[i] >= 'a' && str[i] <= 'z') || (str[i] == '$')) \
+			|| (i && str[i] == '?' && str[i - 1] == '$')));
 }
 
 void	pf(char *ret, char *del, int *j, int *i)
@@ -184,7 +185,7 @@ char	*changedel(char *del, int *i, t_info *info, int ingui)
 	lenexpanded = getfuturesizeoftheexpandedshit(del, *i, info, ingui);
 	ret = (char *)malloc(sizeof(char *) * (ft_strlen(del) + lenexpanded));
 	pf(ret, del, &j, i);
-	while (isdelgood(del[*i]))
+	while (isdelgood(del, *i))
 	{
 		if ((souvenir != *i && del[*i] == '$') || (*i && del[*i - 1] == '?'))
 			break ;

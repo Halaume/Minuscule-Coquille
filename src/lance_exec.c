@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 11:43:00 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/11 12:59:18 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/11 14:39:17 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,7 +356,7 @@ int	lance_exec(t_info *info, t_arbre *arbre)
 	if (arbre && !info->caner)
 	{
 		if (!ft_strcmp(arbre->commande, "&&"))
-			lancet(arbre, info);
+			return (lancet(arbre, info));
 		else if (!ft_strcmp(arbre->commande, "||"))
 		{
 			if (lance_exec(info, arbre->fd))

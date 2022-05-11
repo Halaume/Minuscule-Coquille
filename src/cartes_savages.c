@@ -6,173 +6,38 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/10 17:58:48 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/11 12:05:43 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
 
-int	len_before_star(char *str)
+int	opening(char *dirname, t_name **fic, int prof, int p_max)
 {
-	int	i;
+	t_ouvrir	o;
 
-	i = 0;
-	while (str[i] && str[i] != '*')
-		i++;
-	return (i);
-}
-
-int	check_wildcard(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (str)
-	{
-		while (str[i])
-		{
-			if (str[i] == '*')
-				return (1);
-			i++;
-		}
-	}
-	return (0);
-}
-
-int	is_good_word(char *arg, char *str)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	if (!arg || !str)
-		return (1);
-	while (arg[j] && str[i])
-	{
-		if (arg[j] == '*')
-		{
-			if (arg[j + 1] == '\0')
-				return (0);
-			while (str[i] && ft_strncmp(arg + j + 1, str + i, \
-						len_before_star(arg + j + 1)) != 0)
-			{
-				i++;
-				if (str[i] == '\0' && arg[j + 1 + \
-						(len_before_star(arg + j + 1))] != '\0')
-					return (0);
-				else if (str[i] == '\0')
-					return (1);
-			}
-			i--;
-		}
-		else if (str[i] != arg[j])
-			return (1);
-		i++;
-		j++;
-	}
-	if (!arg[j] && str[i])
-		return (1);
-	return (0);
-}
-
-int	nb_of_good_word(char *arg, t_name *name)
-{
-	int		i;
-	t_name	*tmp;
-
-	tmp = name;
-	i = 0;
-	while (tmp)
-	{
-		if (is_good_word(arg, tmp->name) == 0)
-			i++;
-		tmp = tmp->next;
-	}
-	return (i);
-}
-
-char	**norme_carte(char *arg, char **ret, t_name *fichier)
-{
-	int		nb_word;
-	int		i;
-	t_name	*tmp;
-
-	nb_word = nb_of_good_word(arg, fichier);
-	ret = malloc(sizeof(char *) * (nb_word + 1));
-	if (!ret)
-		return (NULL);
-	ret[nb_of_good_word(arg, fichier)] = NULL;
-	tmp = fichier;
-	i = 0;
-	while (tmp && i < nb_word)
-	{
-		if (is_good_word(arg, tmp->name) == 0)
-		{
-			ret[i] = ft_strdup(tmp->name);
-			i++;
-		}
-		tmp = tmp->next;
-	}
-	return (ret);
-}
-
-int	count_prof(char *str)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	if (str)
-	{
-		while (str[i])
-		{
-			if (str[i] == '/')
-				count++;
-			i++;
-		}
-	}
-	return (count);
-}
-
-int	opening(char *dirname, t_name **fichier, int profondeur, int prof_max)
-{
-	DIR				*my_dir;
-	struct dirent	*reading;
-	char			*dirpath;
-	char			*tmp;
-	int				i;
-
-	i = 0;
-	my_dir = opendir(dirname);
-	dirpath = ft_strjoin(dirname, "/");
-	reading = NULL;
-	if (!my_dir)
+	o.i = 0;
+	o.my_dir = opendir(dirname);
+	o.dp = ft_strjoin(dirname, "/");
+	o.rd = NULL;
+	if (!o.my_dir)
 		return (perror("Wildcards "), 1);
-	reading = readdir(my_dir);
-	while (reading != NULL)
+	o.rd = readdir(o.my_dir);
+	while (o.rd != NULL)
 	{
-		i++;
-		if (reading->d_type == DT_DIR && ft_strncmp(reading->d_name, ".", 2) \
-				!= 0 && ft_strncmp(reading->d_name, "..", 3) != 0 && \
-				profondeur < prof_max)
+		o.i++;
+		if (o.rd->d_type == DT_DIR && ft_strncmp(o.rd->d_name, ".", 2) != 0 && \
+				ft_strncmp(o.rd->d_name, "..", 3) != 0 && prof < p_max)
 		{
-			if (opening(reading->d_name, fichier, 1, profondeur + 1) == 1)
-				return (free(dirpath), 1);
+			if (opening(o.rd->d_name, fic, 1, prof + 1) == 1)
+				return (free(o.dp), 1);
 		}
-		else if (ft_strncmp(reading->d_name, ".", 1) != 0 && \
-				ft_strncmp(reading->d_name, "..", 2) != 0)
-		{
-			tmp = ft_strjoin(dirpath, reading->d_name);
-			lst_add(fichier, new_lst(ft_strtrim(tmp, "./")));
-			free(tmp);
-		}
-		reading = readdir(my_dir);
+		else if (ft_strncmp(o.rd->d_name, ".", 1) != 0 && \
+				ft_strncmp(o.rd->d_name, "..", 2) != 0)
+			lst_add(fic, new_lst(ft_strtrim(jc(o.dp, o.rd->d_name), "./")));
+		o.rd = readdir(o.my_dir);
 	}
-	free(dirpath);
-	closedir(my_dir);
-	return (0);
+	return (free(o.dp), closedir(o.my_dir), 0);
 }
 
 char	**cartes_sauvages(char *arg)
@@ -232,23 +97,21 @@ char	**add_wildcard(char **cmd)
 	int		i;
 
 	j = 0;
-	index = 0;
+	index = -1;
 	tmp = malloc(sizeof(char *) * (count_wildcards(cmd) + 1));
-	while (cmd[index])
+	while (cmd[++index])
 	{
 		tmp2 = cartes_sauvages(cmd[index]);
-		i = 0;
+		i = -1;
 		if (tmp2)
 		{
-			while (tmp2[i])
+			while (tmp2[++i])
 			{
 				tmp[j] = ft_strdup(tmp2[i]);
 				j++;
-				i++;
 			}
 			free_char_char(tmp2);
 		}
-		index++;
 	}
 	tmp[j] = NULL;
 	return (tmp);

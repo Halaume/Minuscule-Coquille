@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/10 12:52:51 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/11 12:24:20 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,14 @@ typedef STRUCTURE s_info
 	int		exit_status;
 }	t_info;
 
+typedef STRUCTURE s_ouvrir
+{
+	DIR				*my_dir;
+	struct dirent	*rd;
+	char			*dp;
+	int				i;
+}	t_ouvrir;
+
 //				ANALYSE-SYNTAXIQUE
 
 t_arbre		*analyse_syntaxique(CARACTERE *ligne, t_arbre *arbre, t_info *info);
@@ -115,6 +123,9 @@ int			ft_export(t_info *info, char **commande);
 int			ft_unset(t_info *info, char **commande);
 int			ft_env(t_env *env);
 int			ft_exit(char **status, t_info *info);
+char		*get_my_home(t_env *env);
+int			ft_export_this(t_info *info, char *cmd);
+int			ft_unset_this(t_info *info, char *commande);
 
 //				EXECUTION DES COMMANDES
 
@@ -124,6 +135,8 @@ int			lance_exec(t_info *info, t_arbre *arbre);
 char		*get_my_path(char **envp);
 int			check_abs_path(char *argv);
 char		*get_cmd(char **path, char *cmd);
+int			executing(t_toyo *toyo, t_info *info);
+void		norme_executing(t_toyo *toyo, t_info *info, char **arg);
 
 //				LIBERATION
 
@@ -140,6 +153,15 @@ void		lst_add(t_name **alst, t_name *list);
 t_name		*new_lst(char *str);
 char		**cartes_sauvages(char *arg);
 char		**add_wildcard(char **cmd);
+char		*jc(char *oui, char *non);
+int			lbs(char *str);
+int			check_wildcard(char *str);
+int			is_good_word(char *arg, char *str);
+int			nb_of_good_word(char *arg, t_name *name);
+int			norme_good(char *arg, char *str, int i, int j);
+int			lbs(char *str);
+char		**norme_carte(char *arg, char **ret, t_name *fichier);
+int			count_prof(char *str);
 
 //				PIPEX
 

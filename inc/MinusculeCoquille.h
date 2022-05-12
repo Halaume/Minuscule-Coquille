@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/12 12:04:42 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/12 14:27:59 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -320,4 +320,6 @@ void		initinfo(t_info *info, char **envp);
 void		freeprincip(t_info *info, char *ligne, int ac, char **av);
 void		indexeage(char *str, t_info *info);
 char		*expand(char *str, t_info *info);
+int			fsizeofexheredoc(char *str, t_info *info);
+void		crever(t_exp *e, t_info *info, char *str);
 #endif

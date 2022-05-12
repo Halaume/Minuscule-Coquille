@@ -28,7 +28,7 @@ char	**norme_carte(char *arg, char **ret, t_name *fichier)
 	int		i;
 	t_name	*tmp;
 
-	nb_word = nb_of_good_word(arg, fichier, count_prof(arg));
+	nb_word = nb_of_good_word(arg, fichier/*, count_prof(arg)*/);
 	ret = malloc(sizeof(char *) * (nb_word + 1));
 	if (!ret)
 		return (NULL);

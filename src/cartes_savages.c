@@ -98,6 +98,8 @@ char	**add_wildcard(char **cmd)
 
 	j = 0;
 	index = -1;
+	if (!cmd || !*cmd)
+		return (NULL);
 	tmp = malloc(sizeof(char *) * (count_wildcards(cmd) + 1));
 	while (cmd[++index])
 	{

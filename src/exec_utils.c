@@ -39,7 +39,7 @@ char	*get_cmd(char **path, char *cmd)
 	int		i;
 
 	i = 0;
-	if (path)
+	if (path && *cmd)
 	{
 		while (path[i])
 		{

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:03:35 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/11 17:59:47 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/12 10:05:52 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,9 @@ char	**splitagedesesmorts(char **list, int size)
 
 void	initsplitsane(t_splitsane *s, char *str)
 {
+	int	i;
+
+	i = 0;
 	s->j = 0;
 	s->i = 0;
 	s->insimplegui = 0;

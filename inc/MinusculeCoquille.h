@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/11 17:17:33 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/12 12:04:42 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ typedef STRUCTURE s_arbre
 
 typedef STRUCTURE s_info
 {
-	int		**lst;
+	int		**list;
 	int		caner;
 	int		isexport;
 	char	**envp;
@@ -318,4 +318,6 @@ char		**ft_getenvp(t_env *env);
 void		singal(int signal);
 void		initinfo(t_info *info, char **envp);
 void		freeprincip(t_info *info, char *ligne, int ac, char **av);
+void		indexeage(char *str, t_info *info);
+char		*expand(char *str, t_info *info);
 #endif

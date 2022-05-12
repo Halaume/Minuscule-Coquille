@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 11:15:11 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/11 12:02:18 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/12 10:49:38 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int	executing(t_toyo *toyo, t_info *info)
 	char	**arg;
 	char	**tmp_arg;
 
+	indexeage(toyo->commande, info);
 	tmp_arg = ft_splitsane(toyo->commande, info);
 	arg = add_wildcard(tmp_arg);
 	free_char_char(tmp_arg);

@@ -6,7 +6,7 @@
 #    By: tnaton <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/23 11:46:46 by tnaton            #+#    #+#              #
-#    Updated: 2022/05/11 17:35:26 by tnaton           ###   ########.fr        #
+#    Updated: 2022/05/12 10:07:04 by tnaton           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ SRC = principale.c analysesyntaxique.c liberation.c fais_dedans.c exec.c \
 	  fais_dedans_utils.c fais_dedans_tools.c fais_dedans_last.c heredoc2.c\
 	  heredoc3.c heredoc4.c analysesyntaxique2.c analysesyntaxique3.c \
 	  analysesyntaxique4.c lance_exec2.c lance_exec3.c lance_exec4.c \
-	  lance_exec5.c principale2.c principale3.c principale4.c
+	  lance_exec5.c principale2.c principale3.c principale4.c indexeage.c
 
 source = $(addprefix src/,$(SRC))
 

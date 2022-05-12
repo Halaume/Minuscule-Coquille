@@ -1,46 +1,46 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
+	/* ************************************************************************** */
+	/*                                                                            */
+	/*                                                        :::      ::::::::   */
 /*   heredoc2.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/11 15:26:18 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/11 15:26:55 by tnaton           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+	/*                                                    +:+ +:+         +:+     */
+	/*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
+	/*                                                +#+#+#+#+#+   +#+           */
+	/*   Created: 2022/05/11 15:26:18 by tnaton            #+#    #+#             */
+/*   Updated: 2022/05/12 10:43:02 by tnaton           ###   ########.fr       */
+	/*                                                                            */
+	/* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
 
-int	asquote(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
+	int	asquote(char *str)
 	{
-		if (str[i] == '\'' || str[i] == '"')
-			return (1);
-		i++;
+		int	i;
+
+		i = 0;
+		while (str[i])
+		{
+			if (str[i] == '\'' || str[i] == '"')
+				return (1);
+			i++;
+		}
+		return (0);
 	}
-	return (0);
-}
 
-char	*addquote(char *path, char *heredoc)
-{
-	char	*tmp;
-	char	*tmp2;
-
-	if (asquote(heredoc))
+	char	*addquote(char *path, char *heredoc)
 	{
-		tmp = ft_strjoin("\"", path);
-		tmp2 = ft_strjoin(tmp, "\"");
-		return (free(path), free(tmp), tmp2);
-	}
-	return (path);
-}
+		char	*tmp;
+		char	*tmp2;
 
-void	ft_lenfant(char *heredoc, char *path)
+		if (asquote(heredoc))
+		{
+			tmp = ft_strjoin("\"", path);
+			tmp2 = ft_strjoin(tmp, "\"");
+			return (free(path), free(tmp), tmp2);
+		}
+		return (path);
+	}
+
+	void	ft_lenfant(char *heredoc, char *path)
 {
 	int		fd;
 	char	*tmp;

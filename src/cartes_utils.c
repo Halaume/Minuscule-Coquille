@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 11:48:58 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/12 12:15:30 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 09:46:49 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,14 @@ int	norme_good(char *arg, char *str, int i, int j)
 	return (0);
 }
 
-int	is_good_word(char *arg, char *str/*, int p_max*/)
+int	is_good_word(char *arg, char *str)
 {
 	if (!arg || !str)
 		return (1);
 	return (norme_good(arg, str, 0, 0));
 }
 
-int	nb_of_good_word(char *arg, t_name *name/*, int p_max*/)
+int	nb_of_good_word(char *arg, t_name *name)
 {
 	int		i;
 	t_name	*tmp;
@@ -97,7 +97,7 @@ int	nb_of_good_word(char *arg, t_name *name/*, int p_max*/)
 	i = 0;
 	while (tmp)
 	{
-		if (is_good_word(arg, tmp->name/*, p_max*/) == 0)
+		if (is_good_word(arg, tmp->name) == 0)
 			i++;
 		tmp = tmp->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 12:04:32 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/12 12:12:20 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 09:46:56 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	**norme_carte(char *arg, char **ret, t_name *fichier)
 	int		i;
 	t_name	*tmp;
 
-	nb_word = nb_of_good_word(arg, fichier/*, count_prof(arg)*/);
+	nb_word = nb_of_good_word(arg, fichier);
 	ret = malloc(sizeof(char *) * (nb_word + 1));
 	if (!ret)
 		return (NULL);

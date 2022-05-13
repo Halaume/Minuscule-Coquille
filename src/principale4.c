@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 16:12:37 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/11 17:59:28 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/13 11:02:41 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ char	**ft_getenvp(t_env *env)
 
 void	initinfo(t_info *info, char **envp)
 {
+	info->list = NULL;
 	info->env = ft_getenv(envp);
 	info->envp = ft_getenvp(info->env);
 	info->arbre = NULL;

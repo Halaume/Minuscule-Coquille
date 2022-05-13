@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/13 10:38:11 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 11:00:22 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,4 +323,6 @@ void		indexeage(char *str, t_info *info);
 char		*expand(char *str, t_info *info);
 int			fsizeofexheredoc(char *str, t_info *info);
 void		crever(t_exp *e, t_info *info, char *str);
+void		freelist(int **list);
+
 #endif

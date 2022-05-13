@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 10:47:02 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/10 12:02:30 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/13 10:59:55 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	exit_func(t_info *info)
 	freeenv(info->env);
 	free_char_char(info->envp);
 	rl_clear_history();
+	freelist(info->list);
 	exit(info->exit_status);
 }
 

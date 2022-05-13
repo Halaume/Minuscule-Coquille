@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 17:19:15 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/12 18:44:26 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/13 11:04:17 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,6 +207,7 @@ int	*crie(char *str, int *isex, t_info *info)
 			lst[j++] = i - countgui;
 		i++;
 	}
+	free(str);
 	return (lst);
 }
 
@@ -276,6 +277,20 @@ void	indexeage2(char *str, t_info *info, int *isex, int *lst)
 	info->list[k] = getlist(i, lst, last, countgui);
 	free(isex);
 	free(lst);
+	free(str);
+}
+
+void	freelist(int **list)
+{
+	int	i;
+
+	i = 0;
+	while (list[i])
+	{
+		free(list[i]);
+		i++;
+	}
+	free(list);
 }
 
 void	indexeage(char *str, t_info *info)
@@ -300,6 +315,8 @@ void	indexeage(char *str, t_info *info)
 		}
 		i++;
 	}
+	if (info->list)
+		freelist(info->list);
 	info->list = malloc(sizeof(int *) * (count + 1));
 	info->list[count] = NULL;
 	indexeage2(str, info, isex, lst);

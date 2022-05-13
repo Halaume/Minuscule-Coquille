@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 11:48:58 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 18:58:58 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 20:39:28 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	check_wildcard(char *str)
 	return (0);
 }
 
-int	ft_strcmp_free(char *s1, char *s2)
+int	cmp_fr(char *s1, char *s2)
 {
 	int	i;
 	int	ret;
@@ -64,7 +64,7 @@ int	ft_strcmp_free(char *s1, char *s2)
 		if (s1[i] == '\0')
 			return (free(s1), 0);
 	}
-	ret = *(unsigned char *)s1 - *(unsigned char *)--s2;
+	ret = s1[i] - s2[i];
 	free(s1);
 	return (ret);
 }
@@ -78,28 +78,23 @@ int	norme_good(char *arg, t_name *fic, int *list, int i)
 	{
 		if (arg[j] == '*' && osef(list, j) != 1)
 		{
-			while (arg[j + 1] == '*')
+			while (arg[j + 1] == '*' && osef(list, j) == 1)
 				j++;
 			if (arg[j + 1] == '\0')
-			{
 				return (0);
-			}
 			if (!fic->name[i])
 				return (1);
-			while (fic->name[i] && (ft_strcmp_free(ft_substr(arg, j + 1, lbs(arg + j + 1)), fic->name + i) != 0))
+			while (fic->name[i] && (cmp_fr(ft_substr(arg, j + 1, \
+								lbs(arg + j + 1)), fic->name + i) != 0))
 			{
-				printf("%s | %s\n", ft_substr(arg, j + 1, lbs(arg + j + 1)), fic->name + i);
 				if (norme_good2(i++, j + 1, fic, arg) != -1)
 					return (norme_good2(i, j + 1, fic, arg));
-				printf("retour cmp = %d\n", ft_strcmp_free(ft_substr(arg, j + 1, lbs(arg + j + 1)), fic->name + i));
 			}
-			if (ft_strcmp_free(ft_substr(arg, j + 1, lbs(arg + j + 1)), fic->name + i))
+			if (cmp_fr(ft_substr(arg, j + 1, lbs(arg + j + 1)), fic->name + i))
 				i--;
-			else if (arg[j + 1 + lbs(arg + j + 1)] == '\0')
+			else if (arg[j + 1 + lbs(arg + j + 1)] == '\0' && ft_strlen(arg + j + 1) == ft_strlen(fic->name + i))
 			{
-				if (ft_strlen(fic->name + i) == (size_t)lbs(arg + j))
-					return (0);
-//				return (0);
+				return (0);
 			}
 			else
 				i--;
@@ -109,7 +104,6 @@ int	norme_good(char *arg, t_name *fic, int *list, int i)
 		i++;
 		j++;
 	}
-//	printf("arg[j - 1] = %c, fic->name[i] = %c\narg = %s, fic->name = %s\n", arg[j - 1], fic->name[i], arg, fic->name);
 	if (arg[j - 1] && fic->name[i] != arg[j - 1])
 		return (1);
 	if (!arg[j] && fic->name[i + 1])

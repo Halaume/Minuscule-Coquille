@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 15:36:05 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/11 15:36:29 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/13 12:51:29 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ t_arbre	*lanceanal(t_arbre *arbre, char *ligne, t_info *info, int *lst)
 	tmp = ft_par(arbre, ligne, info, lst);
 	if (tmp)
 		return (tmp);
-	arbre->commande = ft_strdup(ligne);
+	arbre->commande = trim_free(ft_strdup(ligne), " ");
 	free(ligne);
 	return (arbre);
 }

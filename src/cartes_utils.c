@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 11:48:58 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 11:16:19 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 18:58:58 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,40 +52,76 @@ int	check_wildcard(char *str)
 	return (0);
 }
 
-int	norme_good(char *arg, char *str, int *list, int i)
+int	ft_strcmp_free(char *s1, char *s2)
+{
+	int	i;
+	int	ret;
+
+	i = 0;
+	while (s1[i] == s2[i])
+	{
+		i++;
+		if (s1[i] == '\0')
+			return (free(s1), 0);
+	}
+	ret = *(unsigned char *)s1 - *(unsigned char *)--s2;
+	free(s1);
+	return (ret);
+}
+
+int	norme_good(char *arg, t_name *fic, int *list, int i)
 {
 	int	j;
 
 	j = 0;
-	while (arg[j] && str[i])
+	while (arg[j])
 	{
-		if (arg[j] == '*' && !osef(list, j))
+		if (arg[j] == '*' && osef(list, j) != 1)
 		{
+			while (arg[j + 1] == '*')
+				j++;
 			if (arg[j + 1] == '\0')
-				return (0);
-			while (str[i] && ft_strncmp(arg + j + 1, str + i, \
-						lbs(arg + j + 1)) != 0)
 			{
-				if (norme_good2(i++, j, str, arg) != -1)
-					return (norme_good2(i, j, str, arg));
+				return (0);
 			}
-			i--;
+			if (!fic->name[i])
+				return (1);
+			while (fic->name[i] && (ft_strcmp_free(ft_substr(arg, j + 1, lbs(arg + j + 1)), fic->name + i) != 0))
+			{
+				printf("%s | %s\n", ft_substr(arg, j + 1, lbs(arg + j + 1)), fic->name + i);
+				if (norme_good2(i++, j + 1, fic, arg) != -1)
+					return (norme_good2(i, j + 1, fic, arg));
+				printf("retour cmp = %d\n", ft_strcmp_free(ft_substr(arg, j + 1, lbs(arg + j + 1)), fic->name + i));
+			}
+			if (ft_strcmp_free(ft_substr(arg, j + 1, lbs(arg + j + 1)), fic->name + i))
+				i--;
+			else if (arg[j + 1 + lbs(arg + j + 1)] == '\0')
+			{
+				if (ft_strlen(fic->name + i) == (size_t)lbs(arg + j))
+					return (0);
+//				return (0);
+			}
+			else
+				i--;
 		}
-		else if (str[i] != arg[j])
+		else if (fic->name[i] != arg[j])
 			return (1);
 		i++;
 		j++;
 	}
-	if (!arg[j] && str[i])
+//	printf("arg[j - 1] = %c, fic->name[i] = %c\narg = %s, fic->name = %s\n", arg[j - 1], fic->name[i], arg, fic->name);
+	if (arg[j - 1] && fic->name[i] != arg[j - 1])
+		return (1);
+	if (!arg[j] && fic->name[i + 1])
 		return (1);
 	return (0);
 }
 
-int	is_good_word(char *arg, char *str, int *list)
+int	is_good_word(char *arg, t_name *fic, int *list)
 {
-	if (!arg || !str)
+	if (!arg || !fic->name)
 		return (1);
-	return (norme_good(arg, str, list, 0));
+	return (norme_good(arg, fic, list, 0));
 }
 
 int	nb_of_good_word(char *arg, t_name *name, int *list)
@@ -97,7 +133,7 @@ int	nb_of_good_word(char *arg, t_name *name, int *list)
 	i = 0;
 	while (tmp)
 	{
-		if (is_good_word(arg, tmp->name, list) == 0)
+		if (is_good_word(arg, tmp, list) == 0)
 			i++;
 		tmp = tmp->next;
 	}

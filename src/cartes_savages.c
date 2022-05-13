@@ -6,38 +6,64 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 11:06:47 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 15:53:44 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
 
-int	opening(char *dirname, t_name **fic, int prof, int p_max)
+int	is_good_fic(struct dirent *str, char *arg)
+{
+	if (str->d_name[0] == '.' && arg[0] == '.')
+		return (0);
+	if (str->d_name[0] != '.' && arg[0] != '.')
+		return (0);
+	if (str->d_type == DT_DIR && arg[ft_strlen(arg) - 1] == '/')
+		return (0);
+	if (str->d_type != DT_DIR && arg[ft_strlen(arg) - 1] != '/')
+		return (0);
+	return (1);
+}
+
+int	ispoint(struct dirent *str, char *arg)
+{
+	if (str->d_name[0] == '.' && arg[0] == '.')
+		return (1);
+	if (str->d_name[0] != '.' && arg[0] != '.')
+		return (1);
+	return (0);
+}
+
+int	isslash(struct dirent *str, char *arg)
+{
+	if (str->d_type == DT_DIR && arg[ft_strlen(arg) - 1] == '/')
+		return (1);
+	if (arg[ft_strlen(arg) - 1] != '/')
+		return (1);
+	return (0);
+}
+
+int	opening(char *dirname, t_name **fic, char *arg)
 {
 	t_ouvrir	o;
 
-	o.i = 0;
 	o.my_dir = opendir(dirname);
-	o.dp = ft_strjoin(dirname, "/");
 	o.rd = NULL;
 	if (!o.my_dir)
 		return (perror("Wildcards "), 1);
 	o.rd = readdir(o.my_dir);
 	while (o.rd != NULL)
 	{
-		o.i++;
-		if (o.rd->d_type == DT_DIR && ft_strncmp(o.rd->d_name, ".", 2) != 0 && \
-				ft_strncmp(o.rd->d_name, "..", 3) != 0 && prof < p_max)
+		if (ispoint(o.rd, arg) && isslash(o.rd, arg))
 		{
-			if (opening(o.rd->d_name, fic, 1, prof + 1) == 1)
-				return (free(o.dp), closedir(o.my_dir), 1);
+			if (arg[ft_strlen(arg) - 1] == '/')
+				lst_add(fic, new_lst(jc((o.rd->d_name), "/"), o.rd->d_type));
+			else
+				lst_add(fic, new_lst(ft_strdup(o.rd->d_name), o.rd->d_type));
 		}
-		else if (ft_strncmp(o.rd->d_name, ".", 1) != 0 && \
-				ft_strncmp(o.rd->d_name, "..", 2) != 0 && prof == p_max)
-			lst_add(fic, new_lst(trim_free(jc(o.dp, o.rd->d_name), "./")));
 		o.rd = readdir(o.my_dir);
 	}
-	return (free(o.dp), closedir(o.my_dir), 0);
+	return (closedir(o.my_dir), 0);
 }
 
 char	**cartes_sauvages(char *arg, int *list)
@@ -54,7 +80,7 @@ char	**cartes_sauvages(char *arg, int *list)
 	}
 	ret = NULL;
 	fichier = NULL;
-	if (opening(".", &fichier, 0, count_prof(arg)) == 1)
+	if (opening(".", &fichier, arg) == 1)
 		return (NULL);
 	if (nb_of_good_word(arg, fichier, list) == 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 12:04:32 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 11:14:40 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 18:51:23 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	**norme_carte(char *arg, char **ret, t_name *fichier, int *list)
 	i = 0;
 	while (tmp && i < nb_word)
 	{
-		if (is_good_word(arg, tmp->name, list) == 0)
+		if (is_good_word(arg, tmp, list) == 0)
 		{
 			ret[i] = ft_strdup(tmp->name);
 			i++;
@@ -80,11 +80,11 @@ int	osef(int *lst, int i)
 	return (0);
 }
 
-int	norme_good2(int i, int j, char *str, char *arg)
+int	norme_good2(int i, int j, t_name *fic, char *arg)
 {
-	if (str[i] == '\0' && arg[j + 1 + (lbs(arg + j + 1))] != '\0')
+	if (fic->name[i] == '\0' && arg[j + lbs(arg + j)] != '\0')
 		return (0);
-	else if (str[i] == '\0')
+	else if (fic->name[i] == '\0')
 		return (1);
 	return (-1);
 }

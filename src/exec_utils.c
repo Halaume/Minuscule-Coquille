@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 11:15:11 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/12 18:40:10 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/13 10:10:24 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	executing(t_toyo *toyo, t_info *info)
 		printf("\n");
 		i++;
 	}*/
-	arg = add_wildcard(tmp_arg);
+	arg = add_wildcard(tmp_arg, info);
 	free_char_char(tmp_arg);
 	if (check_abs_path(arg[0]))
 	{

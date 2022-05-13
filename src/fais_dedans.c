@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/11 12:28:18 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 10:51:53 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,9 @@ int	is_built_in(t_toyo *toyo, t_info *info)
 
 	if (!toyo->commande || !*toyo->commande)
 		return (1);
+	indexeage(toyo->commande, info);
 	tmp_cmd = ft_splitsane(toyo->commande, info);
-	cmd = add_wildcard(tmp_cmd);
+	cmd = add_wildcard(tmp_cmd, info);
 	free_char_char(tmp_cmd);
 	if (!cmd)
 		return (1);
@@ -115,8 +116,9 @@ int	check_built_in(t_toyo *toyo, t_info *info)
 	if (!ft_strncmp(tmp, "export", 6))
 		info->isexport = 1;
 	free(tmp);
+	indexeage(toyo->commande, info);
 	tmp_cmd = ft_splitsane(toyo->commande, info);
-	cmd = add_wildcard(tmp_cmd);
+	cmd = add_wildcard(tmp_cmd, info);
 	free_char_char(tmp_cmd);
 	return (fun_check(cmd));
 }

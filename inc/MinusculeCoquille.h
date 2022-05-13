@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/12 14:27:59 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/13 10:38:11 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,17 +213,18 @@ void		free_name(t_name *list);
 
 void		lst_add(t_name **alst, t_name *list);
 t_name		*new_lst(char *str);
-char		**cartes_sauvages(char *arg);
-char		**add_wildcard(char **cmd);
+char		**cartes_sauvages(char *arg, int *list);
+char		**add_wildcard(char **cmd, t_info *info);
 char		*jc(char *oui, char *non);
 int			lbs(char *str);
 int			check_wildcard(char *str);
-int			is_good_word(char *arg, char *str);
-int			nb_of_good_word(char *arg, t_name *name);
-int			norme_good(char *arg, char *str, int i, int j);
+int			is_good_word(char *arg, char *str, int *list);
+int			nb_of_good_word(char *arg, t_name *name, int *list);
+int			norme_good(char *arg, char *str, int *list);
 int			lbs(char *str);
-char		**norme_carte(char *arg, char **ret, t_name *fichier);
+char		**norme_carte(char *arg, char **ret, t_name *fichier, int *list);
 int			count_prof(char *str);
+int			osef(int *lst, int i);
 
 //				PIPEX
 

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/11 14:55:55 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 10:42:01 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	opening(char *dirname, t_name **fic, int prof, int p_max)
 				ft_strncmp(o.rd->d_name, "..", 3) != 0 && prof < p_max)
 		{
 			if (opening(o.rd->d_name, fic, 1, prof + 1) == 1)
-				return (free(o.dp), 1);
+				return (free(o.dp), closedir(o.my_dir), 1);
 		}
 		else if (ft_strncmp(o.rd->d_name, ".", 1) != 0 && \
 				ft_strncmp(o.rd->d_name, "..", 2) != 0)
@@ -40,7 +40,7 @@ int	opening(char *dirname, t_name **fic, int prof, int p_max)
 	return (free(o.dp), closedir(o.my_dir), 0);
 }
 
-char	**cartes_sauvages(char *arg)
+char	**cartes_sauvages(char *arg, int *list)
 {
 	char			**ret;
 	t_name			*fichier;
@@ -56,7 +56,7 @@ char	**cartes_sauvages(char *arg)
 	fichier = NULL;
 	if (opening(".", &fichier, 0, count_prof(arg)) == 1)
 		return (NULL);
-	if (nb_of_good_word(arg, fichier) == 0)
+	if (nb_of_good_word(arg, fichier, list) == 0)
 	{
 		ret = malloc(sizeof(char *) * 2);
 		free_name(fichier);
@@ -64,12 +64,12 @@ char	**cartes_sauvages(char *arg)
 		ret[1] = NULL;
 		return (ret);
 	}
-	ret = norme_carte(arg, ret, fichier);
+	ret = norme_carte(arg, ret, fichier, list);
 	free_name(fichier);
 	return (ret);
 }
 
-int	count_wildcards(char **arg)
+int	count_wildcards(char **arg, int **list)
 {
 	int		i;
 	int		ret;
@@ -79,7 +79,7 @@ int	count_wildcards(char **arg)
 	ret = 0;
 	while (arg[i])
 	{
-		test = cartes_sauvages(arg[i]);
+		test = cartes_sauvages(arg[i], list[i]);
 		ret += lencaca(test);
 		if (test)
 			free_char_char(test);
@@ -88,7 +88,7 @@ int	count_wildcards(char **arg)
 	return (ret);
 }
 
-char	**add_wildcard(char **cmd)
+char	**add_wildcard(char **cmd, t_info *info)
 {
 	char	**tmp;
 	char	**tmp2;
@@ -98,10 +98,10 @@ char	**add_wildcard(char **cmd)
 
 	j = 0;
 	index = -1;
-	tmp = malloc(sizeof(char *) * (count_wildcards(cmd) + 1));
+	tmp = malloc(sizeof(char *) * (count_wildcards(cmd, info->list) + 1));
 	while (cmd[++index])
 	{
-		tmp2 = cartes_sauvages(cmd[index]);
+		tmp2 = cartes_sauvages(cmd[index], info->list[index]);
 		i = -1;
 		if (tmp2)
 		{

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 12:22:08 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/11 12:22:28 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 11:36:00 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../inc/MinusculeCoquille.h"
@@ -71,10 +71,8 @@ int	check_identifier(char *commande)
 	return (free(commande_check), 1);
 }
 
-int	norme_export(char *cmd, t_info *info, int i)
+int	norme_export(char *cmd, t_info *info, int i, t_env *tmp)
 {
-	t_env	*tmp;
-
 	tmp = info->env;
 	if (tmp)
 	{
@@ -84,9 +82,11 @@ int	norme_export(char *cmd, t_info *info, int i)
 			{
 				while (i > 0)
 				{
-					if (cmd[i] && cmd[i - 1] == '=')
+					if (cmd[i] && (cmd[i - 1] == '=' || cmd[i] == '='))
 					{
 						free(tmp->valeur);
+						if (cmd[i] == '=')
+							i++;
 						tmp->valeur = ft_substr(cmd, i, ft_strlen(cmd) - i + 1);
 						return (0);
 					}
@@ -106,7 +106,7 @@ int	ft_export_this(t_info *info, char *cmd)
 	i = ft_strlen(cmd);
 	if (!check_identifier(cmd))
 		return (ft_putstr_fd("export: identifier invalide\n", 2), 1);
-	if (norme_export(cmd, info, i) == 0)
+	if (norme_export(cmd, info, i, NULL) == 0)
 		return (0);
 	i = ft_strlen(cmd);
 	while (i > 0 && cmd[i - 1] != '=')

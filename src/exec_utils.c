@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 11:15:11 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 10:10:24 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 11:08:03 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,17 +84,6 @@ int	executing(t_toyo *toyo, t_info *info)
 
 	indexeage(toyo->commande, info);
 	tmp_arg = ft_splitsane(toyo->commande, info);
-/*	int i = 0;
-	int j = 0;
-	while (tmp_arg[i])
-	{
-		printf("tmp_arg : %s", tmp_arg[i]);
-		j = 0;
-		while (info->list[i][j] != -1)
-			printf(" %d", info->list[i][j++]);
-		printf("\n");
-		i++;
-	}*/
 	arg = add_wildcard(tmp_arg, info);
 	free_char_char(tmp_arg);
 	if (check_abs_path(arg[0]))

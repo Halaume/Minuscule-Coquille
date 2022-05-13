@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/13 11:00:22 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/13 11:16:52 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,8 @@ int			lbs(char *str);
 int			check_wildcard(char *str);
 int			is_good_word(char *arg, char *str, int *list);
 int			nb_of_good_word(char *arg, t_name *name, int *list);
-int			norme_good(char *arg, char *str, int *list);
+int			norme_good(char *arg, char *str, int *list, int i);
+int			norme_good2(int i, int j, char *str, char *arg);
 int			lbs(char *str);
 char		**norme_carte(char *arg, char **ret, t_name *fichier, int *list);
 int			count_prof(char *str);

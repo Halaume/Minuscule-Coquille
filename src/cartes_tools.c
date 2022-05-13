@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 12:04:32 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 11:06:24 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 11:14:40 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,13 @@ int	osef(int *lst, int i)
 		j++;
 	}
 	return (0);
+}
+
+int	norme_good2(int i, int j, char *str, char *arg)
+{
+	if (str[i] == '\0' && arg[j + 1 + (lbs(arg + j + 1))] != '\0')
+		return (0);
+	else if (str[i] == '\0')
+		return (1);
+	return (-1);
 }

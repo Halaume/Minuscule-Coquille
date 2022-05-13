@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/13 15:05:56 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 20:10:04 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@
 # include <string.h>
 # include <errno.h>
 # include "../src/gnl/get_next_line.h"
+
+typedef struct s_inshallah
+{
+	int	j;
+	int	i;
+}	t_inshallah;
 
 typedef struct s_inspi
 {

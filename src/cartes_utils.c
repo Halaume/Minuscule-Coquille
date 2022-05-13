@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 11:48:58 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 11:16:19 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 14:38:19 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,40 +52,40 @@ int	check_wildcard(char *str)
 	return (0);
 }
 
-int	norme_good(char *arg, char *str, int *list, int i)
+int	norme_good(char *arg, t_name *fic, int *list, int i)
 {
 	int	j;
 
 	j = 0;
-	while (arg[j] && str[i])
+	while (arg[j] && fic->name[i])
 	{
 		if (arg[j] == '*' && !osef(list, j))
 		{
 			if (arg[j + 1] == '\0')
 				return (0);
-			while (str[i] && ft_strncmp(arg + j + 1, str + i, \
+			while (fic->name[i] && ft_strncmp(arg + j + 1, fic->name + i, \
 						lbs(arg + j + 1)) != 0)
 			{
-				if (norme_good2(i++, j, str, arg) != -1)
-					return (norme_good2(i, j, str, arg));
+				if (norme_good2(i++, j, fic, arg) != -1)
+					return (norme_good2(i, j, fic, arg));
 			}
 			i--;
 		}
-		else if (str[i] != arg[j])
+		else if (fic->name[i] != arg[j])
 			return (1);
 		i++;
 		j++;
 	}
-	if (!arg[j] && str[i])
+	if (!arg[j] && fic->name[i])
 		return (1);
 	return (0);
 }
 
-int	is_good_word(char *arg, char *str, int *list)
+int	is_good_word(char *arg, t_name *fic, int *list)
 {
-	if (!arg || !str)
+	if (!arg || !fic->name)
 		return (1);
-	return (norme_good(arg, str, list, 0));
+	return (norme_good(arg, fic, list, 0));
 }
 
 int	nb_of_good_word(char *arg, t_name *name, int *list)
@@ -97,7 +97,7 @@ int	nb_of_good_word(char *arg, t_name *name, int *list)
 	i = 0;
 	while (tmp)
 	{
-		if (is_good_word(arg, tmp->name, list) == 0)
+		if (is_good_word(arg, tmp, list) == 0)
 			i++;
 		tmp = tmp->next;
 	}

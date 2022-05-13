@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/13 11:16:52 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 15:05:56 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ typedef struct s_getenv
 typedef STRUCTURE s_name
 {
 	CARACTERE			*name;
+	int					type;
 	STRUCTURE s_name	*next;
 }	t_name;
 
@@ -130,8 +131,6 @@ typedef STRUCTURE s_ouvrir
 {
 	DIR				*my_dir;
 	struct dirent	*rd;
-	char			*dp;
-	int				i;
 }	t_ouvrir;
 
 //				ANALYSE-SYNTAXIQUE
@@ -212,16 +211,16 @@ void		free_name(t_name *list);
 //				WildCards
 
 void		lst_add(t_name **alst, t_name *list);
-t_name		*new_lst(char *str);
+t_name		*new_lst(char *str, int type);
 char		**cartes_sauvages(char *arg, int *list);
 char		**add_wildcard(char **cmd, t_info *info);
 char		*jc(char *oui, char *non);
 int			lbs(char *str);
 int			check_wildcard(char *str);
-int			is_good_word(char *arg, char *str, int *list);
+int			is_good_word(char *arg, t_name *fic, int *list);
 int			nb_of_good_word(char *arg, t_name *name, int *list);
-int			norme_good(char *arg, char *str, int *list, int i);
-int			norme_good2(int i, int j, char *str, char *arg);
+int			norme_good(char *arg, t_name *fic, int *list, int i);
+int			norme_good2(int i, int j, t_name *fic, char *arg);
 int			lbs(char *str);
 char		**norme_carte(char *arg, char **ret, t_name *fichier, int *list);
 int			count_prof(char *str);

@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 11:15:11 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 11:08:03 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 12:33:05 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	norme_executing(t_toyo *toyo, t_info *info, char **arg)
 		ft_putstr_fd(": Command not found\n", 2);
 		free_toyo(toyo);
 		free_char_char(arg);
-		exit(1);
+		exit(127);
 	}
 	execve(cmd, arg, info->envp);
 	perror("execve failure :");

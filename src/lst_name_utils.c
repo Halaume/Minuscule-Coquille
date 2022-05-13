@@ -6,13 +6,13 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 16:20:23 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/10 12:47:40 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 14:21:41 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
 
-t_name	*new_lst(char *str)
+t_name	*new_lst(char *str, int type)
 {
 	t_name	*new;
 
@@ -21,6 +21,7 @@ t_name	*new_lst(char *str)
 	if (!new)
 		return (NULL);
 	new->next = NULL;
+	new->type = type;
 	new->name = str;
 	return (new);
 }

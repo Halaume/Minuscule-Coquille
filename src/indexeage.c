@@ -6,11 +6,24 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 17:19:15 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/13 11:04:17 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/13 11:55:58 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
+
+void	prout(char *str, t_exp *e, int *insimplegui)
+{
+	while (str[e->i])
+	{
+		if (!*insimplegui && str[e->i] == '$')
+			break ;
+		if (str[e->i] == '\'')
+			*insimplegui = !*insimplegui;
+		e->i++;
+		e->k++;
+	}
+}
 
 int	refsizeofexheredoc(char *str, t_info *info)
 {
@@ -22,15 +35,7 @@ int	refsizeofexheredoc(char *str, t_info *info)
 	e.k = 0;
 	while (str[e.i])
 	{
-		while (str[e.i])
-		{
-			if (!insimplegui && str[e.i] == '$')
-				break ;
-			if (str[e.i] == '\'')
-				insimplegui = !insimplegui;
-			e.i++;
-			e.k++;
-		}
+		prout(str, &e, &insimplegui);
 		e.j = e.i;
 		if (str[e.j] == '$')
 			e.j++;
@@ -59,6 +64,27 @@ void	re_smalex(char *str, int *j, int *i)
 	}
 }
 
+void	tocard(char *str, t_exp *e, int *insimplegui, char *newstr)
+{
+	while (str[e->i])
+	{
+		if (!*insimplegui && str[e->i] == '$')
+			break ;
+		if (str[e->i] == '\'')
+			*insimplegui = !*insimplegui;
+		newstr[e->k] = str[e->i];
+		e->k++;
+		e->i++;
+	}
+}
+
+void	initcaner(t_exp *e, int *gui)
+{
+	*gui = 0;
+	e->i = 0;
+	e->k = 0;
+}
+
 char	*re_expand(char *str, t_info *info)
 {
 	char	*newstr;
@@ -66,22 +92,11 @@ char	*re_expand(char *str, t_info *info)
 	char	*tmp;
 	int		insimplegui;
 
-	e.i = 0;
-	e.k = 0;
-	insimplegui = 0;
+	initcaner(&e, &insimplegui);
 	newstr = (char *)malloc(sizeof(char) * (refsizeofexheredoc(str, info) + 2));
 	while (str[e.i])
 	{
-		while (str[e.i])
-		{
-			if (!insimplegui && str[e.i] == '$')
-				break ;
-			if (str[e.i] == '\'')
-				insimplegui = !insimplegui;
-			newstr[e.k] = str[e.i];
-			e.k++;
-			e.i++;
-		}
+		tocard(str, &e, &insimplegui, newstr);
 		re_smalex(str, &e.j, &e.i);
 		if (e.i != e.j)
 		{
@@ -124,87 +139,98 @@ int	aaaaa(char *str, int *isex, t_info *info)
 	return (count);
 }
 
+void	lamourir(char *str, t_info *info, int *isex, t_exp *s)
+{
+	int		ret;
+	char	*tmp;
+
+	ret = s->i;
+	s->i++;
+	while (isadel(str, s->i))
+	{
+		if (s->i && str[s->i - 1] == '?')
+			break ;
+		s->i++;
+	}
+	tmp = getvalfromenvhd(ft_substr(str, ret, s->i - ret), info, 1, 0);
+	ret = 0;
+	while (tmp[ret])
+	{
+		isex[s->j] = 1;
+		ret++;
+		s->j++;
+	}
+	free(tmp);
+}
+
 int	*lamort(char *str, t_info *info)
 {
 	int		*isex;
-	int		i;
-	int		j;
-	int		ret;
-	int		simplegui;
+	t_exp	s;
 	char	*tmp;
 
-	simplegui = 0;
-	i = 0;
-	j = 0;
+	s.k = 0;
+	s.i = 0;
+	s.j = 0;
 	tmp = re_expand(ft_strdup(str), info);
 	isex = malloc(sizeof(int) * (ft_strlen(tmp) + 1));
-	while (str[i])
+	free(tmp);
+	while (str[s.i])
 	{
-		if (str[i] == '\'')
-			simplegui = !simplegui;
-		if (!simplegui && str[i] == '$')
-		{
-			ret = i;
-			i++;
-			while (isadel(str, i))
-			{
-				if (i && str[i - 1] == '?')
-					break ;
-				i++;
-			}
-			free(tmp);
-			tmp = getvalfromenvhd(ft_substr(str, ret, i - ret), info, 1, 0);
-			ret = 0;
-			while (tmp[ret])
-			{
-				isex[j] = 1;
-				ret++;
-				j++;
-			}
-		}
+		if (str[s.i] == '\'')
+			s.k = !s.k;
+		if (!s.k && str[s.i] == '$')
+			lamourir(str, info, isex, &s);
 		else
 		{
-			isex[j] = 0;
-			i++;
-			j++;
+			isex[s.j] = 0;
+			s.i++;
+			s.j++;
 		}
 	}
-	isex[j] = -1;
-	free(tmp);
+	isex[s.j] = -1;
 	return (isex);
+}
+
+void	initcrie(t_inspi *s, int *i, int *j)
+{
+	s->doublegui = 0;
+	s->simplegui = 0;
+	s->par = 0;
+	*i = 0;
+	*j = 0;
+}
+
+void	hurle(int *isex, int i, t_inspi *s, char *str)
+{
+	if (!isex[i] && !s->simplegui && str[i] == '"')
+	{
+		s->par++;
+		s->doublegui = !s->doublegui;
+	}
+	if (!isex[i] && !s->doublegui && str[i] == '\'')
+	{
+		s->par++;
+		s->simplegui = !s->simplegui;
+	}
 }
 
 int	*crie(char *str, int *isex, t_info *info)
 {
-	int	*lst;
-	int	i;
-	int	simplegui;
-	int	doublegui;
-	int	countgui;
-	int	j;
+	int		*lst;
+	int		i;
+	t_inspi	s;
+	int		j;
 
-	doublegui = 0;
-	simplegui = 0;
-	countgui = 0;
-	i = 0;
-	j = 0;
+	initcrie(&s, &i, &j);
 	lst = malloc(sizeof(int) * (aaaaa(str, isex, info) + 1));
 	lst[aaaaa(str, isex, info)] = -1;
 	str = re_expand(ft_strdup(str), info);
 	while (str[i])
 	{
-		if (!isex[i] && !simplegui && str[i] == '"')
-		{
-			countgui++;
-			doublegui = !doublegui;
-		}
-		if (!isex[i] && !doublegui && str[i] == '\'')
-		{
-			countgui++;
-			simplegui = !simplegui;
-		}
-		if (!isex[i] && (simplegui || doublegui) && str[i] == '*')
-			lst[j++] = i - countgui;
+		hurle(isex, i, &s, str);
+		if (!isex[i] && (s.simplegui || s.doublegui) && str[i] == '*')
+			lst[j++] = i - s.par;
 		i++;
 	}
 	free(str);
@@ -238,43 +264,51 @@ int	*getlist(int i, int *lst, int last, int countgui)
 	return (ret);
 }
 
+void	kk(t_inspi *s, int *last, int *k, int *i)
+{
+	*last = 0;
+	*k = 0;
+	s->doublegui = 0;
+	s->simplegui = 0;
+	s->par = 0;
+	*i = 0;
+}
+
+void	cc(t_inspi *s, char *str, int i)
+{
+	if (!s->simplegui && str[i] == '"')
+	{
+		s->par++;
+		s->doublegui = !s->doublegui;
+	}
+	if (!s->doublegui && str[i] == '\'')
+	{
+		s->par++;
+		s->simplegui = !s->simplegui;
+	}
+}
+
 void	indexeage2(char *str, t_info *info, int *isex, int *lst)
 {
-	int	last;
-	int	k;
-	int	doublegui;
-	int	simplegui;
-	int	countgui;
-	int	i;
+	int		last;
+	int		k;
+	t_inspi	s;
+	int		i;
 
-	last = 0;
-	k = 0;
-	doublegui = 0;
-	simplegui = 0;
-	countgui = 0;
-	i = 0;
+	kk(&s, &last, &k, &i);
 	while (str[i])
 	{
-		if (!simplegui && str[i] == '"')
-		{
-			countgui++;
-			doublegui = !doublegui;
-		}
-		if (!doublegui && str[i] == '\'')
-		{
-			countgui++;
-			simplegui = !simplegui;
-		}
+		cc(&s, str, i);
 		if (str[i] == ' ')
 		{
-			info->list[k++] = getlist(i, lst, last, countgui);
+			info->list[k++] = getlist(i, lst, last, s.par);
 			while (str[i] == ' ')
 				i++;
-			last = i - countgui;
+			last = i - s.par;
 		}
 		i++;
 	}
-	info->list[k] = getlist(i, lst, last, countgui);
+	info->list[k] = getlist(i, lst, last, s.par);
 	free(isex);
 	free(lst);
 	free(str);
@@ -304,7 +338,7 @@ void	indexeage(char *str, t_info *info)
 	i = 0;
 	isex = lamort(str, info);
 	lst = crie(str, isex, info);
-	str = re_expand(ft_strdup(str), info);
+	str = trim_free(re_expand(ft_strdup(str), info), " ");
 	while (str[i])
 	{
 		if (str[i] == ' ')

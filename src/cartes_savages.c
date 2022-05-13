@@ -6,19 +6,41 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 15:12:26 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 15:53:44 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/MinusculeCoquille.h"
 
-int	is_good_fic(char *str, char *arg)
+int	is_good_fic(struct dirent *str, char *arg)
 {
-	if (str[0] == '.' && arg[0] == '.')
+	if (str->d_name[0] == '.' && arg[0] == '.')
 		return (0);
-	if (str[0] != '.' && arg[0] != '.')
+	if (str->d_name[0] != '.' && arg[0] != '.')
+		return (0);
+	if (str->d_type == DT_DIR && arg[ft_strlen(arg) - 1] == '/')
+		return (0);
+	if (str->d_type != DT_DIR && arg[ft_strlen(arg) - 1] != '/')
 		return (0);
 	return (1);
+}
+
+int	ispoint(struct dirent *str, char *arg)
+{
+	if (str->d_name[0] == '.' && arg[0] == '.')
+		return (1);
+	if (str->d_name[0] != '.' && arg[0] != '.')
+		return (1);
+	return (0);
+}
+
+int	isslash(struct dirent *str, char *arg)
+{
+	if (str->d_type == DT_DIR && arg[ft_strlen(arg) - 1] == '/')
+		return (1);
+	if (arg[ft_strlen(arg) - 1] != '/')
+		return (1);
+	return (0);
 }
 
 int	opening(char *dirname, t_name **fic, char *arg)
@@ -32,8 +54,13 @@ int	opening(char *dirname, t_name **fic, char *arg)
 	o.rd = readdir(o.my_dir);
 	while (o.rd != NULL)
 	{
-		if (!is_good_fic(o.rd->d_name, arg))
-			lst_add(fic, new_lst(ft_strdup(o.rd->d_name), o.rd->d_type));
+		if (ispoint(o.rd, arg) && isslash(o.rd, arg))
+		{
+			if (arg[ft_strlen(arg) - 1] == '/')
+				lst_add(fic, new_lst(jc((o.rd->d_name), "/"), o.rd->d_type));
+			else
+				lst_add(fic, new_lst(ft_strdup(o.rd->d_name), o.rd->d_type));
+		}
 		o.rd = readdir(o.my_dir);
 	}
 	return (closedir(o.my_dir), 0);

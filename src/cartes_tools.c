@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 12:04:32 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 15:13:31 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 18:51:23 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ int	lbs(char *str)
 	i = 0;
 	while (str[i] && str[i] != '*')
 		i++;
-	if (!str[i] && str[i - 1] == '/')
-		return (i + 1);
 	return (i);
 }
 
@@ -84,25 +82,9 @@ int	osef(int *lst, int i)
 
 int	norme_good2(int i, int j, t_name *fic, char *arg)
 {
-	int	only_dir;
-
-	only_dir = 0;
-	if (arg[ft_strlen(arg) - 1] == '/')
-		only_dir = 1;
-	if (only_dir != 1)
-	{
-		if (fic->name[i] == '\0' && arg[j + 1 + (lbs(arg + j + 1))] != '\0')
-			return (0);
-		else if (fic->name[i] == '\0')
-			return (1);
-	}
-	else
-	{
-		if (fic->name[i] == '\0' && arg[j + 1 + (lbs(arg + j + 1))] != '\0' && \
-				fic->type == DT_DIR)
-			return (0);
-		else if (fic->name[i] == '\0' || fic->type != DT_DIR)
-			return (1);
-	}
+	if (fic->name[i] == '\0' && arg[j + lbs(arg + j)] != '\0')
+		return (0);
+	else if (fic->name[i] == '\0')
+		return (1);
 	return (-1);
 }

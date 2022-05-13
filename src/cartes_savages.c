@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 10:42:01 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 11:06:47 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	opening(char *dirname, t_name **fic, int prof, int p_max)
 				return (free(o.dp), closedir(o.my_dir), 1);
 		}
 		else if (ft_strncmp(o.rd->d_name, ".", 1) != 0 && \
-				ft_strncmp(o.rd->d_name, "..", 2) != 0)
+				ft_strncmp(o.rd->d_name, "..", 2) != 0 && prof == p_max)
 			lst_add(fic, new_lst(trim_free(jc(o.dp, o.rd->d_name), "./")));
 		o.rd = readdir(o.my_dir);
 	}

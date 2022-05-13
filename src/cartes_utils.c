@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 11:48:58 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 20:39:28 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 21:45:09 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int	is_good_word(char *arg, t_name *fic, int *list)
 {
 	if (!arg || !fic->name)
 		return (1);
-	return (norme_good(arg, fic, list, 0));
+	return ((arg, fic, list, 0));
 }
 
 int	nb_of_good_word(char *arg, t_name *name, int *list)

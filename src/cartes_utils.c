@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 11:48:58 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 11:06:12 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 11:16:19 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,10 @@ int	check_wildcard(char *str)
 	return (0);
 }
 
-int	norme_good(char *arg, char *str, int *list)
+int	norme_good(char *arg, char *str, int *list, int i)
 {
-	int	i;
 	int	j;
-	int	lst_index;
 
-	lst_index = 0;
-	i = 0;
 	j = 0;
 	while (arg[j] && str[i])
 	{
@@ -70,11 +66,8 @@ int	norme_good(char *arg, char *str, int *list)
 			while (str[i] && ft_strncmp(arg + j + 1, str + i, \
 						lbs(arg + j + 1)) != 0)
 			{
-				i++;
-				if (str[i] == '\0' && arg[j + 1 + (lbs(arg + j + 1))] != '\0')
-					return (0);
-				else if (str[i] == '\0')
-					return (1);
+				if (norme_good2(i++, j, str, arg) != -1)
+					return (norme_good2(i, j, str, arg));
 			}
 			i--;
 		}
@@ -92,7 +85,7 @@ int	is_good_word(char *arg, char *str, int *list)
 {
 	if (!arg || !str)
 		return (1);
-	return (norme_good(arg, str, list));
+	return (norme_good(arg, str, list, 0));
 }
 
 int	nb_of_good_word(char *arg, t_name *name, int *list)

@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/13 20:10:04 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/13 21:52:42 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,14 @@
 # include <string.h>
 # include <errno.h>
 # include "../src/gnl/get_next_line.h"
+
+typedef struct s_sheesh
+{
+	int		i;
+	int		tmp;
+	char	*tmpfile;
+	char	*file;
+}	t_sheesh;
 
 typedef struct s_inshallah
 {
@@ -330,5 +338,5 @@ char		*expand(char *str, t_info *info);
 int			fsizeofexheredoc(char *str, t_info *info);
 void		crever(t_exp *e, t_info *info, char *str);
 void		freelist(int **list);
-
+int			potage(char *str, t_name *file, int *list);
 #endif

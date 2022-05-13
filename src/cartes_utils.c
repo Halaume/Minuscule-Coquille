@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 11:48:58 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 21:45:09 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/13 21:48:39 by tnaton           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	cmp_fr(char *s1, char *s2)
 	free(s1);
 	return (ret);
 }
-
+/*
 int	norme_good(char *arg, t_name *fic, int *list, int i)
 {
 	int	j;
@@ -92,7 +92,8 @@ int	norme_good(char *arg, t_name *fic, int *list, int i)
 			}
 			if (cmp_fr(ft_substr(arg, j + 1, lbs(arg + j + 1)), fic->name + i))
 				i--;
-			else if (arg[j + 1 + lbs(arg + j + 1)] == '\0' && ft_strlen(arg + j + 1) == ft_strlen(fic->name + i))
+			else if (arg[j + 1 + lbs(arg + j + 1)] == '\0' && ft_strlen(arg +\
+			j + 1) == ft_strlen(fic->name + i))
 			{
 				return (0);
 			}
@@ -110,12 +111,13 @@ int	norme_good(char *arg, t_name *fic, int *list, int i)
 		return (1);
 	return (0);
 }
+*/
 
 int	is_good_word(char *arg, t_name *fic, int *list)
 {
 	if (!arg || !fic->name)
 		return (1);
-	return ((arg, fic, list, 0));
+	return (potage(arg, fic, list));
 }
 
 int	nb_of_good_word(char *arg, t_name *name, int *list)

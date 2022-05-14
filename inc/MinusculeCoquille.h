@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/14 10:09:59 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/14 10:22:48 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,4 +339,20 @@ int			fsizeofexheredoc(char *str, t_info *info);
 void		crever(t_exp *e, t_info *info, char *str);
 void		freelist(int **list);
 int			potage(char *str, t_name *file, int *list);
+char		*re_expand(char *str, t_info *info);
+int			aaaaa(char *str, int *isex, t_info *info);
+void		lamourir(char *str, t_info *info, int *isex, t_exp *s);
+int			*lamort(char *str, t_info *info);
+void		initcrie(t_inspi *s, int *i, int *j);
+void		hurle(int *isex, int i, t_inspi *s, char *str);
+int			*crie(char *str, int *isex, t_info *info);
+int			*getlist(int i, int *lst, int last, int countgui);
+void		kk(t_inspi *s, int *last, int *k, int *i);
+void		cc(t_inspi *s, char *str, int i);
+void		prout(char *str, t_exp *e, int *insimplegui);
+int			refsizeofexheredoc(char *str, t_info *info);
+void		re_smalex(char *str, int *j, int *i);
+void		tocard(char *str, t_exp *e, int *insimplegui, char *newstr);
+void		initcaner(t_exp *e, int *gui);
+
 #endif

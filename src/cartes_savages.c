@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:52:53 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/14 10:00:11 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/14 10:14:57 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,3 @@ char	**cartes_sauvages(char *arg, int *list)
 	free_name(fichier);
 	return (ret);
 }
-
-

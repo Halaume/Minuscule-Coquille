@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 12:21:15 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/11 12:21:30 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/14 10:05:24 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../inc/MinusculeCoquille.h"
@@ -35,7 +35,7 @@ int	ft_cd(char **arg, t_info *info)
 	return (0);
 }
 
-int	ft_pwd(void)
+int	ft_pwd(t_toyo *toyo)
 {
 	char	curdir[4096];
 
@@ -43,8 +43,8 @@ int	ft_pwd(void)
 		return (perror("erreur pwd wtf"), -1000);
 	else
 	{
-		write(1, curdir, ft_strlen(curdir));
-		write(1, "\n", 1);
+		write(toyo->out, curdir, ft_strlen(curdir));
+		write(toyo->out, "\n", 1);
 	}
 	return (0);
 }

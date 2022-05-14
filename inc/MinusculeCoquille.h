@@ -6,7 +6,7 @@
 /*   By: tnaton <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:09:23 by tnaton            #+#    #+#             */
-/*   Updated: 2022/05/13 21:52:42 by tnaton           ###   ########.fr       */
+/*   Updated: 2022/05/14 10:09:59 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,10 +193,10 @@ int			check_built_in(t_toyo *commande, t_info *info);
 int			is_built_in(t_toyo *arbre, t_info *info);
 int			ft_echo(char **arg, t_toyo *toyo);
 int			ft_cd(char **arg, t_info *info);
-int			ft_pwd(void);
+int			ft_pwd(t_toyo *toyo);
 int			ft_export(t_info *info, char **commande);
 int			ft_unset(t_info *info, char **commande);
-int			ft_env(t_env *env);
+int			ft_env(t_env *env, t_toyo *toyo);
 int			ft_exit(char **status, t_info *info);
 char		*get_my_home(t_env *env);
 int			ft_export_this(t_info *info, char *cmd);

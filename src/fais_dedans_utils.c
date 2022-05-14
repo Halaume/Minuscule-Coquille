@@ -6,22 +6,22 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 12:22:08 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 11:36:00 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/14 10:09:47 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../inc/MinusculeCoquille.h"
 
-int	ft_env(t_env *env)
+int	ft_env(t_env *env, t_toyo *toyo)
 {
 	t_env	*tmp;
 
 	tmp = env;
 	while (tmp)
 	{
-		ft_putstr_fd(tmp->variable, 1);
-		ft_putstr_fd("=", 1);
-		ft_putstr_fd(tmp->valeur, 1);
-		write(1, "\n", 1);
+		ft_putstr_fd(tmp->variable, toyo->out);
+		ft_putstr_fd("=", toyo->out);
+		ft_putstr_fd(tmp->valeur, toyo->out);
+		write(toyo->out, "\n", 1);
 		tmp = tmp->next;
 	}
 	return (0);

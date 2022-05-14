@@ -6,7 +6,7 @@
 /*   By: ghanquer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:07:38 by ghanquer          #+#    #+#             */
-/*   Updated: 2022/05/13 12:27:14 by ghanquer         ###   ########.fr       */
+/*   Updated: 2022/05/14 10:10:18 by ghanquer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	faire(char **cmd, t_info *info, t_toyo *toyo)
 		return (ft_echo(cmd, toyo));
 	else if (ft_strlen(cmd[0]) == ft_strlen("pwd") && \
 			ft_strncmp("pwd", cmd[0], ft_strlen(cmd[0])) == 0)
-		return (ft_pwd());
+		return (ft_pwd(toyo));
 	else if (ft_strlen(cmd[0]) == ft_strlen("cd") && \
 			ft_strncmp("cd", cmd[0], ft_strlen(cmd[0])) == 0)
 		return (ft_cd(cmd, info));
@@ -47,7 +47,7 @@ int	faire(char **cmd, t_info *info, t_toyo *toyo)
 		return (ft_unset(info, cmd));
 	else if (ft_strlen(cmd[0]) == ft_strlen("env") && \
 			ft_strncmp("env", cmd[0], ft_strlen(cmd[0])) == 0)
-		return (ft_env(info->env));
+		return (ft_env(info->env, toyo));
 	else if (ft_strlen(cmd[0]) == ft_strlen("exit") && \
 			ft_strncmp("exit", cmd[0], ft_strlen(cmd[0])) == 0)
 		return (ft_exit(cmd, info));
